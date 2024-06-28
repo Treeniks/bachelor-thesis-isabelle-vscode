@@ -16,6 +16,4 @@ jobs:
       - name: Compile Typst
         uses: lvignoli/typst-action@main
         with:
-          source_file: |
-            thesis.typ
-            proposal.typ
+          source_file: thesis.typ
