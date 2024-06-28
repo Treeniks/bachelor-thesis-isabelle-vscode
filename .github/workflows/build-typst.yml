@@ -2,7 +2,7 @@ name: Build typst
 on:
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   build_release_thesis:
