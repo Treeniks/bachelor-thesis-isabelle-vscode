@@ -39,7 +39,7 @@ jobs:
           name: Version ${{ steps.bump.outputs.new_tag }}
           draft: false
           prerelease: false
-  
+
       - name: Compile Typst
         uses: lvignoli/typst-action@main
         with:
