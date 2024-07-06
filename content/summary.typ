@@ -10,10 +10,10 @@
   Describe honestly the achieved goals (e.g. the well implemented and tested use cases) and the open goals here. if you only have achieved goals, you did something wrong in your analysis.
 ]
 
-=== Realized Goals
-#TODO[
-  Summarize the achieved goals by repeating the realized requirements or use cases stating how you realized them.
-]
+// === Realized Goals
+// #TODO[
+//   Summarize the achieved goals by repeating the realized requirements or use cases stating how you realized them.
+// ]
 
 === Open Goals
 #TODO[
