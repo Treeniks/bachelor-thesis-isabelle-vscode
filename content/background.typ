@@ -14,13 +14,26 @@ The Language Server Protocol was meant to solve these problem by introducing one
 
 The LSP consists of two main components: A language server and a language client. The language server is responsible for understanding the semantics of the language. It may be connected to a compiler, or it may have the language's logic built from the ground up, but either way, it is supposed to understand the types of values, when and why code does not compile, which functions are available in the current scope, and more. The language client on the other hand exists on the side of the code editor. It receives messages from the language server about the aforementioned list and converts these messages into GUI elements of the given code editor. The end goal is a system in which a new programming language only needs to implement a single language server, while a new code editor only needs to implement a single language client. In the best case scenario, any language server and language client can be used together (although in practice this is still not always the case). If we wanted to support $N$ programming languages for $M$ code editors, without the LSP we would need $N dot M$ implementations of language semantics and GUI translation layers. With the LSP, this number is reduced drastically to only $N$ implementations of language semantics and $M$ GUI translation layers.
 
+// Before its introduction, it was customary for code editors to either only support syntax highlighting for a language, with very basic auto-completion and semantic understanding at best, or implement a full fletched IDE environment for a language. This system had a few problems:
+// - Smaller languages would either not be able to offer a full-IDE experience at all, or would ship with an IDE of its own.
+// - The configuration for one IDE is rarely compatible with the configuration of another. As such, developers using multiple languages would need to get used to multiple different IDE systems, or live without IDE-features.
+// - The idea of a truly polymorphic IDE, that could be used for any language, was virtually impossible.
+//
+// The Language Server Protocol was meant to solve these problem by introducing one API describing how the semantics of a language are supposed to be communicated with a code editor.
+//
+// The LSP consists of two main components: A language server and a language client. The language server is responsible for understanding the semantics of the language. It may be connected to a compiler, or it may have the language's logic built from the ground up, but either way, it is supposed to understand the types of values, when and why code does not compile, which functions are available in the current scope, and more. The language client on the other hand exists on the side of the code editor. It receives messages from the language server about the aforementioned list and converts these messages into GUI elements of the given code editor. The end goal is a system in which a new programming language only needs to implement a single language server, while a new code editor only needs to implement a single language client. In the best case scenario, any language server and language client can be used together (although in practice this is still not always the case). If we wanted to support $N$ programming languages for $M$ code editors, without the LSP we would need $N dot M$ implementations of language semantics and GUI translation layers. With the LSP, this number is reduced drastically to only $N$ implementations of language semantics and $M$ GUI translation layers.
+//
+// Unfortunately, Isabelle/VSCode was insufficient at providing an experience comparable to that of Isabelle/JEdit. There were many issues with usability, as well as many missing features that are available in Isabelle/JEdit but were missing from Isabelle/VSCode. The goal of this thesis is to bring Isabelle/VSCode closer to the experience of Isabelle/JEdit, i.e. to introduce some of those missing features and tackle the usability problems.
+//
+// Another problem with Isabelle/VSCode was that the underlying language server did not offer a full enough feature set for it to be usable from within other editors outside of VSCode. The nature of Isabelle's interactive sessions is fundamentally too complex to fit into the LSP's default protocols, making it impossible to create a plug-in language server implementation that works out of the box. There was always going to be work needed on the client side. Even still, the offered extra APIs by Isabelle/VSCode were not enough to reliably implement a working language client.
+
 #TODO[insert graphic (server <-> client)]
 
 == Isabelle
 
 Isabelle is a Proof Assistant
 
-#TODO []
+#TODO[]
 
 // = Background
 // #TODO[
