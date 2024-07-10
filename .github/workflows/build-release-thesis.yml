@@ -38,7 +38,7 @@ jobs:
           tag_name: ${{ steps.bump.outputs.new_tag }}
           name: Version ${{ steps.bump.outputs.new_tag }}
           draft: false
-          prerelease: false
+          prerelease: true
 
       # using Alpine because it's easier
       - name: Set up Alpine
