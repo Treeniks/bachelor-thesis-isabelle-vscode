@@ -10,8 +10,8 @@
   )
 
   set text(
-    font: body-font, 
-    size: 12pt, 
+    font: body-font,
+    size: 12pt,
     lang: lang
   )
 
@@ -23,8 +23,8 @@
   // --- Abstract ---
   v(1fr)
   align(center, text(font: body-font, 1em, weight: "semibold", title.at(lang)))
-  
+
   body
-  
+
   v(1fr)
 }

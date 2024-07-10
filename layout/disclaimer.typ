@@ -13,17 +13,17 @@
   )
 
   set text(
-    font: body-font, 
-    size: 12pt, 
+    font: body-font,
+    size: 12pt,
     lang: "en"
   )
 
   set par(leading: 1em)
 
-  
+
   // --- Disclaimer ---
   pagebreak()
-  
+
   v(75%)
   text("I confirm that this " + degree + "’s thesis is my own work and I have documented all sources and material used.")
 

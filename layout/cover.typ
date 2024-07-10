@@ -13,14 +13,14 @@
   )
 
   set text(
-    font: body-font, 
-    size: 12pt, 
+    font: body-font,
+    size: 12pt,
     lang: "en"
   )
-  
+
   set par(leading: 1em)
 
-  
+
   // --- Cover ---
   v(1cm)
   align(center, image("../figures/logo.png", width: 26%))

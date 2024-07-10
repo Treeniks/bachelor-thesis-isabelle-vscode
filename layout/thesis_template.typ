@@ -91,7 +91,7 @@
 
   // --- Figures ---
   show figure: set text(size: 0.85em)
-  
+
   // --- Table of Contents ---
   outline(
     title: {
@@ -100,8 +100,8 @@
     },
     indent: 2em
   )
-  
-  
+
+
   v(2.4fr)
   pagebreak()
 

@@ -37,8 +37,8 @@
 
   // Set body font family.
   set text(
-    font: body-font, 
-    size: 12pt, 
+    font: body-font,
+    size: 12pt,
     lang: "en"
   )
 
