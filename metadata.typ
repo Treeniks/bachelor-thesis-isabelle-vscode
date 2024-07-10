@@ -2,7 +2,7 @@
 #let titleEnglish = "Improving Isabelle/VSCode: Towards Better Prover IDE Integration via Language Server"
 #let titleGerman = "Improving Isabelle/VSCode: Towards Better Prover IDE Integration via Language Server"
 #let degree = "Bachelor"
-#let program = "Information Systems"
+#let program = "Informatics"
 #let supervisor = "Prof. Dr. Stephan Krusche"
 #let advisors = ("Prof. Dr. Tobias Nipkow",)
 #let author = "Thomas Lindae"
