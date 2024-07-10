@@ -1,3 +1,5 @@
+#import "/layout/fonts.typ": *
+
 #let titlepage(
   title: "",
   titleGerman: "",
@@ -17,9 +19,6 @@
     numbering: none,
     number-align: center,
   )
-
-  let body-font = "New Computer Modern"
-  let sans-font = "New Computer Modern Sans"
 
   set text(
     font: body-font, 

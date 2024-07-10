@@ -3,6 +3,7 @@
 #import "/layout/disclaimer.typ": *
 #import "/layout/acknowledgement.typ": *
 #import "/layout/abstract.typ": *
+#import "/layout/fonts.typ": *
 
 #let thesis(
   title: "",
@@ -55,16 +56,13 @@
     number-align: center,
   )
 
-  let body-font = "New Computer Modern"
-  let sans-font = "New Computer Modern Sans"
-
   set text(
-    font: body-font, 
-    size: 12pt, 
+    font: body-font,
+    size: 12pt,
     lang: "en"
   )
-  
-  show math.equation: set text(weight: 400)
+
+  show math.equation: set text(weight: 400, font: math-font)
 
   // --- Headings ---
   show heading: set block(below: 0.85em, above: 1.75em)

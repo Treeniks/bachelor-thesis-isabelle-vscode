@@ -1,3 +1,5 @@
+#import "/layout/fonts.typ": *
+
 #let abstract(body, lang: "en") = {
   let title = (en: "Abstract", de: "Zusammenfassung")
 
@@ -6,9 +8,6 @@
     numbering: none,
     number-align: center,
   )
-
-  let body-font = "New Computer Modern"
-  let sans-font = "New Computer Modern Sans"
 
   set text(
     font: body-font, 

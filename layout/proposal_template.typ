@@ -1,4 +1,5 @@
 #import "/layout/titlepage.typ": *
+#import "/layout/fonts.typ": *
 
 // The project function defines how your document looks.
 // It takes your content and some metadata and formats it.
@@ -33,10 +34,6 @@
     numbering: "1",
     number-align: center,
   )
-
-  // Save heading and body font families in variables.
-  let body-font = "New Computer Modern"
-  let sans-font = "New Computer Modern Sans"
 
   // Set body font family.
   set text(

@@ -1,12 +1,11 @@
+#import "/layout/fonts.typ": *
+
 #let acknowledgement() = {
   set page(
     margin: (left: 30mm, right: 30mm, top: 40mm, bottom: 40mm),
     numbering: none,
     number-align: center,
   )
-
-  let body-font = "New Computer Modern"
-  let sans-font = "New Computer Modern Sans"
 
   set text(
     font: body-font, 
