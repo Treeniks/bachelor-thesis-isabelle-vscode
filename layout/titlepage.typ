@@ -42,7 +42,7 @@
 
   align(center, text(font: title-font, 16pt, weight: "thin", degree + "’s Thesis in " + program))
 
-  v(15mm)
+  v(10mm)
 
   align(center, text(font: title-font, 20pt, weight: "bold", title))
   align(center, text(font: title-font, 20pt, weight: "regular", titleGerman))
