@@ -40,10 +40,16 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Compile Typst
-        uses: lvignoli/typst-action@main
-        with:
-          source_file: thesis.typ
+      # using Alpine because it's easier
+      - name: Set up Alpine
+        uses: jirutka/setup-alpine@v1
+
+      - name: Compile Thesis
+        shell: alpine.sh --root {0}
+        run: |
+          apk add just
+          apk add typst
+          just build
 
       - name: Upload Release Asset - Thesis
         uses: actions/upload-release-asset@v1
