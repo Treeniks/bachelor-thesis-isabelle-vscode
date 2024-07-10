@@ -1,6 +1,6 @@
 // Enter your thesis data here:
-#let titleEnglish = "Improving Isabelle/VSCode: Towards Better Prover IDE Integration via Language Server"
-#let titleGerman = "Improving Isabelle/VSCode: Towards Better Prover IDE Integration via Language Server"
+#let titleEnglish = [Improving Isabelle/VSCode: Towards Better\ Prover IDE Integration via Language Server]
+#let titleGerman = [Improving Isabelle/VSCode: Towards Better\ Prover IDE Integration via Language Server]
 #let degree = "Bachelor"
 #let program = "Informatics"
 #let supervisor = "Prof. Dr. Stephan Krusche"
