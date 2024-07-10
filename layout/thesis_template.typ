@@ -83,7 +83,8 @@
   }
 
   // --- Paragraphs ---
-  set par(leading: 1em)
+  set par(leading: 0.6em)
+  set block(spacing: 0.8em)
 
   // --- Citations ---
   set cite(style: "alphanumeric")
