@@ -28,4 +28,15 @@
 == Future Work
 #TODO[
   Tell us the next steps (that you would do if you have more time). Be creative, visionary and open-minded here.
+
+  - more clients (Zed, the Atom fork, better Sublime Text)
+  - update State ID handling in VSCode
+  - update VSCode version
+  - dynamic Symbol additions should be handleable
+    - refer to previous section that SymbolsRequest only gives compile-time symbols, not all actually current symbols
+    - in VSCode difficult, but in neovim possible to add these dynamically as new symbols
+  - code actions for other types of active markup
+  - indentation as LSP format provider
+    - in general, extract indentation logic from JEdit
+    - then also ability to use that logic for Code Actions
 ]

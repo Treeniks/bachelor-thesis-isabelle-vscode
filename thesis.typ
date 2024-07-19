@@ -22,5 +22,6 @@
 #include "/content/related_work.typ"
 #include "/content/main_server.typ"
 #include "/content/main_client.typ"
+#include "/content/main_both.typ"
 // #include "/content/evaluation.typ"
 #include "/content/summary.typ"
