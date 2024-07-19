@@ -7,7 +7,7 @@
 
 There are many examples where mathematicians tried to proof a statement, thought they conceived such proof and later found that the proof was incorrect or incomplete #TODO[maybe introduce with an example instead]. Thus, there exist software tools called proof assistants which allow one to write proofs in a language not dissimilar to a programming langauge and have the computer check for the proof's correctness. One such tool is #emph[Isabelle], originally developed at the #emph[University of Cambridge] and #emph[Technical University of Munich].
 
-To interact with the Isabelle system, the Isabelle distribution bundles a the #emph[Isabelle/JEdit] code editor, a modified version of the Java-based code editor #emph[JEdit]. Through that, the user is offered a fully interactive Isabelle session, in which proofs are evaluated and checked in real-time. However, Isabelle/JEdit has many accessibility and extensibility issues. To tackle this problem, #emph[Isabelle/VSCode] was built to create support for Isabelle from within the popular code editor #emph[Visual Studio Code] utilizing the #emph[Language Server Protocol].
+To interact with the Isabelle system, the Isabelle distribution bundles the #emph[Isabelle/JEdit] code editor, a modified version of the Java-based code editor #emph[JEdit]. Through that, the user is offered a fully interactive Isabelle session, in which proofs are evaluated and checked in real-time. However, Isabelle/JEdit has many accessibility and extensibility issues. To tackle this problem, #emph[Isabelle/VSCode] was built to create support for Isabelle from within the popular code editor #emph[Visual Studio Code] utilizing the #emph[Language Server Protocol].
 
 The Language Server Protocol (or #emph[LSP] for short) is a protocol originally developed by Microsoft specifically for VSCode. It consists of two main components: A language server, responsible for understanding the language on a semantic level, and a language client, which is typically the code editor itself. Later, the protocol became a standardized specification and is now widely used by many different programming languages and code editors to more easily support IDE functions like auto completion and diagnostics.
 
@@ -15,10 +15,13 @@ Unfortunately, Isabelle/VSCode was insufficient at providing an experience compa
 
 The goal of this thesis is to tackle both of these problems, thus bringing Isabelle/VSCode closer to the experience of Isabelle/JEdit and improve and extend the language server, such that building Isabelle support for a new code editor becomes much simpler.
 
-// == Problem
+== Problem
 // #TODO[
 //   Describe the problem that you like to address in your thesis to show the importance of your work. Focus on the negative symptoms of the currently available solution.
 // ]
+Unfortunately, Isabelle/VSCode was insufficient at providing an experience comparable to that of Isabelle/JEdit. There were both issues with usability, as well as missing features. Another problem was that the underlying language server was not powerful enough to make an Isabelle language client implementation for another code editor viable.
+
+The goal of this thesis is to tackle both of these problems, thus bringing Isabelle/VSCode closer to the experience of Isabelle/JEdit and improve and extend the language server, such that building Isabelle support for a new code editor becomes much simpler.
 
 == Motivation
 
@@ -28,7 +31,7 @@ As a temporary workaraound, the Isabelle fork `isabelle-emacs` was used, which i
 
 == Objectives
 
-Before starting work on the language server, a list of additions and changes required was compiled beforehand:
+A list of additions and changes required was compiled beforehand.
 
 - fix change_document
 - add Isabelle Extension settings into VSCode (Language Server CLI flags)

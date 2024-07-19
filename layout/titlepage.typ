@@ -32,11 +32,11 @@
 
   v(5mm)
 
-  align(center, upper(text(font: title-font, 22pt, weight: "bold", [Technical University of Munich])))
+  align(center, smallcaps(text(font: title-font, 22pt, weight: "bold", [Technical University of Munich])))
 
   v(5mm)
 
-  align(center, upper(text(font: title-font, 18pt, weight: "regular", [School of Computation,\ Information and Technology\ -- Informatics --])))
+  align(center, smallcaps(text(font: title-font, 18pt, weight: "regular", [School of Computation,\ Information and Technology\ -- Informatics --])))
 
   v(15mm)
 

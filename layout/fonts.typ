@@ -1,4 +1,3 @@
-
 // #let body-font = "New Computer Modern"
 #let body-font = "STIX Two Text"
 // #let body-font = "Libertinus Serif"

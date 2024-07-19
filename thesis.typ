@@ -20,6 +20,7 @@
 #include "/content/introduction.typ"
 #include "/content/background.typ"
 #include "/content/related_work.typ"
-#include "/content/main.typ"
+#include "/content/main_server.typ"
+#include "/content/main_client.typ"
 // #include "/content/evaluation.typ"
 #include "/content/summary.typ"
