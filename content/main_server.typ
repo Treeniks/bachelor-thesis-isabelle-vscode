@@ -31,7 +31,7 @@ This normalization was not intended according to the LSP specficiation:
 
 Thus, all that needed to be done to fix the common desyncs was to remove said normalization and instead apply the changes in the order they are received.
 
-== State Init rework
+== State Init rework <state-init>
 
 #TODO[
     - originally State Init would expect the client to know what ID it is

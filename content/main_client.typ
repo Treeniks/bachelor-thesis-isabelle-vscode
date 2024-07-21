@@ -65,7 +65,7 @@ To do so, the source `package.json` includes a `"ISABELLE_OPTIONS": {},` marker 
 == Get rid of old unused code for abbreviations
 
 #TODO[
-    - due to lsp completions chanes, client-sided abbreviation support is not needed
+    - due to lsp completions changes, client-sided abbreviation support is not needed
     - 3 whole modules could be outright removed
 ]
 
