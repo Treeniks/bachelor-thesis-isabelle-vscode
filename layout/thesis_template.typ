@@ -112,25 +112,25 @@
   body
 
   // List of figures.
-  pagebreak()
-  heading(numbering: none)[List of Figures]
-  outline(
-    title:"",
-    target: figure.where(kind: image),
-  )
+  // pagebreak()
+  // heading(numbering: none)[List of Figures]
+  // outline(
+  //   title:"",
+  //   target: figure.where(kind: image),
+  // )
 
   // List of tables.
-  pagebreak()
-  heading(numbering: none)[List of Tables]
-  outline(
-    title: "",
-    target: figure.where(kind: table)
-  )
+  // pagebreak()
+  // heading(numbering: none)[List of Tables]
+  // outline(
+  //   title: "",
+  //   target: figure.where(kind: table)
+  // )
 
   // Appendix.
-  pagebreak()
-  heading(numbering: none)[Appendix A: Supplementary Material]
-  include("/layout/appendix.typ")
+  // pagebreak()
+  // heading(numbering: none)[Appendix A: Supplementary Material]
+  // include("/layout/appendix.typ")
 
   pagebreak()
   bibliography("/thesis.bib")
