@@ -15,7 +15,7 @@ Unfortunately, #vscode was insufficient at providing an experience comparable to
 
 The original motivation was an attempt at building a language client for the terminal-based code and text editor _Neovim_. It was quickly apparent that the existing language server was not sufficient. For example, the language server used to only send the content of certain panels in an HTML format. This is great for an Electron-based editor like VSCode, which runs on the Chromium browser engine, allowing the editor to effortlessly and natively display HTML. This is not possible from within a terminal-based editor like Neovim, meaning an option to get non-HTML text was required.
 
-As a temporary workaraound, the Isabelle fork `isabelle-emacs` was used, which includes many advancements to the Isabelle language server in order to support the _Emacs_ code editor. Based on this fork, a working Neovim Isabelle environment was achievable, but there were still many missing features compared to #jedit. The `isabelle-emacs` fork was thus a strong inspiration for some of the changes done in the context of this thesis.
+As a temporary workaround, the Isabelle fork `isabelle-emacs` was used, which includes many advancements to the Isabelle language server in order to support the _Emacs_ code editor. Based on this fork, a working Neovim Isabelle environment was achievable, but there were still many missing features compared to #jedit. The `isabelle-emacs` fork was thus a strong inspiration for some of the changes done in the context of this thesis.
 
 // == Objectives
 //

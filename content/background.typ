@@ -11,7 +11,7 @@ Isabelle's core implementation languages are _ML_ and _Scala_. Generally speakin
 
 Scala, being a JVM based programming language, also effortlessly integrates into JEdit's Java code base. When using #jedit, Isabelle is able to offer an interactive session with no clear cut between what is UI and what is the underlying Isabelle logic. The entire Isabelle system has direct access to any data JEdit may hold, and the same is true the other way around. For example, #jedit has a feature to automatically indent parts of or an entire Isabelle theory. Internally, this automatic indentation uses both access to the Isabelle backend and the JEdit buffer at the same time.
 
-Additionally, Isabelle, being a proof assistant, does not follow conventional programming language wisdom. For the sake of keeping correctness, the actual Isabelle core is kept small (albeit with performance related additions). Much of Isabelle's systems are built within Isabelle itself, including a majority of its syntax. Keywords such as `theorem` do not exist statically, but are instead defined in `Pure.thy`, and it is thus also possible to extend this syntax if needed. When editing a theory in #jedit, the actual syntax highlighting is done mostly dynamically.
+Additionally, Isabelle, being a proof assistant, does not follow conventional programming language wisdom. For the sake of keeping correctness, the actual Isabelle core is kept small (albeit with performance related additions). Many of Isabelle's systems are built within Isabelle itself, including a majority of its syntax. Keywords such as `theorem` do not exist statically, but are instead defined in `Pure.thy`, and it is thus also possible to extend this syntax if needed. When editing a theory in #jedit, the actual syntax highlighting is done mostly dynamically.
 
 === Isabelle Output and State Panels
 
@@ -35,7 +35,7 @@ Each Isabelle symbol roughly consists of the following data:
 - an optional unicode codepoint
 - a list of abbreviations for this symbol
 
-These 4 points are not the whole story, however for the sake of this thesis, we will ignore some details.
+These 4 points are not the whole story, however for the sake of this thesis, we will skip some details.
 
 As an example, let's say you write the implication $A ==> B$ in Isabelle. Within JEdit, you will see it written out as "#isabelle[A ⟹ B]", however internally the "#isabelle[⟹]" is an Isabelle symbol with the following data:
 - ASCII representation: "`\<Longrightarrow>`"
@@ -56,13 +56,13 @@ To deal with these symbols, #jedit uses a custom encoding called /* to prevent h
 
 Isabelle nowadays consists of many different components. #jedit is one such component. When we refer to #vscode, we are actually referring to three different Isabelle components: The Isabelle _language server_, Isabelle's own patched _VSCodium_ and the VSCode _extension_ binding the two together. Note in particular that when running #vscode, Isabelle does not actually use a standard distribution of VSCode. Instead, it is a custom VSCodium package. VSCodium is a fully open-source version distribution of Microsoft's VSCode with some patches to disable certain types of internal telemetry as well as replacing the VSCode branding with that of VSCodium.
 
-Isabelle adds its own patches on top of VSCodium, in order to to add a custom encoding mimicking the functionality of #jedit. As such, when loading a theory file in #vscode, the user again will see "#isabelle[A ⟹ B]", while the file itself is loaded and saved as "`A \<Longrightarrow> B`".
+Isabelle adds its own patches on top of VSCodium, in order to add a custom encoding mimicking the functionality of #jedit. As such, when loading a theory file in #vscode, the user again will see "#isabelle[A ⟹ B]", while the file itself is loaded and saved as "`A \<Longrightarrow> B`".
 
 The concept of _Output_ and _State_ panels exist equivalently within #vscode, although it is not possible to create multiple _State_ panels for reasons outlined in @state-init.
 
 == Language Server Protocol (LSP)
 
-Before the introduction of the Language Server Protocol, it was customary for code editors to either only support syntax highlighting for its supported languages with very basic auto-completion and semantic understanding, or implement a full fletched IDE environment for the language. The idea of a truly polyglot IDE was virtually impossible.
+Before the introduction of the Language Server Protocol, it was common for code editors to either only support syntax highlighting for its supported languages with very basic auto-completion and semantic understanding, or implement a full fletched IDE environment for the language. The idea of a truly polyglot IDE was virtually impossible.
 
 Now, the responsibility of semantic understanding of the language has moved entirely to the language server, while the language client is responsible only for handling user interaction.
 
@@ -97,7 +97,7 @@ The general setup is quite simple: The client and server communicate via `jsonrp
 - _Request Messages_
 - _Response Messages_
 
-_Notification Messages_ are messages that, as the name suggest, only exist to notify the other party. They must not send a response back. _Request Messages_ are requests sent to the other party and require a _Response Message_ to be sent back once the request has been processed. The structure of these message types is also defined within the LSP Specification:
+_Notification Messages_ are messages that, as the name suggests, only exist to notify the other party. They must not send a response back. _Request Messages_ are requests sent to the other party and require a _Response Message_ to be sent back once the request has been processed. The structure of these message types is also defined within the LSP Specification:
 #align(center,
     // box to prevent pagebreak in the middle of the table
     box(table(
