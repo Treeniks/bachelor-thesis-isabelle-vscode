@@ -91,6 +91,11 @@
 
   // --- Figures ---
   show figure: set text(size: 0.85em)
+  show figure: it => {
+    v(1em)
+    it
+    v(1em)
+  }
 
   // --- Table of Contents ---
   outline(
