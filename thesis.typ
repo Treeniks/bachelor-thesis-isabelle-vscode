@@ -14,7 +14,7 @@
   startDate: startDate,
   submissionDate: submissionDate,
   abstract_en: include "/content/abstract_en.typ",
-  abstract_de: include "/content/abstract_de.typ"
+  abstract_de: include "/content/abstract_de.typ",
 )
 
 #include "/content/introduction.typ"

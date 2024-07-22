@@ -6,6 +6,6 @@
 // ]
 
 #TODO[
-    - https://github.com/m-fleury/isabelle-emacs
-    - https://www21.in.tum.de/students/past/vscode_plugin_improvements/assets/Isabelle_VSCode_Thesis.pdf
+  - https://github.com/m-fleury/isabelle-emacs
+  - https://www21.in.tum.de/students/past/vscode_plugin_improvements/assets/Isabelle_VSCode_Thesis.pdf
 ]

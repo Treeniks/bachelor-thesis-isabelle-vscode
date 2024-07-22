@@ -24,19 +24,19 @@ As a temporary workaround, the Isabelle fork `isabelle-emacs` was used, which in
 // - fix change_document
 // - add Isabelle Extension settings into VSCode (Language Server CLI flags)
 // - decorations
-//     - remove necessity on static highlighting (e.g. decorate theorem keyword dynamically)
-//     - ability to request decorations to be sent explicitly from client
-//     - dynamic decoration radius (named caret perspective)
+//   - remove necessity on static highlighting (e.g. decorate theorem keyword dynamically)
+//   - ability to request decorations to be sent explicitly from client
+//   - dynamic decoration radius (named caret perspective)
 // - state and dynamic output
-//     - overhaul how state panels are created (e.g. IDs handling)
-//     - handling width of state/output window
-//     - option to send output/state in non-HTML (with decorations)
-//     - option to merge state and output into one message/panel
+//   - overhaul how state panels are created (e.g. IDs handling)
+//   - handling width of state/output window
+//   - option to send output/state in non-HTML (with decorations)
+//   - option to merge state and output into one message/panel
 // - completion
-//     - dynamic symbol auto-completion (e.g. \<gamma>)
-//     - keyword completion (e.g. theorem)
+//   - dynamic symbol auto-completion (e.g. \<gamma>)
+//   - keyword completion (e.g. theorem)
 // - (maybe) add message to request all current dynamic symbol replacements (\<gamma> => γ)
 // - active markup (w/ LSP actions?)
-//     - (maybe) rename variables etc.
+//   - (maybe) rename variables etc.
 //
 // Over the course of the work, some of these features were discovered to already exist or not require changing and new problems came up that were added.

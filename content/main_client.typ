@@ -57,26 +57,26 @@ To do so, the source `package.json` includes a `"ISABELLE_OPTIONS": {},` marker 
 == Correct Font in Output and State Panel
 
 #TODO[
-    - currently used defualt "monospace" font because it is a par
-    - had to add all fonts during build
-    - then add the ones needed in typescript and update css
+  - currently used defualt "monospace" font because it is a par
+  - had to add all fonts during build
+  - then add the ones needed in typescript and update css
 ]
 
 == Get rid of old unused code for abbreviations
 
 #TODO[
-    - due to lsp completions changes, client-sided abbreviation support is not needed
-    - 3 whole modules could be outright removed
+  - due to lsp completions changes, client-sided abbreviation support is not needed
+  - 3 whole modules could be outright removed
 ]
 
 == New Default Settings and Word Pattern
 
 #TODO[
-    - completions don't work properly if word pattern is not set the way it is now
+  - completions don't work properly if word pattern is not set the way it is now
 ]
 
 #TODO[
-    - renderWhitespace to none because the space render is not monospaced in the font
-    - quickSuggestions strings to on, because everything in quotes is set to be a string by the static syntax
-    - wordBasedSuggestions to off
+  - renderWhitespace to none because the space render is not monospaced in the font
+  - quickSuggestions strings to on, because everything in quotes is set to be a string by the static syntax
+  - wordBasedSuggestions to off
 ]

@@ -12,7 +12,10 @@
   submissionDate: datetime,
 ) = {
   // Quality checks
-  assert(degree in ("Bachelor", "Master"), message: "The degree must be either 'Bachelor' or 'Master'")
+  assert(
+    degree in ("Bachelor", "Master"),
+    message: "The degree must be either 'Bachelor' or 'Master'",
+  )
 
   set page(
     margin: (left: 30mm, right: 30mm, top: 40mm, bottom: 40mm),
@@ -23,7 +26,7 @@
   set text(
     font: body-font,
     size: 12pt,
-    lang: "en"
+    lang: "en",
   )
 
 
@@ -68,7 +71,7 @@
       ..for (term, desc) in entries {
         (strong(term), desc)
       }
-    )
+    ),
   )
 
   pagebreak()

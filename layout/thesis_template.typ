@@ -35,14 +35,14 @@
     advisors: advisors,
     author: author,
     startDate: startDate,
-    submissionDate: submissionDate
+    submissionDate: submissionDate,
   )
 
   disclaimer(
     title: title,
     degree: degree,
     author: author,
-    submissionDate: submissionDate
+    submissionDate: submissionDate,
   )
 
   acknowledgement()
@@ -59,7 +59,7 @@
   set text(
     font: body-font,
     size: 12pt,
-    lang: "en"
+    lang: "en",
   )
 
   show math.equation: set text(weight: 400, font: math-font)
@@ -75,7 +75,7 @@
       [Chapter ]
       numbering(
         el.numbering,
-        ..counter(heading).at(el.location())
+        ..counter(heading).at(el.location()),
       )
     } else {
       it
@@ -103,7 +103,7 @@
       text(font: body-font, 1.5em, weight: 700, "Contents")
       v(15mm)
     },
-    indent: 2em
+    indent: 2em,
   )
 
 

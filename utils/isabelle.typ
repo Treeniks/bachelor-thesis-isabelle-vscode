@@ -1,11 +1,9 @@
 #let isabelle(body) = {
-    text(font: "Isabelle DejaVu Sans Mono", body)
+  text(font: "Isabelle DejaVu Sans Mono", body)
 }
-
 #let vscode = {
-    box(emph[Isabelle/VSCode])
+  box(emph[Isabelle/VSCode])
 }
-
 #let jedit = {
-    box(emph[Isabelle/JEdit])
+  box(emph[Isabelle/jEdit])
 }

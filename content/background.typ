@@ -16,9 +16,9 @@ Additionally, Isabelle, being a proof assistant, does not follow conventional pr
 === Isabelle Output and State Panels
 
 #figure(
-    image("/figures/jedit1.png", width: 80%),
-    caption: [JEdit with both _Output_ and _State_ panels open. _Output_ on the bottom, _State_ on the right.],
-    // placement: auto,
+  image("/figures/jedit1.png", width: 80%),
+  caption: [JEdit with both _Output_ and _State_ panels open. _Output_ on the bottom, _State_ on the right.],
+  // placement: auto,
 )
 
 Isabelle has a few different types of panels which give crucial information to the user. The two most important of such panels are the _Output_ panel and _State_ panels. The point of the _Output_ panel is to show messages that correspond to a given command, which can include general information, warnings or errors. This also means, that the content of the _Output_ panel is directly tied to a specific command in the theory. The command is typically determined by the current position of the caret.
@@ -49,9 +49,9 @@ To deal with these symbols, #jedit uses a custom encoding called /* to prevent h
 === Isabelle/VSCode
 
 #figure(
-    image("/figures/vscode1.png", width: 80%),
-    caption: [VSCode with both _Output_ and _State_ panels open. _Output_ on the bottom, _State_ on the right.],
-    // placement: auto,
+  image("/figures/vscode1.png", width: 80%),
+  caption: [VSCode with both _Output_ and _State_ panels open. _Output_ on the bottom, _State_ on the right.],
+  // placement: auto,
 )
 
 Isabelle nowadays consists of many different components. #jedit is one such component. When we refer to #vscode, we are actually referring to three different Isabelle components: The Isabelle _language server_, Isabelle's own patched _VSCodium_ and the VSCode _extension_ binding the two together. Note in particular that when running #vscode, Isabelle does not actually use a standard distribution of VSCode. Instead, it is a custom VSCodium package. VSCodium is a fully open-source version distribution of Microsoft's VSCode with some patches to disable certain types of internal telemetry as well as replacing the VSCode branding with that of VSCodium.
@@ -69,27 +69,27 @@ Now, the responsibility of semantic understanding of the language has moved enti
 The goal is a system in which a new programming language only needs to implement a single language server, while a new code editor only needs to implement a single language client. In the best case scenario, any language server and language client can be used together (although in practice this is still not always the case). If we wanted to support $N$ programming languages for $M$ code editors, without the LSP we would need $N dot M$ implementations of language semantics. With the LSP, this number is reduced drastically to only $N$ implementations of language semantics.
 
 // #figure(
-//     cetz.canvas({
-//         import cetz.draw: *
+//   cetz.canvas({
+//     import cetz.draw: *
 //
-//         rect((0, 0), (2.5, 1), name: "client", radius: 10pt)
-//         content("client", align(center)[Client\ (e.g. Editor)])
+//     rect((0, 0), (2.5, 1), name: "client", radius: 10pt)
+//     content("client", align(center)[Client\ (e.g. Editor)])
 //
-//         rect((7, 0), (9.5, 1), name: "server", radius: 10pt)
-//         content("server", [Server])
+//     rect((7, 0), (9.5, 1), name: "server", radius: 10pt)
+//     content("server", [Server])
 //
-//         line("client.east", "server.west", name: "connection", mark: (symbol: "stealth"))
-//         content("connection.mid", align(center)[jsonrpc 2.0\ connection], frame: "rect", stroke: none, fill: white, padding: .1)
+//     line("client.east", "server.west", name: "connection", mark: (symbol: "stealth"))
+//     content("connection.mid", align(center)[jsonrpc 2.0\ connection], frame: "rect", stroke: none, fill: white, padding: .1)
 //
-//         line((rel: (0, -1), to: "client.east"), (rel: (0, -1), to: "server.west"), name: "connection2", mark: (end: (symbol: "stealth")))
-//         content((rel: (0, .2), to: "connection2.mid"), [`initialize` request])
+//     line((rel: (0, -1), to: "client.east"), (rel: (0, -1), to: "server.west"), name: "connection2", mark: (end: (symbol: "stealth")))
+//     content((rel: (0, .2), to: "connection2.mid"), [`initialize` request])
 //
-//         line((rel: (0, -2), to: "client.east"), (rel: (0, -2), to: "server.west"), name: "connection3", mark: (start: (symbol: "stealth")))
-//         content((rel: (0, .2), to: "connection3.mid"), [`initialize` response])
+//     line((rel: (0, -2), to: "client.east"), (rel: (0, -2), to: "server.west"), name: "connection3", mark: (start: (symbol: "stealth")))
+//     content((rel: (0, .2), to: "connection3.mid"), [`initialize` response])
 //
-//         line((rel: (0, -3), to: "client.east"), (rel: (0, -3), to: "server.west"), name: "connection4", mark: (end: (symbol: "stealth")))
-//         content((rel: (0, .2), to: "connection4.mid"), [`initialized` notification])
-//     }),
+//     line((rel: (0, -3), to: "client.east"), (rel: (0, -3), to: "server.west"), name: "connection4", mark: (end: (symbol: "stealth")))
+//     content((rel: (0, .2), to: "connection4.mid"), [`initialized` notification])
+//   }),
 // )
 
 The general setup is quite simple: The client and server communicate via `jsonrpc 2.0` messages. These messages are mostly either of 3 types:
@@ -99,31 +99,31 @@ The general setup is quite simple: The client and server communicate via `jsonrp
 
 _Notification Messages_ are messages that, as the name suggests, only exist to notify the other party. They must not send a response back. _Request Messages_ are requests sent to the other party and require a _Response Message_ to be sent back once the request has been processed. The structure of these message types is also defined within the LSP Specification:
 #align(center,
-    // box to prevent pagebreak in the middle of the table
-    box(table(
-        columns: 3,
-        // fill: (x, y) => if y == 0 { gray },
-        stroke: (x, y) => (
-            left: if x > 0 { .5pt } else { 0pt },
-            right: 0pt,
-            top: if y == 1 { .5pt } else { 0pt },
-            bottom: 0pt,
-        ),
-        align: left,
-        table.header([*Notification*], [*Request*], [*Response*]),
-        [ jsonrpc: string ],
-        [ jsonrpc: string ],
-        [ jsonrpc: string ],
-        [],
-        [ id: integer | string; ],
-        [ id: integer | string | null; ],
-        [ method: string; ],
-        [ method: string; ],
-        [ result?: Any; ],
-        [ params?: array | object; ],
-        [ params?: array | object; ],
-        [ error?: ResponseError; ],
-    ))
+  // box to prevent pagebreak in the middle of the table
+  box(table(
+    columns: 3,
+    // fill: (x, y) => if y == 0 { gray },
+    stroke: (x, y) => (
+      left: if x > 0 { .5pt } else { 0pt },
+      right: 0pt,
+      top: if y == 1 { .5pt } else { 0pt },
+      bottom: 0pt,
+    ),
+    align: left,
+    table.header([*Notification*], [*Request*], [*Response*]),
+    [ jsonrpc: string ],
+    [ jsonrpc: string ],
+    [ jsonrpc: string ],
+    [],
+    [ id: integer | string; ],
+    [ id: integer | string | null; ],
+    [ method: string; ],
+    [ method: string; ],
+    [ result?: Any; ],
+    [ params?: array | object; ],
+    [ params?: array | object; ],
+    [ error?: ResponseError; ],
+  ))
 )
 
 The _jsonrpc_ entry of every message is, at the time of writing, always set to "_2.0_". The _id_ of the Request is sent in order to identify the associated response, thus the _id_ in a Response Message must also be set appropriately. The _params_, _result_ and _error_ entries' shape all depend on the type of Notification/Request/Response sent. This type is specified within the _method_ entry, which is the most important for now.
@@ -137,33 +137,33 @@ Because of the LSP's server/client system, it is technically possible to use an 
 The first message exchanged between client and server is an #box["`initialize`"] request sent by the client. The client has to wait for the server to respond to this request before sending any other messages, and finally sends an #box["`initialized`"] notification to mark the initialization complete once the server's response has arrived.
 
 #figure(
-    cetz.canvas({
-        import cetz.draw: *
-        let r = 7
-        let m = (symbol: "stealth")
+  cetz.canvas({
+    import cetz.draw: *
+    let r = 7
+    let m = (symbol: "stealth")
 
-        line((0, 0), (0, -3), name: "client")
-        content((rel: (0, .2), to: "client.start"), align(center)[Client\ (e.g. Editor)], anchor: "south")
+    line((0, 0), (0, -3), name: "client")
+    content((rel: (0, .2), to: "client.start"), align(center)[Client\ (e.g. Editor)], anchor: "south")
 
-        line((r, 0), (r, -3), name: "server")
-        content((rel: (0, .2), to: "server.start"), align(center)[Server], anchor: "south")
+    line((r, 0), (r, -3), name: "server")
+    content((rel: (0, .2), to: "server.start"), align(center)[Server], anchor: "south")
 
-        // content((r / 2, .2), align(center)[jsonrpc 2.0\ connection], anchor: "south")
+    // content((r / 2, .2), align(center)[jsonrpc 2.0\ connection], anchor: "south")
 
-        // line((1.5, .2), (r - 1.5, .2), name: "connection", mark: (symbol: "stealth"))
-        // content("connection.mid", align(center)[jsonrpc 2.0\ connection], frame: "rect", stroke: none, fill: white, padding: .1)
+    // line((1.5, .2), (r - 1.5, .2), name: "connection", mark: (symbol: "stealth"))
+    // content("connection.mid", align(center)[jsonrpc 2.0\ connection], frame: "rect", stroke: none, fill: white, padding: .1)
 
-        line((0, -.5), (r, -.5), name: "connection2", mark: (end: m))
-        content((rel: (0, .2), to: "connection2.mid"), [`initialize` request])
+    line((0, -.5), (r, -.5), name: "connection2", mark: (end: m))
+    content((rel: (0, .2), to: "connection2.mid"), [`initialize` request])
 
-        line((0, -1.5), (r, -1.5), name: "connection3", mark: (start: m))
-        content((rel: (0, .2), to: "connection3.mid"), [`initialize` response])
+    line((0, -1.5), (r, -1.5), name: "connection3", mark: (start: m))
+    content((rel: (0, .2), to: "connection3.mid"), [`initialize` response])
 
-        line((0, -2.5), (r, -2.5), name: "connection4", mark: (end: m))
-        content((rel: (0, .2), to: "connection4.mid"), [`initialized` notification])
-    }),
-    caption: [LSP Initialization],
-    // placement: auto,
+    line((0, -2.5), (r, -2.5), name: "connection4", mark: (end: m))
+    content((rel: (0, .2), to: "connection4.mid"), [`initialized` notification])
+  }),
+  caption: [LSP Initialization],
+  // placement: auto,
 ) <lsp-init>
 
 What's important for us is that during this back and forth, within the `initialize` request and response, the client and server send each other client and server capabilities respectively. These capabilities describe which features of the LSP the client or server actually supports. For example, not every server supports completions, and even if it does, there is further information needed, like which characters should automatically request completions. By exchanging the capabilities this early on, the client and server can exclude certain parts of messages or even skip sending some entirely, preventing expensive JSON Serialization and Deserialization for messages that the other party cannot deal with anyway.
@@ -180,4 +180,3 @@ Isabelle thus extends the LSP with its own methods under the #box["`PIDE/`"] pre
 3. "`PIDE/decoration`": A notification sent from the server to the client containing information on the dynamic syntax highlighting within the current theory.
 
 There are many more of the sort. As a result, unlike most language servers, one cannot simply start the Isabelle language server from within an existing language client and expect everything to work. There is an unusual amount of extra work that needs to be done on the client side before an IDE can utilize the Isabelle language server.
-

@@ -25,7 +25,7 @@
     advisors: advisors,
     author: author,
     startDate: startDate,
-    submissionDate: submissionDate
+    submissionDate: submissionDate,
   )
 
   // Set the document's basic properties.
@@ -39,7 +39,7 @@
   set text(
     font: body-font,
     size: 12pt,
-    lang: "en"
+    lang: "en",
   )
 
   show math.equation: set text(weight: 400)

@@ -15,7 +15,7 @@
   set text(
     font: body-font,
     size: 12pt,
-    lang: "en"
+    lang: "en",
   )
 
   set par(leading: 1em)
@@ -29,9 +29,9 @@
 
   v(15mm)
   grid(
-      columns: 2,
-      gutter: 1fr,
-      "Munich, " + submissionDate.display("[day].[month].[year]"), author
+    columns: 2,
+    gutter: 1fr,
+    "Munich, " + submissionDate.display("[day].[month].[year]"), author,
   )
 
   pagebreak()
