@@ -56,9 +56,9 @@ To deal with these symbols, #jedit uses a custom encoding called /* to prevent h
 
 Isabelle nowadays consists of many different components. #jedit is one such component. When we refer to #vscode, we are actually referring to three different Isabelle components: The Isabelle _language server_, Isabelle's own patched _VSCodium_ and the VSCode _extension_ binding the two together. Note in particular that when running #vscode, Isabelle does not actually use a standard distribution of VSCode. Instead, it is a custom VSCodium package. VSCodium is a fully open-source version distribution of Microsoft's VSCode with some patches to disable certain types of internal telemetry as well as replacing the VSCode branding with that of VSCodium.
 
-Isabelle adds its own patches on top of VSCodium, in order to add a custom encoding mimicking the functionality of #jedit. As such, when loading a theory file in #vscode, the user again will see "#isabelle[A ⟹ B]", while the file itself is loaded and saved as "`A \<Longrightarrow> B`".
+Isabelle adds its own patches on top of VSCodium, in order to add a custom encoding mimicking the functionality of #jedit. As such, when loading a theory file in #vscode, the user will see "#isabelle[A ⟹ B]", while the file itself is loaded and saved as "`A \<Longrightarrow> B`".
 
-The concept of _Output_ and _State_ panels exist equivalently within #vscode, although it is not possible to create multiple _State_ panels for reasons outlined in @state-init.
+The concept of _Output_ and _State_ panels exist equivalently within #vscode, although it is currently not possible to create multiple _State_ panels for reasons outlined in @state-init.
 
 == Language Server Protocol (LSP)
 
