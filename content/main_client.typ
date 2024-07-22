@@ -6,15 +6,15 @@
 
 Isabelle has many options that can be set to adjust different aspects of the interactive sessions. For example, the option `editor_output_state` defined whether or not state output should be printed within the output panel.
 
-The default options are generally defined within `etc/options` files scattered throughout the codebase. The user is then expected to overwrite these options within `~/.isabelle/etc/preferences`. With Isabelle/JEdit, these options are simply listed within the JEdit settings or throughout the UI, which then in turn add the appropriate entries into the user's preferences.
+The default options are generally defined within `etc/options` files scattered throughout the codebase. The user is then expected to overwrite these options within `~/.isabelle/etc/preferences`. With Isabelle/jEdit, these options are simply listed within the jEdit settings or throughout the UI, which then in turn add the appropriate entries into the user's preferences.
 
-#TODO[add JEdit example screenshot?]
+#TODO[add jEdit example screenshot?]
 
 Another way to set Isabelle preferences is through the command line. When the user invokes the `isabelle` command with their intended subcommand, e.g. `isabelle vscode`, they can add further option overwrites with `-o`, e.g. `-o editor_output_state=true`.
 
 Additionally, many options are annotated with a tag, thus creating grouping of similar options. For example, the `content` tag includes options such as `names_long`, `names_short` and `names_unique` which affect how names are printed within output and state panels.
 
-If a user tries to use Isabelle/VSCode, chances are they are already familiar with VSCode, but potentially not very familiar with Isabelle. The goal was to have the relevant options available in VSCode's settings as well, to allow a similar user experience to JEdit. The ideal would be, if the settings in VSCode were kept in-sync with the user's prefernces, to have the same user experience as one would with JEdit. However, this was deemed unpractical and thus we chose an overwriting system instead.
+If a user tries to use Isabelle/VSCode, chances are they are already familiar with VSCode, but potentially not very familiar with Isabelle. The goal was to have the relevant options available in VSCode's settings as well, to allow a similar user experience to jEdit. The ideal would be, if the settings in VSCode were kept in-sync with the user's prefernces, to have the same user experience as one would with jEdit. However, this was deemed unpractical and thus we chose an overwriting system instead.
 
 The actual settings passed to Isabelle are then as follows, in order of priority:
 1. CLI Arguments
@@ -25,7 +25,7 @@ The actual settings passed to Isabelle are then as follows, in order of priority
 
 === Choosing the relevant options
 
-Many of the options Isabelle exposes are not relevant for Isabelle/VSCode. For example, one of the option tags available is the `jedit` tag which, as the name suggests, includes options relevant specifically for JEdit.
+Many of the options Isabelle exposes are not relevant for Isabelle/VSCode. For example, one of the option tags available is the `jedit` tag which, as the name suggests, includes options relevant specifically for jEdit.
 
 The first options that are relevant are the options specifically designed for VSCode and the language server. These options are defined within `src/Tools/VSCode/etc/options`. To easily access these options, a new `vscode` option tag was added and assigned to these options.
 

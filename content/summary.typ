@@ -37,6 +37,6 @@
     - in VSCode difficult, but in neovim possible to add these dynamically as new symbols
   - code actions for other types of active markup
   - indentation as LSP format provider
-    - in general, extract indentation logic from JEdit
+    - in general, extract indentation logic from jEdit
     - then also ability to use that logic for Code Actions
 ]

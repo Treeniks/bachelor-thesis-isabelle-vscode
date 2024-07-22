@@ -9,7 +9,7 @@
 
 Isabelle's core implementation languages are _ML_ and _Scala_. Generally speaking, the ML code is responsible for Isabelle's backend, i.e. the core logic, while Scala is responsible for Isabelle's frontend, i.e. everything to do with the UI and IO. Many modules within the Isabelle code base exist identically in both Scala and ML. That way, there exists an almost seamless transition between the two.
 
-Scala, being a JVM based programming language, also effortlessly integrates into JEdit's Java code base. When using #jedit, Isabelle is able to offer an interactive session with no clear cut between what is UI and what is the underlying Isabelle logic. The entire Isabelle system has direct access to any data JEdit may hold, and the same is true the other way around. For example, #jedit has a feature to automatically indent parts of or an entire Isabelle theory. Internally, this automatic indentation uses both access to the Isabelle backend and the JEdit buffer at the same time.
+Scala, being a JVM based programming language, also effortlessly integrates into jEdit's Java code base. When using #jedit, Isabelle is able to offer an interactive session with no clear cut between what is UI and what is the underlying Isabelle logic. The entire Isabelle system has direct access to any data jEdit may hold, and the same is true the other way around. For example, #jedit has a feature to automatically indent parts of or an entire Isabelle theory. Internally, this automatic indentation uses both access to the Isabelle backend and the jEdit buffer at the same time.
 
 Additionally, Isabelle, being a proof assistant, does not follow conventional programming language wisdom. For the sake of keeping correctness, the actual Isabelle core is kept small (albeit with performance related additions). Many of Isabelle's systems are built within Isabelle itself, including a majority of its syntax. Keywords such as `theorem` do not exist statically, but are instead defined in `Pure.thy`, and it is thus also possible to extend this syntax if needed. When editing a theory in #jedit, the actual syntax highlighting is done mostly dynamically.
 
@@ -37,7 +37,7 @@ Each Isabelle symbol roughly consists of the following data:
 
 These 4 points are not the whole story, however for the sake of this thesis, we will skip some details.
 
-As an example, let's say you write the implication $A ==> B$ in Isabelle. Within JEdit, you will see it written out as "#isabelle[A ⟹ B]", however internally the "#isabelle[⟹]" is an Isabelle symbol with the following data:
+As an example, let's say you write the implication $A ==> B$ in Isabelle. Within jEdit, you will see it written out as "#isabelle[A ⟹ B]", however internally the "#isabelle[⟹]" is an Isabelle symbol with the following data:
 - ASCII representation: "`\<Longrightarrow>`"
 - name: "`Longrightarrow`"
 - unicode codepoint: `0x27F9`

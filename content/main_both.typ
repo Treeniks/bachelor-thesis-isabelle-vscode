@@ -25,7 +25,7 @@
 === Client
 
 #TODO[
-  - "mix" as test string for symbol sizes, same as in JEdit
+  - "mix" as test string for symbol sizes, same as in jEdit
   - send with a timeout, otherwise there is a message for every pixel
   - add headroom
 ]

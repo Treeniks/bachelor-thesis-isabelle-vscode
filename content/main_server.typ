@@ -83,8 +83,8 @@ Thus, all that needed to be done to fix the common desyncs was to remove said no
   - now works for sendbacks (insertions)
     - example with sledgehammer/try0
     - indentation is copied from current line
-      - indentation on JEdit is handled via global indent function
-      - uses internal JEdit buffers, thus not easily translatable to server
+      - indentation on jEdit is handled via global indent function
+      - uses internal jEdit buffers, thus not easily translatable to server
   - TODO look into git history for more difficulties
 ]
 
