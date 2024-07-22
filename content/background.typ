@@ -5,8 +5,6 @@
 
 = Background
 
-#TODO[]
-
 == Isabelle
 
 Isabelle's core implementation languages are _ML_ and _Scala_. Generally speaking, the ML code is responsible for Isabelle's backend, i.e. the core logic, while Scala is responsible for Isabelle's frontend, i.e. everything to do with the UI and IO. Many modules within the Isabelle code base exist identically in both Scala and ML. That way, there exists an almost seamless transition between the two.
@@ -70,22 +68,29 @@ Now, the responsibility of semantic understanding of the language has moved enti
 
 The goal is a system in which a new programming language only needs to implement a single language server, while a new code editor only needs to implement a single language client. In the best case scenario, any language server and language client can be used together (although in practice this is still not always the case). If we wanted to support $N$ programming languages for $M$ code editors, without the LSP we would need $N dot M$ implementations of language semantics. With the LSP, this number is reduced drastically to only $N$ implementations of language semantics.
 
-#figure(
-    cetz.canvas({
-        import cetz.draw: *
-
-        rect((0, 0), (2.5, 1), name: "client", radius: 10pt)
-        content("client", align(center)[Client\ (e.g. Editor)])
-
-        rect((6, 0), (8.5, 1), name: "server", radius: 10pt)
-        content("server", [Server])
-
-        set-style(mark: (symbol: "stealth"))
-        line("client.east", "server.west", name: "connection")
-
-        content("connection.mid", [jsonrpc 2.0], frame: "rect", stroke: none, fill: white, padding: .1)
-    }),
-)
+// #figure(
+//     cetz.canvas({
+//         import cetz.draw: *
+//
+//         rect((0, 0), (2.5, 1), name: "client", radius: 10pt)
+//         content("client", align(center)[Client\ (e.g. Editor)])
+//
+//         rect((7, 0), (9.5, 1), name: "server", radius: 10pt)
+//         content("server", [Server])
+//
+//         line("client.east", "server.west", name: "connection", mark: (symbol: "stealth"))
+//         content("connection.mid", align(center)[jsonrpc 2.0\ connection], frame: "rect", stroke: none, fill: white, padding: .1)
+//
+//         line((rel: (0, -1), to: "client.east"), (rel: (0, -1), to: "server.west"), name: "connection2", mark: (end: (symbol: "stealth")))
+//         content((rel: (0, .2), to: "connection2.mid"), [`initialize` request])
+//
+//         line((rel: (0, -2), to: "client.east"), (rel: (0, -2), to: "server.west"), name: "connection3", mark: (start: (symbol: "stealth")))
+//         content((rel: (0, .2), to: "connection3.mid"), [`initialize` response])
+//
+//         line((rel: (0, -3), to: "client.east"), (rel: (0, -3), to: "server.west"), name: "connection4", mark: (end: (symbol: "stealth")))
+//         content((rel: (0, .2), to: "connection4.mid"), [`initialized` notification])
+//     }),
+// )
 
 The general setup is quite simple: The client and server communicate via `jsonrpc 2.0` messages. These messages are mostly either of 3 types:
 - _Notification Messages_
@@ -127,22 +132,52 @@ There are many different #emph[method]s. For example, messages dealing with text
 
 === Initialization
 
-#TODO[
-    - initialize message
-    - capabilities
-]
+Because of the LSP's server/client system, it is technically possible to use an externally running language server. Even so, in practice the server is typically started by the IDE in question.
 
-Let's say you want to write code in the Rust Programming Language. When you open a Rust code file within an editor implementing an LSP client, the editor will typically proceed to start the language server in a new process (in the case of Rust, the canonical language server would be `rust-analyzer`).
+The first message exchanged between client and server is an #box["`initialize`"] request sent by the client. The client has to wait for the server to respond to this request before sending any other messages, and finally sends an #box["`initialized`"] notification to mark the initialization complete once the server's response has arrived.
 
-#TODO[]
+#figure(
+    cetz.canvas({
+        import cetz.draw: *
+        let r = 7
+        let m = (symbol: "stealth")
+
+        line((0, 0), (0, -3), name: "client")
+        content((rel: (0, .2), to: "client.start"), align(center)[Client\ (e.g. Editor)], anchor: "south")
+
+        line((r, 0), (r, -3), name: "server")
+        content((rel: (0, .2), to: "server.start"), align(center)[Server], anchor: "south")
+
+        // content((r / 2, .2), align(center)[jsonrpc 2.0\ connection], anchor: "south")
+
+        // line((1.5, .2), (r - 1.5, .2), name: "connection", mark: (symbol: "stealth"))
+        // content("connection.mid", align(center)[jsonrpc 2.0\ connection], frame: "rect", stroke: none, fill: white, padding: .1)
+
+        line((0, -.5), (r, -.5), name: "connection2", mark: (end: m))
+        content((rel: (0, .2), to: "connection2.mid"), [`initialize` request])
+
+        line((0, -1.5), (r, -1.5), name: "connection3", mark: (start: m))
+        content((rel: (0, .2), to: "connection3.mid"), [`initialize` response])
+
+        line((0, -2.5), (r, -2.5), name: "connection4", mark: (end: m))
+        content((rel: (0, .2), to: "connection4.mid"), [`initialized` notification])
+    }),
+    caption: [LSP Initialization],
+    // placement: auto,
+) <lsp-init>
+
+What's important for us is that during this back and forth, within the `initialize` request and response, the client and server send each other client and server capabilities respectively. These capabilities describe which features of the LSP the client or server actually supports. For example, not every server supports completions, and even if it does, there is further information needed, like which characters should automatically request completions. By exchanging the capabilities this early on, the client and server can exclude certain parts of messages or even skip sending some entirely, preventing expensive JSON Serialization and Deserialization for messages that the other party cannot deal with anyway.
 
 === Isabelle's Language Server
 
 While the LSP defines most methods required for typical language server usecases, specific language servers may also extend the basic protocol by their own methods. In such cases, the corresponding client will need to define extra handlers for these new methods.
 
-Through Isabelle's interactive nature, the standard Language Server Protocol is not strong enough to represent everything Isabelle needs. For example, in order to keep the _Output_ and _State_ panels updated, the server needs to know the current location of the caret at all times. This is not a typical need for language servers of normal programming languages and is thus not intended by the protocol.
+Through Isabelle's interactive nature, the standard Language Server Protocol is not strong enough to represent everything Isabelle needs. For example, in order to keep the _Output_ and _State_ panels updated, the server needs to know the current location of the caret at all times. This is not a typical need for language servers of normal programming languages and is thus not build into the protocol by default.
 
-#TODO[
-    explain `PIDE` extensions
-]
+Isabelle thus extends the LSP with its own methods under the #box["`PIDE/`"] prefix, which have to be enabled with the #box["`vscode_pide_extensions`"] Isabelle option. For example, here are 3 such methods:
+1. "`PIDE/caret_update`": A bidirectional notification for telling the other party that the caret has been moved. Mostly sent from the client to the server.
+2. "`PIDE/dynamic_output`": A notification sent from the server to the client containing the current content of the _Output_ panel.
+3. "`PIDE/decoration`": A notification sent from the server to the client containing information on the dynamic syntax highlighting within the current theory.
+
+There are many more of the sort. As a result, unlike most language servers, one cannot simply start the Isabelle language server from within an existing language client and expect everything to work. There is an unusual amount of extra work that needs to be done on the client side before an IDE can utilize the Isabelle language server.
 
