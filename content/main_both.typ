@@ -54,24 +54,54 @@ Later on, we found that client-side caching was already implemented for the Isab
 //   - decoration request kept in, in case a different client needs it (Foreshadowing to Sublime Text implementation which used it)
 // ]
 
-== Panel Margin Handling
+== Pretty Formatting for Panels
 
-=== Server
+Isabelle uses an internal module called `Pretty` to manage the formatting of content in _State_ and _Output_ panels. Specifically, this module is responsible for adding line breaks and indenting to these outputs if the panels are not wide enough to display something in a single line. The language server did not use the `Pretty` module at all, meaning that it was the responsibility of the client to add correct line breaks, which #vscode did not do.
 
-#TODO[
-  - new introduction of Pretty Panel module
-  - manages the formatting of output, including extracting the decorations if HTML is disabled
-  - now client can send margins for both state and output panels
-    - pretty panel manages if new message needs to be sent or not (i.e. if output has actually changed)
-]
+=== Isabelle's Internal XML
 
-=== Client
+Isabelle internally represents almost all content with untyped XML trees. An `XML.Body` is defined as a list of `XML.Tree`s, which can be either an instance `XML.Text` containing some text, or an `XML.Elem` containing some markup and a child body. At the end of the day, the actual content of an XML body is determined exclusively through such XML text instances, essentially the leafs of XML trees. The markup portion of XML elements on the other hand stores all kinds of semantic information Isabelle might need about its child body. This information can include what type of highlighting the text should have (e.g. `text_skolem`), whether it is _Active Markup_ that should do something when the user clicks on it, or where to go when the user initiates a _Goto Definition_. These XML bodies are so fundamental to Isabelle's inner workings, that even the theory code itself is saved as XML internally.
 
-#TODO[
-  - "mix" as test string for symbol sizes, same as in jEdit
-  - send with a timeout, otherwise there is a message for every pixel
-  - add headroom
-]
+_Output_ panel content is also created as such XML bodies. An Isabelle theory consists of many #emph[Command]s, each _Command_ has some _Command Result_, and when the caret is above a command, the content of its _Command Result_ is displayed on the _Output_ panel. And these #emph[Command Result]s are also just XML bodies. Similarly, _State_ panel content is also originally just an XML body.
+
+The `Pretty` module acts primarily on these XML bodies. There are 2 relevant functions within the module: `separate`, `formatted`. `separate` takes an XML body and adds an XML element with a separator markup between each element in the body. `formatted` applies the aforementioned indenting and line breaks to the XML body, as such this function also requires knowledge about the width of the area the content should be displayed at, further called the margin. Lastly, the `XML` module includes a `content` function, which reduces an XML body down into a String, using the information stored within the markups where applicable (like adding the correct separation character for a separator markup).
+
+=== Using `Pretty` for #vscode
+
+The problem with adding support for correct formatting of these panels to #vscode is that, for `Pretty` to be able to correctly format some output, it needs to know the margin of the panel in question. In #jedit, this is a non-issue, since the #jedit UI and the `Pretty` module all exist within the same Scala codebase. With #vscode however, there is a clear-cut between the UI (VSCode) and _Isabelle/Scala_ (the language server). Once again, there are several possibilities that we considered:
+1. rebuild the `Pretty` module within the VSCode extension
+2. give access to the `Pretty` API through LSP messages
+3. notify the language server about the current margin of each panel
+
+Option 1 would've required fundamentally changing the format in which the language client receives _State_ and _Output_ content. Previously, the language client would get HTML code that it could just display inside a WebView. While generating this HTML code, information stored within the XML body's markup was used to create hyperlinks, such that the user can click on some elements and be transported to its definition (e.g. for functions). In order for the language client to correctly format this content, it would instead need access to Isabelle's underlying XML. Such a change would've also required significantly more work for every Isabelle language client implementation, and was thus not pursued.
+
+Option 2 is promising in that it allows a language client to use the `Pretty` module the same way #jedit would. However, the problem of requiring Isabelle's underlying XML content remains. Whenever the content of a panel were to change, the following would need to happen:
+1. the language server sends the panel's XML body to the client
+2. the client then proceeds to send a `Pretty/separate` request to call the `Pretty` module's separate function on the XML body, the server calls `separate` and send the resulting XML body back to the client
+4. the client sends a `Pretty/formatted` request to the server, the server calls `formatted` and sends the result back
+5. the client sends a `XML/content` request to the server, the server calls `content` and sends the result back
+In step 4 the client can easily send over the current panel's margin in its request, thus solving the original problem. This solution clearly requires a lot of work from the client and introduces several roundtrips for each panel, however it also allows for the greatest flexibility for the client. It also gives a clear distinction between UI and logic. The language server exists purely for the internal Isabelle logic, while correct displaying of the internal information is the pure responsibility of the client. Because of this, when the UI is somehow changes, like changing the margin of the _Output_ panel, only steps 4 and 5 need to be repeated. The language server does not need to be informed about the change in UI, the panel's content does not need to be newly generated and sent to the client, and the client can handle exactly _when_ reformatting of the content is necessary.
+
+Option 3 however requires the least amount of work for the language client. For this option, the client only needs to inform the server about the current panel margin and the server can decide completely on its own whether a re-send of the panel's content is necessary. From the perspective of a language client, it is thus the simplest solution, because all the actual output logic is done by the language server, and is thus the option we chose to implement. To this end, a new `Pretty_Text_Panel` module was added to #vscode, which implements this exact logic. Both _Output_ and _State_ internally save one such `Pretty_Text_Panel` and simply tell it to refresh whenever the margin or content has changed. The `Pretty_Text_Panel` can then decide for itself if the actual content has changed and only send the appropriate notification to the client if it did.
+
+While this option has worked well in practice, note that one has to be careful how to send these margin updates. In VSCode for example, panel width can only be polled in pixels. The Isabelle language server however requires the margin to be in symbols, i.e. how many symbols currently fit horizontally into the panel. Since Isabelle symbols are not necessarily all monospaced, this instigates a unique problem: How do we measure symbol width? In #jedit, this is solved by using the text string "mix", measuring its width and dividing that width by 3, thus we did the same in #vscode. Additionally, we added a limit on how often the margin update notifications are sent. If we were to send this notification for every single change in panel width, we would send a notification for every single pixel, which is extremely wasteful. In Neovim, by its terminal based nature, neither of these problems exist, because all characters have the same width and the width of a Neovim window only exists within discrete character counts.
+
+// === Server
+//
+// #TODO[
+//   - new introduction of Pretty Panel module
+//   - manages the formatting of output, including extracting the decorations if HTML is disabled
+//   - now client can send margins for both state and output panels
+//     - pretty panel manages if new message needs to be sent or not (i.e. if output has actually changed)
+// ]
+//
+// === Client
+//
+// #TODO[
+//   - "mix" as test string for symbol sizes, same as in jEdit
+//   - send with a timeout, otherwise there is a message for every pixel
+//   - add headroom
+// ]
 
 == Symbol Options
 

@@ -45,7 +45,7 @@ Thus, all that needed to be done to fix the common desyncs was to remove said no
   - currently only send some decorations, now send all
 ]
 
-== Disable HTML Output
+== Disable HTML Output <html-panel-output>
 
 #TODO[
   - currently server sends output always in HTML format

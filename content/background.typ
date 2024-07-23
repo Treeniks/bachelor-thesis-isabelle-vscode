@@ -46,7 +46,7 @@ As an example, let's say you write the implication $A ==> B$ in Isabelle. Within
 To deal with these symbols, #jedit uses a custom encoding called /* to prevent hyphenation */ #box(emph["UTF-8-Isabelle"]). This encoding ensures that the user sees "#isabelle[A ⟹ B]" while the actual content of the underlying file is "`A \<Longrightarrow> B`". However, because Isabelle internally uses its own abstracted representation of symbols, it has no trouble dealing with cases where the actual
 "#isabelle[⟹]" unicode symbol is used within a file.
 
-=== Isabelle/VSCode <isabelle-vscode>
+=== #vscode <isabelle-vscode>
 
 #figure(
   image("/figures/vscode1.png", width: 80%),
@@ -59,6 +59,10 @@ Isabelle nowadays consists of many different components. #jedit is one such comp
 Isabelle adds its own patches on top of VSCodium, in order to add a custom encoding mimicking the functionality of #jedit. As such, when loading a theory file in #vscode, the user will see "#isabelle[A ⟹ B]", while the file itself is loaded and saved as "`A \<Longrightarrow> B`".
 
 The concept of _Output_ and _State_ panels exist equivalently within #vscode, although it is currently not possible to create multiple _State_ panels for reasons outlined in @state-init.
+
+=== Isabelle Fonts
+
+#TODO[]
 
 == Language Server Protocol (LSP)
 

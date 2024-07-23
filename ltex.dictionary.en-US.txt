@@ -3,3 +3,4 @@ jEdit
 VSCode
 VSCodium
 Deserialization
+Neovim
