@@ -1,4 +1,5 @@
 #import "/utils/todo.typ": TODO
+#import "/utils/isabelle.typ": *
 
 = Changes to the Language Server (Isabelle)
 
