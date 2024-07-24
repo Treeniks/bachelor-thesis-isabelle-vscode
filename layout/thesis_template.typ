@@ -65,21 +65,18 @@
   show math.equation: set text(weight: 400, font: math-font)
 
   // --- Headings ---
-  show heading: set block(below: 0.85em, above: 1.75em)
+  show heading: set block(below: 1em, above: 2em)
   show heading: set text(font: body-font)
   set heading(numbering: "1.1")
+
   // Reference first-level headings as "chapters"
-  show ref: it => {
-    let el = it.element
-    if el != none and el.func() == heading and el.level == 1 {
-      [Chapter ]
-      numbering(
-        el.numbering,
-        ..counter(heading).at(el.location()),
-      )
-    } else {
-      it
-    }
+  show heading.where(level: 1): set heading(supplement: [Chapter])
+  show heading.where(level: 1): set text(size: 20pt)
+  // Put chapters on new page and add extra spacing
+  show heading.where(level: 1): it => {
+    pagebreak(weak: true)
+    v(3em)
+    it
   }
 
   // --- Paragraphs ---
