@@ -84,18 +84,13 @@
 
   // --- Paragraphs ---
   set par(leading: 0.6em)
-  set block(spacing: 0.8em)
+  // set block(spacing: 0.8em)
 
   // --- Citations ---
   set cite(style: "alphanumeric")
 
   // --- Figures ---
   show figure: set text(size: 0.85em)
-  show figure: it => {
-    v(1em)
-    it
-    v(1em)
-  }
 
   // --- Table of Contents ---
   outline(
@@ -112,7 +107,10 @@
 
 
   // Main body.
-  set par(justify: true, first-line-indent: 1em)
+  // set par(justify: true, first-line-indent: 1em)
+  set par(justify: true)
+  set list(indent: 1em)
+  set enum(indent: 1em)
 
   body
 

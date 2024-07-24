@@ -18,7 +18,8 @@ Additionally, Isabelle, being a proof assistant, does not follow conventional pr
 #figure(
   image("/figures/jedit1.png", width: 80%),
   caption: [JEdit with both _Output_ and _State_ panels open. _Output_ on the bottom, _State_ on the right.],
-  // placement: auto,
+  kind: image,
+  placement: auto,
 )
 
 Isabelle has a few different types of panels which give crucial information to the user. The two most important of such panels are the _Output_ panel and _State_ panels. The point of the _Output_ panel is to show messages that correspond to a given command, which can include general information, warnings or errors. This also means, that the content of the _Output_ panel is directly tied to a specific command in the theory. The command is typically determined by the current position of the caret.
@@ -43,15 +44,15 @@ As an example, let's say you write the implication $A ==> B$ in Isabelle. Within
 - unicode codepoint: `0x27F9`
 - abbreviations: "`.>`", "`==>`"
 
-To deal with these symbols, #jedit uses a custom encoding called /* to prevent hyphenation */ #box(emph["UTF-8-Isabelle"]). This encoding ensures that the user sees "#isabelle[A ⟹ B]" while the actual content of the underlying file is "`A \<Longrightarrow> B`". However, because Isabelle internally uses its own abstracted representation of symbols, it has no trouble dealing with cases where the actual
-"#isabelle[⟹]" unicode symbol is used within a file.
+To deal with these symbols, #jedit uses a custom encoding called /* to prevent hyphenation */ #box(emph["UTF-8-Isabelle"]). This encoding ensures that the user sees "#isabelle[A ⟹ B]" while the actual content of the underlying file is "`A \<Longrightarrow> B`". However, because Isabelle internally uses its own abstracted representation of symbols, it has no trouble dealing with cases where the actual "#isabelle[⟹]" unicode symbol is used within a file.
 
 === #vscode <isabelle-vscode>
 
 #figure(
   image("/figures/vscode1.png", width: 80%),
   caption: [VSCode with both _Output_ and _State_ panels open. _Output_ on the bottom, _State_ on the right.],
-  // placement: auto,
+  kind: image,
+  placement: auto,
 )
 
 Isabelle nowadays consists of many different components. #jedit is one such component. When we refer to #vscode, we are actually referring to three different Isabelle components: The Isabelle _language server_, Isabelle's own patched _VSCodium_ and the VSCode _extension_ binding the two together. Note in particular that when running #vscode, Isabelle does not actually use a standard distribution of VSCode. Instead, it is a custom VSCodium package. VSCodium is a fully open-source version distribution of Microsoft's VSCode with some patches to disable certain types of internal telemetry as well as replacing the VSCode branding with that of VSCodium.
@@ -130,7 +131,7 @@ _Notification Messages_ are messages that, as the name suggests, only exist to n
   ))
 )
 
-The _jsonrpc_ entry of every message is, at the time of writing, always set to "_2.0_". The _id_ of the Request is sent in order to identify the associated response, thus the _id_ in a Response Message must also be set appropriately. The _params_, _result_ and _error_ entries' shape all depend on the type of Notification/Request/Response sent. This type is specified within the _method_ entry, which is the most important for now.
+The _jsonrpc_ entry of every message is, at the time of writing, always set to "`2.0`". The _id_ of the Request is sent in order to identify the associated response, thus the _id_ in a Response Message must also be set appropriately. The _params_, _result_ and _error_ entries' shape all depend on the type of Notification/Request/Response sent. This type is specified within the _method_ entry, which is the most important for now.
 
 There are many different #emph[method]s. For example, messages dealing with text documents are sent under the #box["`textDocument/`"] method prefix, like the #box["`textDocument/hover`"] request which requests for hover information, or the #box["`textDocument/didChange`"] notification, sent by the client to keep the server informed about changes made to the document's text.
 
@@ -167,7 +168,8 @@ The first message exchanged between client and server is an #box["`initialize`"]
     content((rel: (0, .2), to: "connection4.mid"), [`initialized` notification])
   }),
   caption: [LSP Initialization],
-  // placement: auto,
+  kind: image,
+  placement: auto,
 ) <lsp-init>
 
 What's important for us is that during this back and forth, within the `initialize` request and response, the client and server send each other client and server capabilities respectively. These capabilities describe which features of the LSP the client or server actually supports. For example, not every server supports completions, and even if it does, there is further information needed, like which characters should automatically request completions. By exchanging the capabilities this early on, the client and server can exclude certain parts of messages or even skip sending some entirely, preventing expensive JSON Serialization and Deserialization for messages that the other party cannot deal with anyway.
@@ -180,7 +182,9 @@ Through Isabelle's interactive nature, the standard Language Server Protocol is 
 
 Isabelle thus extends the LSP with its own methods under the #box["`PIDE/`"] prefix, which have to be enabled with the #box["`vscode_pide_extensions`"] Isabelle option. For example, here are 3 such methods:
 1. "`PIDE/caret_update`": A bidirectional notification for telling the other party that the caret has been moved. Mostly sent from the client to the server.
+
 2. "`PIDE/dynamic_output`": A notification sent from the server to the client containing the current content of the _Output_ panel.
+
 3. "`PIDE/decoration`": A notification sent from the server to the client containing information on the dynamic syntax highlighting within the current theory.
 
 There are many more of the sort. As a result, unlike most language servers, one cannot simply start the Isabelle language server from within an existing language client and expect everything to work. There is an unusual amount of extra work that needs to be done on the client side before an IDE can utilize the Isabelle language server.
