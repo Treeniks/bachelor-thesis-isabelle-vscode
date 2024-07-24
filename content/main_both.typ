@@ -9,29 +9,35 @@ As mentioned in @isabelle-vscode, #vscode describes multiple Isabelle components
 
 Previously, when switching theory within #vscode and then switching back, the dynamic syntax highlighting would not persist. It was possible to get the highlighting to work again by changing the buffer's content; however, until this was done, it never recovered by itself. This was a problem when working on multiple theory files.
 
-To understand how #vscode does dynamic syntax highlighting, we will first take a look at the structure of the `PIDE/decoration` notifications: The `params` field of this method's Notifications has two components: A `uri` field with the relevant theory file's URI, and a list of decorations called `entries`. Each of these entries then consists of a `type` and a list of ranges called `content`. The `type` is a string identifier for an Isabelle decoration type. It includes things like `text_skolem` for Skolem variables and `dotted_warning` for things that have warnings associated and thus have a dotted underline. Each entry in the `content` list is another list of 4 integers describing the line start, line end, column start, and column end of the range the specified decoration type should be applied to.
+To understand how #vscode does dynamic syntax highlighting, we will first take a look at the structure of the `PIDE/decoration` notifications: The `params` field of this method's Notifications has two components: A `uri` field with the relevant theory file's URI, and a list of decorations called `entries`. Each of these entries then consists of a `type` and a list of ranges called `content`. The `type` is a string identifier for an Isabelle decoration type. It includes things like `text_skolem` for Skolem variables and `dotted_warning` for things that have warnings associated and thus have a dotted underline. Each entry in the `content` list is another list of 4 integers describing the line start, line end, column start, and column end of the range the specified decoration type should be applied to. @pide-decoration-json shows an example of what a `PIDE/decoration` message may look like.
 
-Thus, an example `PIDE/decoration` message may look something like this:
-```json
-"jsonrpc": "2.0",
-"method": "PIDE/decoration",
-"params": {
-  "uri": "file:///home/user/Documents/Example.thy",
-  "entries": [
-    {
-      "type": "text_main",
-      "content": [
-        { "range": [1, 23, 1, 41] },
-        { "range": [5, 10, 5, 11] }
+#figure(
+  [
+    ```json
+    "jsonrpc": "2.0",
+    "method": "PIDE/decoration",
+    "params": {
+      "uri": "file:///home/user/Documents/Example.thy",
+      "entries": [
+        {
+          "type": "text_main",
+          "content": [
+            { "range": [1, 23, 1, 41] },
+            { "range": [5, 10, 5, 11] }
+          ]
+        },
+        {
+          "type": "text_operator",
+          "content": [ { "range": [7, 6, 7, 7] } ]
+        }
       ]
-    },
-    {
-      "type": "text_operator",
-      "content": [ { "range": [7, 6, 7, 7] } ]
     }
-  ]
-}
-```
+    ```
+  ],
+  caption: [Example `PIDE/decoration` notification sent by the language server.],
+  kind: raw,
+  placement: auto,
+) <pide-decoration-json>
 
 Since this is not part of the standard LSP specification, a language client must implement a special handler for such decoration notifications. It was also not possible to explicitly request these decorations from the language server. Instead, the language server would send new decorations whenever it deemed necessary, e.g., because the caret moved into areas of the text that haven't been decorated yet or because the document's content has changed.
 
@@ -69,7 +75,7 @@ The `Pretty` module acts primarily on these XML bodies. There are 2 relevant fun
 
 === Using `Pretty` for #vscode
 
-The problem with adding support for correct formatting of these panels to #vscode is that, for `Pretty` to be able to correctly format some output, it needs to know the margin of the panel in question. In #jedit, this is a non-issue, since the #jedit UI and the `Pretty` module all exist within the same Scala codebase. With #vscode however, there is a clear-cut between the UI (VSCode) and _Isabelle/Scala_ (the language server). Once again, there are several possibilities that we considered:
+The problem with adding support for correct formatting of these panels to #vscode is that, for `Pretty` to be able to correctly format some output, it needs to know the margin of the panel in question. In #jedit, this is a non-issue, since the #jedit UI and the `Pretty` module all exist within the same Scala codebase. With #vscode however, there is a clear-cut between the UI (VSCode) and #box[_Isabelle/Scala_] (the language server). Once again, there are several possibilities that we considered:
 1. rebuild the `Pretty` module within the VSCode extension
 
 2. give access to the `Pretty` API through LSP messages
@@ -83,11 +89,11 @@ Option 2 is promising in that it allows a language client to use the `Pretty` mo
 
 2. the client then proceeds to send a `Pretty/separate` request to call the `Pretty` module's separate function on the XML body, the server calls `separate` and send the resulting XML body back to the client
 
-4. the client sends a `Pretty/formatted` request to the server, the server calls `formatted` and sends the result back
+3. the client sends a `Pretty/formatted` request to the server, the server calls `formatted` and sends the result back
 
-5. the client sends a `XML/content` request to the server, the server calls `content` and sends the result back
+4. the client sends a `XML/content` request to the server, the server calls `content` and sends the result back
 
-In step 4 the client can easily send over the current panel's margin in its request, thus solving the original problem. This solution clearly requires a lot of work from the client and introduces several roundtrips for each panel, however it also allows for the greatest flexibility for the client. It also gives a clear distinction between UI and logic. The language server exists purely for the internal Isabelle logic, while correct displaying of the internal information is the pure responsibility of the client. Because of this, when the UI is somehow changes, like changing the margin of the _Output_ panel, only steps 4 and 5 need to be repeated. The language server does not need to be informed about the change in UI, the panel's content does not need to be newly generated and sent to the client, and the client can handle exactly _when_ reformatting of the content is necessary.
+In step 3 the client can easily send over the current panel's margin in its request, thus solving the original problem. This solution clearly requires a lot of work from the client and introduces several roundtrips for each panel, however it also allows for the greatest flexibility for the client. It also gives a clear distinction between UI and logic. The language server exists purely for the internal Isabelle logic, while correct displaying of the internal information is the pure responsibility of the client. Because of this, when the UI is somehow changes, like changing the margin of the _Output_ panel, only steps 4 and 5 need to be repeated. The language server does not need to be informed about the change in UI, the panel's content does not need to be newly generated and sent to the client, and the client can handle exactly _when_ reformatting of the content is necessary.
 
 Option 3 however requires the least amount of work for the language client. For this option, the client only needs to inform the server about the current panel margin and the server can decide completely on its own whether a re-send of the panel's content is necessary. From the perspective of a language client, it is thus the simplest solution, because all the actual output logic is done by the language server, and is thus the option we chose to implement. To this end, a new `Pretty_Text_Panel` module was added to #vscode, which implements this exact logic. Both _Output_ and _State_ internally save one such `Pretty_Text_Panel` and simply tell it to refresh whenever the margin or content has changed. The `Pretty_Text_Panel` can then decide for itself if the actual content has changed and only send the appropriate notification to the client if it did.
 
