@@ -66,7 +66,7 @@
 
   // --- Headings ---
   show heading: set block(below: 1em, above: 2em)
-  show heading: set text(font: body-font)
+  show heading: set text(font: body-font, weight: 700)
   set heading(numbering: "1.1")
 
   // Reference first-level headings as "chapters"
@@ -88,16 +88,22 @@
   // set cite(style: "alphanumeric")
 
   // --- Figures ---
-  show figure: set text(size: 0.85em)
+  show figure.caption: set text(size: 0.85em)
 
   // --- Table of Contents ---
-  outline(
-    title: {
-      text(font: body-font, 1.5em, weight: 700, "Contents")
-      v(15mm)
-    },
-    indent: 2em,
-  )
+  { // scoped so it doesn't affect other outlines
+    show outline.entry.where(level: 1): it => {
+      v(2em, weak: true)
+      strong(it)
+    }
+    outline(
+      title: {
+        text(font: body-font, 1.5em, weight: 700, "Contents")
+        v(15mm)
+      },
+      indent: 2em,
+    )
+  }
 
 
   v(2.4fr)
