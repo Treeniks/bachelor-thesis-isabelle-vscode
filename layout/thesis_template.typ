@@ -132,5 +132,5 @@
   // include("/layout/appendix.typ")
 
   pagebreak()
-  bibliography("/biblio.yml")
+  bibliography("/biblio.yml", style: "elsevier-with-titles")
 }

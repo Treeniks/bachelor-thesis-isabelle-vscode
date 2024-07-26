@@ -65,7 +65,7 @@ Before the introduction of the Language Server Protocol, it was common for code 
 
 Now, the responsibility of semantic understanding of the language has moved entirely to the language server, while the language client is responsible only for handling user interaction.
 
-The goal is a system in which a new programming language only needs to implement a single language server, while a new code editor only needs to implement a single language client. In the best case scenario, any language server and language client can be used together (although in practice this is still not always the case). If we wanted to support $N$ programming languages for $M$ code editors, without the LSP we would need $N dot M$ implementations of language semantics. With the LSP, this number is reduced drastically to only $N$ implementations of language semantics.
+The goal is a system in which a new programming language only needs to implement a single language server, while a new code editor only needs to implement a single language client. In the best case scenario, any language server and language client can be used together (although in practice this is still not always the case). If we wanted to support $N$ programming languages for $M$ code editors, without the LSP we would need $N dot M$ implementations of language semantics @rask-lsp-specification. With the LSP, this number is reduced drastically to only $N$ implementations of language semantics.
 
 The general setup is quite simple: The client and server communicate via `jsonrpc 2.0` messages. These messages are mostly either of 3 types:
 - _Notification Messages_
@@ -149,7 +149,7 @@ What's important for us is that during this back and forth, within the `initiali
 
 While the LSP defines most methods required for typical language server usecases, specific language servers may also extend the basic protocol by their own methods. In such cases, the corresponding client will need to define extra handlers for these new methods.
 
-Through Isabelle's interactive nature, the standard Language Server Protocol is not enough to represent everything Isabelle needs. For example, in order to keep the _Output_ and _State_ panels updated, the server needs to know the current location of the caret at all times. This is not a typical need for language servers of normal programming languages and is thus not build into the protocol by default.
+Since the standard Language Server Protocol is designed for normal programming languages in mind, it defines little for other types of langauges, particularly theorem provers @rask-lsp-specification, and is thus insufficient for Isabelle's needs. For example, in order to keep the _Output_ and _State_ panels updated, the server needs to know the current location of the caret at all times. This is not a typical need for language servers of normal programming languages and is thus not build into the protocol by default.
 
 Isabelle thus extends the LSP with its own methods under the #box["`PIDE/`"] prefix, which have to be enabled with the #box["`vscode_pide_extensions`"] Isabelle option. For example, here are 3 such methods:
 1. "`PIDE/caret_update`": A bidirectional notification for telling the other party that the caret has been moved. Mostly sent from the client to the server.

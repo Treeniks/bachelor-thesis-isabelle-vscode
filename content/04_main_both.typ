@@ -1,9 +1,9 @@
 #import "/utils/todo.typ": TODO
 #import "/utils/isabelle.typ": *
 
-= Changes for both Language Server and Client
+= Changes to both Server and Client
 
-As mentioned in @isabelle-vscode, #vscode describes multiple Isabelle components working in cohort to support Isabelle within VSCode. As such, the work done on #vscode can be categorized on whether it deals with the language server, the language client (i.e. the VSCode extension), or both, the latter of which we will look at first.
+As mentioned in @isabelle-vscode, #vscode describes multiple Isabelle components working in unison to support Isabelle within VSCode. As such, the work done on #vscode can be categorized on whether it deals with the language server, the language client (i.e. the VSCode extension), or both, the latter of which we will look at first.
 
 == Decorations on File Switch
 

@@ -136,3 +136,14 @@ lean-system:
     title: Automated Deduction - CADE-25
     serial-number:
       isbn: 978-3-319-21401-6
+
+rask-lsp-specification:
+  type: article
+  title: "The specification language server protocol: A proposal for standardised LSP extensions"
+  author: ["Jonas Kjær Rask", "Frederik Palludan Madsen", "Nick Battle", "Hugo Daniel Macedo", "Peter Gorm Larsen"]
+  url: https://arxiv.org/abs/2108.02961
+  date: 2021-08-06
+  serial-number:
+    arxiv: 2108.02961
+  # TODO add arxiv parent
+
