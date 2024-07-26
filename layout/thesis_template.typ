@@ -5,6 +5,8 @@
 #import "/layout/abstract.typ": *
 #import "/layout/fonts.typ": *
 
+#import "@preview/codly:1.0.0": *
+
 #let thesis(
   title: "",
   titleGerman: "",
@@ -19,6 +21,8 @@
   abstract_de: "",
   body,
 ) = {
+  show: codly-init.with()
+
   cover(
     title: title,
     degree: degree,
