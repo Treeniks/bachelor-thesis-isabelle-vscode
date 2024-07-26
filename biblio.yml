@@ -18,6 +18,13 @@ intro-schroder1898:
   publisher: Druck von E. Karras
   date: 1898
 
+manual-isar:
+  type: reference
+  title: The Isabelle/Isar Reference Manual
+  author: Makarius Wenzel
+  date: 2024-05-23
+  url: https://isabelle.in.tum.de/doc/isar-ref.pdf
+
 manual-jedit:
   type: reference
   title: Isabelle/jEdit

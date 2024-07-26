@@ -7,13 +7,23 @@
 
 == Isabelle
 
-Isabelle's core implementation languages are _ML_ and _Scala_. Generally speaking, the ML code is responsible for Isabelle's backend, i.e. the core prover logic, while Scala is responsible for Isabelle's frontend, i.e. everything to do with the UI and IO. Many modules within the Isabelle code base exist in both Scala and ML. That way, there exists an almost seamless transition between the two.
+#TODO[stats about Isabelle's usage in the real world]
 
-Scala, being a JVM based programming language, also effortlessly integrates into jEdit's Java code base. When using #jedit, Isabelle is able to offer an interactive session with /* TODO */ no clear cut between what is UI and what is the underlying Isabelle logic. The entire Isabelle system has direct access to any data jEdit may hold, and the same is true the other way around. For example, #jedit has a feature to automatically indent parts of or an entire Isabelle theory. Internally, this automatic indentation uses both access to the Isabelle backend and the jEdit buffer at the same time.
+=== Isabelle/Isar
 
-Additionally, Isabelle, being a proof assistant, does not follow conventional programming language practices. For the sake of keeping correctness, the actual Isabelle core is kept small (albeit with performance related additions). Many of Isabelle's systems are built within Isabelle itself, including a majority of its syntax. Keywords such as `theorem` do not exist statically, but are instead defined in `Pure.thy`, and it is thus also possible to extend this syntax if needed. When editing a theory in #jedit, the actual syntax highlighting is done mostly dynamically.
+When one wants to write an Isabelle theory, i.e. a document containing a number of theorems, lemmas, function definitions and more, Isabelle offers its own proof language called #isar, allowing its users to write human-readable structured proofs @manual-isar.
 
-=== Isabelle Output and State Panels
+The #isar syntax consists of three main syntactic concepts: _Commands_, _Methods_ and _Attributes_. Particularly relevant for us are the _Commands_, which includes keywords like `theorem` with which one can state a proposition followed by a proof, or `apply` with which one can apply a proof _Method_.
+
+=== Implementation Design
+
+Isabelle's core implementation languages are _ML_ and _Scala_. Generally speaking, the ML code is responsible for Isabelle's purely functional and mathematical domain, e.g. its LCF-style kernel @paulson-next-700 @paulson-lcf-to-isabelle, while Scala is responsible for Isabelle's physical domain, e.g. everything to do with the UI and IO. Many modules within the Isabelle code base exist in both Scala and ML, thus creating an almost seamless transition between the two.
+
+Scala, being a JVM based programming language, also effortlessly integrates into jEdit's Java code base. When using #jedit, Isabelle is able to offer an interactive session which does not follow classical layered architectures. The entire Isabelle system has direct access to any data jEdit may hold, and the same is true the other way around. For example, #jedit has a feature to automatically indent parts of or an entire Isabelle theory. Internally, this automatic indentation uses both access to the Isabelle backend and the jEdit buffer at the same time.
+
+Additionally, Isabelle, being a proof assistant, does not follow conventional programming language practices. For the sake of keeping correctness, the actual Isabelle kernel is kept small (albeit with performance related additions). Many of Isabelle's systems are built within Isabelle itself, including a majority of the #isar syntax. Keywords such as `theorem` do not exist statically, but are instead defined in userspace/* userland? */, and it is thus also possible to extend this syntax if needed. When editing a theory in #jedit, the actual syntax highlighting is done mostly dynamically.
+
+=== Output and State Panels
 
 #figure(
   image("/figures/jedit1.png", width: 80%),
@@ -26,19 +36,46 @@ Isabelle has a few different types of panels which give crucial information to t
 
 _State_ panels on the other hand display the current internal proof state within a proof. While there can only be one _Output_ panel, it is possible to have multiple _State_ panels open, which may show states at different positions within the document. Whether or not moving the caret updates the currently displayed _Output_ or _State_ depends on the _Auto update_ setting of the respective panel.
 
-=== Isabelle Symbols
+=== Symbols
 
 Isabelle uses a lot of custom symbols to allow logical terms to be written in a syntax close to that of mathematics. The concept of what an _Isabelle symbol_ is exactly is rather broad, so for simplicity we will focus primarily on a certain group of symbols typically used in mathematical formulas.
 
 Each Isabelle symbol roughly consists of four points of data: An ASCII representation of the symbol, a name, an optional unicode codepoint and a list of abbreviations for this symbol. These four points are not the whole story, however for the sake of simplicity, we will skip some details.
 
-As an example, let's say you write the implication $A ==> B$ in Isabelle. Within jEdit, you will see it written out as #isabelle("A ⟹ B"), however internally the #isabelle("⟹") is an Isabelle symbol with the following data:
-- ASCII representation: "`\<Longrightarrow>`"
-- name: "`Longrightarrow`"
-- unicode codepoint: `0x27F9`
-- abbreviations: "`.>`", "`==>`"
+As an example, let's say you write the implication $A ==> B$ in Isabelle. Within jEdit, you will see it written out as #isabelle("A ⟹ B"), however internally the #isabelle("⟹") is an Isabelle symbol. Its corresponding data is outlined in @symbol-data-example.
+
+#figure(
+  table(
+    columns: 2,
+    stroke: (x, y) => (
+      left: if x > 0 { .5pt } else { 0pt },
+      right: 0pt,
+      top: 0pt,
+      bottom: 0pt,
+    ),
+    align: left,
+
+    [*ASCII Representation*],
+    [`\<Longrightarrow>`],
+    [*Name*],
+    [`Longrightarrow`],
+    [*Unicode Codepoint*],
+    [`0x27F9`],
+    [*Abbreviations*],
+    [#isabelle(".>"), #isabelle("==>")],
+  ),
+  caption: [Symbol data of #isabelle("⟹")],
+  kind: table,
+  placement: auto,
+) <symbol-data-example>
 
 To deal with these symbols, #jedit uses a custom encoding called #box(emph["UTF-8-Isabelle"]). /* say more */ This encoding ensures that the user sees #isabelle("A ⟹ B") while the actual content of the underlying file is "`A \<Longrightarrow> B`". However, because Isabelle internally uses its own abstracted representation of symbols, it has no trouble dealing with cases where the actual #isabelle("⟹") unicode symbol is used within a file.
+
+#TODO[
+  Add explanation why this custom encoding is used instead of just unicode:
+  - sub/sup not consistent in unicode, can even be nested in Isabelle
+  - not dependent on font unicode support, file can be viewed with virtually any font if needed
+]
 
 === Isabelle/VSCode <isabelle-vscode>
 
@@ -51,11 +88,11 @@ To deal with these symbols, #jedit uses a custom encoding called #box(emph["UTF-
 
 Isabelle nowadays consists of many different components. #jedit is one such component. When we refer to #vscode, we are actually referring to three different Isabelle components: The Isabelle _language server_, Isabelle's own patched _VSCodium_ #footnote[https://vscodium.com/] and the VSCode _extension_ binding the two together. Note in particular that when running #vscode, Isabelle does not actually use a standard distribution of VSCode. Instead, it is a custom VSCodium package. VSCodium is a fully open-source distribution of Microsoft's VSCode with some patches to disable telemetry as well as replacing the VSCode branding with that of VSCodium.
 
-Isabelle adds its own patches on top of VSCodium, in order to add a custom encoding mimicking the functionality of #jedit, as well as adding custom Isabelle-specific fonts which we will discuss further in @isabelle-fonts. Since neither adding custom encodings nor including custom fonts is possible from within a VSCode plugin, these patches were created instead. /* TODO active voice? */
+Isabelle adds its own patches on top of VSCodium, in order to add a custom encoding mimicking the functionality of #jedit, as well as integrating custom Isabelle-specific fonts which we will discuss further in @isabelle-fonts. Since neither adding custom encodings nor including custom fonts is possible from within a VSCode plugin, these patches exist instead.
 
 The concept of _Output_ and _State_ panels exist equivalently within #vscode as seen in @vscode1, although it is currently not possible to create multiple _State_ panels for reasons outlined in @state-init.
 
-=== Isabelle Fonts <isabelle-fonts>
+=== Fonts <isabelle-fonts>
 
 #TODO[]
 
@@ -65,7 +102,7 @@ Before the introduction of the Language Server Protocol, it was common for code 
 
 Now, the responsibility of semantic understanding of the language has moved entirely to the language server, while the language client is responsible only for handling user interaction.
 
-The goal is a system in which a new programming language only needs to implement a single language server, while a new code editor only needs to implement a single language client. In the best case scenario, any language server and language client can be used together (although in practice this is still not always the case). If we wanted to support $N$ programming languages for $M$ code editors, without the LSP we would need $N dot M$ implementations of language semantics @rask-lsp-specification. With the LSP, this number is reduced drastically to only $N$ implementations of language semantics.
+The goal is a system in which a new programming language only needs to implement a single language server, while a new code editor only needs to implement a single language client. In the best case scenario, any language server and language client can be used together (although in practice this is still not always the case). If we wanted to support $N$ programming languages for $M$ code editors, without the LSP we would need $N dot M$ implementations of language semantics @rask-lsp-specification. With the LSP, this number is reduced drastically to only $N$ language server and $M$ language client implementations.
 
 The general setup is quite simple: The client and server communicate via `jsonrpc 2.0` messages. These messages are mostly either of 3 types:
 - _Notification Messages_
@@ -75,32 +112,29 @@ The general setup is quite simple: The client and server communicate via `jsonrp
 _Notification Messages_ are messages that, as the name suggests, only exist to notify the other party. They must not send a response back. _Request Messages_ are requests sent to the other party and require a _Response Message_ to be sent back once the request has been processed. The structure of these message types is also defined within the LSP Specification and can be seen in @lsp-message-structure.
 
 #figure(
-  align(center,
-    // box to prevent pagebreak in the middle of the table
-    box(table(
-      columns: 3,
-      // fill: (x, y) => if y == 0 { gray },
-      stroke: (x, y) => (
-        left: if x > 0 { .5pt } else { 0pt },
-        right: 0pt,
-        top: if y == 1 { .5pt } else { 0pt },
-        bottom: 0pt,
-      ),
-      align: left,
-      table.header([*Notification*], [*Request*], [*Response*]),
-      [ jsonrpc: string ],
-      [ jsonrpc: string ],
-      [ jsonrpc: string ],
-      [],
-      [ id: integer | string; ],
-      [ id: integer | string | null; ],
-      [ method: string; ],
-      [ method: string; ],
-      [ result?: Any; ],
-      [ params?: array | object; ],
-      [ params?: array | object; ],
-      [ error?: ResponseError; ],
-    ))
+  table(
+    columns: 3,
+    // fill: (x, y) => if y == 0 { gray },
+    stroke: (x, y) => (
+      left: if x > 0 { .5pt } else { 0pt },
+      right: 0pt,
+      top: if y == 1 { .5pt } else { 0pt },
+      bottom: 0pt,
+    ),
+    align: left,
+    table.header([*Notification*], [*Request*], [*Response*]),
+    [ jsonrpc: string ],
+    [ jsonrpc: string ],
+    [ jsonrpc: string ],
+    [],
+    [ id: integer | string; ],
+    [ id: integer | string | null; ],
+    [ method: string; ],
+    [ method: string; ],
+    [ result?: Any; ],
+    [ params?: array | object; ],
+    [ params?: array | object; ],
+    [ error?: ResponseError; ],
   ),
   caption: [General LSP message structure.],
   kind: table,

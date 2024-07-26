@@ -4,9 +4,7 @@
 // #let body-font = "TeX Gyre Pagella"
 
 // #let sans-font = "New Computer Modern Sans"
-// #let sans-font = "STIX Two Text"
 #let sans-font = "Libertinus Sans"
-// #let sans-font = "TeX Gyre Pagella"
 
 // #let title-font = "New Computer Modern"
 #let title-font = "STIX Two Text"

@@ -16,3 +16,8 @@
 #let jedit = {
   box(emph[Isabelle/jEdit])
 }
+
+#let isar = {
+  box(emph[Isabelle/Isar])
+}
+
