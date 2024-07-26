@@ -94,21 +94,24 @@
   { // scoped so it doesn't affect other outlines
     show outline.entry.where(level: 1): it => {
       v(2em, weak: true)
-      strong(it)
+      strong({
+        it.body
+        h(1fr)
+        it.page
+      })
     }
+
     outline(
       title: {
         text(font: body-font, 1.5em, weight: 700, "Contents")
         v(15mm)
       },
-      indent: 2em,
+      indent: auto,
     )
   }
 
-
   v(2.4fr)
   pagebreak()
-
 
   // Main body.
   // set par(justify: true, first-line-indent: 1em)
