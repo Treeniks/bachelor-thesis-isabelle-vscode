@@ -125,9 +125,12 @@ lean-system:
   title: The Lean Theorem Prover (System Description)
   author: ["Leonardo de Moura", "Soonho Kong", "Jeremy Avigad", "Floris van Doorn", "Jakob von Raumer"]
   editor: ["Amy P. Felty", "Aart Middeldorp"]
-  date: 2015-01-01
+  url: https://lean-lang.org/papers/system.pdf
   page-range: 378-388
+  date: 2015-01-01
   publisher: Springer International Publishing
+  serial-number:
+    doi: 10.1007/978-3-319-21401-6_26
   parent:
     type: proceedings
     title: Automated Deduction - CADE-25
