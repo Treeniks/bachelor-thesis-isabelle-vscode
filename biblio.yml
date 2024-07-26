@@ -76,7 +76,7 @@ paulson-natural-deduction:
 
 paulson-foundations-generic-theorem-prover:
   type: article
-  title: The foundation of a generic theorem prover
+  title: The Foundation of a Generic Theorem Prover
   author: Lawrence C. Paulson
   url: https://doi.org/10.1007/BF00248324
   volume: 5
