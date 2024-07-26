@@ -1,0 +1,28 @@
+name: Build Thesis
+
+on: [push]
+
+jobs:
+  build-thesis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # using Alpine because it's easier
+      - name: Set Up Alpine
+        uses: jirutka/setup-alpine@v1
+
+      - name: Compile Thesis
+        shell: alpine.sh --root {0}
+        run: |
+          apk add just
+          apk add typst
+          just build
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: thesis
+          path: thesis.pdf
+          if-no-files-found: error
