@@ -1,0 +1,135 @@
+intro-korselt1911:
+  type: article
+  title: Über einen Beweis des Äquivalenssatzes.
+  author: Alwin Korselt
+  page-range: 294-296
+  url: http://eudml.org/doc/158498
+  volume: 70
+  date: 1911
+  parent:
+    type: periodical
+    title: Mathematische Annalen
+    url: https://eudml.org/journal/10142
+
+intro-schroder1898:
+  type: book
+  title: Über zwei Definitionen der Endlichkeit und G. Cantor'sche Sätze
+  author: Ernst Schröder
+  publisher: Druck von E. Karras
+  date: 1898
+
+manual-jedit:
+  type: reference
+  title: Isabelle/jEdit
+  author: Makarius Wenzel
+  date: 2024-05-23
+  url: https://isabelle.in.tum.de/doc/jedit.pdf
+
+manual-system:
+  type: reference
+  title: The Isabelle System Manual
+  author: Makarius Wenzel
+  date: 2024-05-23
+  url: https://isabelle.in.tum.de/dist/Isabelle2024/doc/system.pdf
+
+markarius-isabelle-vscode:
+  type: report
+  title: Isabelle/VSCode in January 2017
+  author: Makarius Wenzel
+  date: 2017-01-26
+  url: https://sketis.net/wp-content/uploads/2017/01/isabelle-vscode-jan-2017.pdf
+
+denis-paluca:
+  type: thesis
+  title: "Isabelle/VSCode: Editor Improvements and Prover IDE integrations"
+  author: Denis Paluca
+  date: 2021-08-15
+  url: https://www21.in.tum.de/students/past/vscode_plugin_improvements/assets/Isabelle_VSCode_Thesis.pdf
+
+paulson-next-700:
+  type: article
+  title: "Isabelle: The Next 700 Theorem Provers"
+  author: Lawrence C. Paulson
+  url: https://arxiv.org/abs/cs/9301106
+  date: 2000-10-31
+  serial-number:
+    doi: 10.48550/arXiv.cs/9301106
+    arxiv: cs/9301106
+  # TODO add parent: arxiv?
+
+paulson-natural-deduction:
+  type: article
+  title: Natural deduction as higher-order resolution
+  author: Lawrence C. Paulson
+  url: https://www.sciencedirect.com/science/article/pii/0743106686900154
+  volume: 3
+  issue: 3
+  page-range: 237-258
+  date: 1986
+  serial-number:
+    doi: 10.1016/0743-1066(86)90015-4
+  parent:
+    type: periodical
+    title: The Journal of Logic Programming
+    serial-number:
+      issn: 0743-1066
+
+paulson-foundations-generic-theorem-prover:
+  type: article
+  title: The foundation of a generic theorem prover
+  author: Lawrence C. Paulson
+  url: https://doi.org/10.1007/BF00248324
+  volume: 5
+  issue: 3
+  page-range: 363-397
+  date: 1989-09-01
+  serial-number:
+    doi: 10.1007/BF00248324
+  parent:
+    type: periodical
+    title: Journal of Automated Reasoning
+    serial-number:
+      issn: 1573-0670
+
+paulson-isabelle-generic-theorem-prover:
+  type: book
+  title: "Isabelle: A Generic Theorem Prover"
+  editor: Lawrence C. Paulson
+  url: https://doi.org/10.1007/BFb0030541
+  date: 1994
+  publisher: Springer Berlin Heidelberg
+  serial-number:
+    doi: 10.1007/BFb0030541
+    isbn: 978-3-540-58244-1
+
+paulson-lcf-to-isabelle:
+  type: article
+  title: From LCF to Isabelle/HOL
+  author: ["Lawrence C. Paulson", "Tobias Nipkow", "Makarius Wenzel"]
+  url: https://dl.acm.org/doi/10.1007/s00165-019-00492-1
+  volume: 31
+  issue: 6
+  page-range: 675-698
+  date: 2019-09-02
+  serial-number:
+    doi: 10.1007/s00165-019-00492-1
+    arxiv: 1907.02836
+  parent:
+    type: periodical
+    title: Formal Aspects of Computing
+    serial-number:
+      issn: 1433-299X
+
+lean-system:
+  type: article
+  title: The Lean Theorem Prover (System Description)
+  author: ["Leonardo de Moura", "Soonho Kong", "Jeremy Avigad", "Floris van Doorn", "Jakob von Raumer"]
+  editor: ["Amy P. Felty", "Aart Middeldorp"]
+  date: 2015-01-01
+  page-range: 378-388
+  publisher: Springer International Publishing
+  parent:
+    type: proceedings
+    title: Automated Deduction - CADE-25
+    serial-number:
+      isbn: 978-3-319-21401-6

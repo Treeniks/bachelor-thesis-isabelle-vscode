@@ -7,11 +7,11 @@
 
 == Isabelle
 
-Isabelle's core implementation languages are _ML_ and _Scala_. Generally speaking, the ML code is responsible for Isabelle's backend, i.e. the core logic, while Scala is responsible for Isabelle's frontend, i.e. everything to do with the UI and IO. Many modules within the Isabelle code base exist identically in both Scala and ML. That way, there exists an almost seamless transition between the two.
+Isabelle's core implementation languages are _ML_ and _Scala_. Generally speaking, the ML code is responsible for Isabelle's backend, i.e. the core prover logic, while Scala is responsible for Isabelle's frontend, i.e. everything to do with the UI and IO. Many modules within the Isabelle code base exist in both Scala and ML. That way, there exists an almost seamless transition between the two.
 
-Scala, being a JVM based programming language, also effortlessly integrates into jEdit's Java code base. When using #jedit, Isabelle is able to offer an interactive session with no clear cut between what is UI and what is the underlying Isabelle logic. The entire Isabelle system has direct access to any data jEdit may hold, and the same is true the other way around. For example, #jedit has a feature to automatically indent parts of or an entire Isabelle theory. Internally, this automatic indentation uses both access to the Isabelle backend and the jEdit buffer at the same time.
+Scala, being a JVM based programming language, also effortlessly integrates into jEdit's Java code base. When using #jedit, Isabelle is able to offer an interactive session with /* TODO */ no clear cut between what is UI and what is the underlying Isabelle logic. The entire Isabelle system has direct access to any data jEdit may hold, and the same is true the other way around. For example, #jedit has a feature to automatically indent parts of or an entire Isabelle theory. Internally, this automatic indentation uses both access to the Isabelle backend and the jEdit buffer at the same time.
 
-Additionally, Isabelle, being a proof assistant, does not follow conventional programming language wisdom. For the sake of keeping correctness, the actual Isabelle core is kept small (albeit with performance related additions). Many of Isabelle's systems are built within Isabelle itself, including a majority of its syntax. Keywords such as `theorem` do not exist statically, but are instead defined in `Pure.thy`, and it is thus also possible to extend this syntax if needed. When editing a theory in #jedit, the actual syntax highlighting is done mostly dynamically.
+Additionally, Isabelle, being a proof assistant, does not follow conventional programming language practices. For the sake of keeping correctness, the actual Isabelle core is kept small (albeit with performance related additions). Many of Isabelle's systems are built within Isabelle itself, including a majority of its syntax. Keywords such as `theorem` do not exist statically, but are instead defined in `Pure.thy`, and it is thus also possible to extend this syntax if needed. When editing a theory in #jedit, the actual syntax highlighting is done mostly dynamically.
 
 === Isabelle Output and State Panels
 
@@ -20,48 +20,42 @@ Additionally, Isabelle, being a proof assistant, does not follow conventional pr
   caption: [JEdit with both _Output_ and _State_ panels open. _Output_ on the bottom, _State_ on the right.],
   kind: image,
   placement: auto,
-)
+) <jedit1>
 
-Isabelle has a few different types of panels which give crucial information to the user. The two most important of such panels are the _Output_ panel and _State_ panels. The point of the _Output_ panel is to show messages that correspond to a given command, which can include general information, warnings or errors. This also means, that the content of the _Output_ panel is directly tied to a specific command in the theory. The command is typically determined by the current position of the caret.
+Isabelle has a few different types of panels which give crucial information to the user. The two most relevant to us are the _Output_ panel and _State_ panels as seen in @jedit1. The point of the _Output_ panel is to show messages that correspond to a given command, which can include general information, warnings or errors. This also means, that the content of the _Output_ panel is directly tied to a specific command in the theory. The command is typically determined by the current position of the caret.
 
 _State_ panels on the other hand display the current internal proof state within a proof. While there can only be one _Output_ panel, it is possible to have multiple _State_ panels open, which may show states at different positions within the document. Whether or not moving the caret updates the currently displayed _Output_ or _State_ depends on the _Auto update_ setting of the respective panel.
 
-=== Isabelle's Symbols
+=== Isabelle Symbols
 
-Isabelle uses a lot of custom symbols to allow logical terms to be written in a syntax much closer to that of mathematics. The concept of what an _Isabelle symbol_ is exactly is rather broad, so for simplicity we will focus primarily on a certain group of symbols typically used in mathematical formulas.
+Isabelle uses a lot of custom symbols to allow logical terms to be written in a syntax close to that of mathematics. The concept of what an _Isabelle symbol_ is exactly is rather broad, so for simplicity we will focus primarily on a certain group of symbols typically used in mathematical formulas.
 
-Each Isabelle symbol roughly consists of the following data:
-- an ASCII representation of the symbol
-- a name
-- an optional unicode codepoint
-- a list of abbreviations for this symbol
+Each Isabelle symbol roughly consists of four points of data: An ASCII representation of the symbol, a name, an optional unicode codepoint and a list of abbreviations for this symbol. These four points are not the whole story, however for the sake of simplicity, we will skip some details.
 
-These 4 points are not the whole story, however for the sake of this thesis, we will skip some details.
-
-As an example, let's say you write the implication $A ==> B$ in Isabelle. Within jEdit, you will see it written out as "#isabelle[A ⟹ B]", however internally the "#isabelle[⟹]" is an Isabelle symbol with the following data:
+As an example, let's say you write the implication $A ==> B$ in Isabelle. Within jEdit, you will see it written out as #isabelle("A ⟹ B"), however internally the #isabelle("⟹") is an Isabelle symbol with the following data:
 - ASCII representation: "`\<Longrightarrow>`"
 - name: "`Longrightarrow`"
 - unicode codepoint: `0x27F9`
 - abbreviations: "`.>`", "`==>`"
 
-To deal with these symbols, #jedit uses a custom encoding called /* to prevent hyphenation */ #box(emph["UTF-8-Isabelle"]). This encoding ensures that the user sees "#isabelle[A ⟹ B]" while the actual content of the underlying file is "`A \<Longrightarrow> B`". However, because Isabelle internally uses its own abstracted representation of symbols, it has no trouble dealing with cases where the actual "#isabelle[⟹]" unicode symbol is used within a file.
+To deal with these symbols, #jedit uses a custom encoding called #box(emph["UTF-8-Isabelle"]). /* say more */ This encoding ensures that the user sees #isabelle("A ⟹ B") while the actual content of the underlying file is "`A \<Longrightarrow> B`". However, because Isabelle internally uses its own abstracted representation of symbols, it has no trouble dealing with cases where the actual #isabelle("⟹") unicode symbol is used within a file.
 
-=== #vscode <isabelle-vscode>
+=== Isabelle/VSCode <isabelle-vscode>
 
 #figure(
   image("/figures/vscode1.png", width: 80%),
   caption: [VSCode with both _Output_ and _State_ panels open. _Output_ on the bottom, _State_ on the right.],
   kind: image,
   placement: auto,
-)
+) <vscode1>
 
-Isabelle nowadays consists of many different components. #jedit is one such component. When we refer to #vscode, we are actually referring to three different Isabelle components: The Isabelle _language server_, Isabelle's own patched _VSCodium_ and the VSCode _extension_ binding the two together. Note in particular that when running #vscode, Isabelle does not actually use a standard distribution of VSCode. Instead, it is a custom VSCodium package. VSCodium is a fully open-source version distribution of Microsoft's VSCode with some patches to disable certain types of internal telemetry as well as replacing the VSCode branding with that of VSCodium.
+Isabelle nowadays consists of many different components. #jedit is one such component. When we refer to #vscode, we are actually referring to three different Isabelle components: The Isabelle _language server_, Isabelle's own patched _VSCodium_ #footnote[https://vscodium.com/] and the VSCode _extension_ binding the two together. Note in particular that when running #vscode, Isabelle does not actually use a standard distribution of VSCode. Instead, it is a custom VSCodium package. VSCodium is a fully open-source distribution of Microsoft's VSCode with some patches to disable telemetry as well as replacing the VSCode branding with that of VSCodium.
 
-Isabelle adds its own patches on top of VSCodium, in order to add a custom encoding mimicking the functionality of #jedit. As such, when loading a theory file in #vscode, the user will see "#isabelle[A ⟹ B]", while the file itself is loaded and saved as "`A \<Longrightarrow> B`".
+Isabelle adds its own patches on top of VSCodium, in order to add a custom encoding mimicking the functionality of #jedit, as well as adding custom Isabelle-specific fonts which we will discuss further in @isabelle-fonts. Since neither adding custom encodings nor including custom fonts is possible from within a VSCode plugin, these patches were created instead. /* TODO active voice? */
 
-The concept of _Output_ and _State_ panels exist equivalently within #vscode, although it is currently not possible to create multiple _State_ panels for reasons outlined in @state-init.
+The concept of _Output_ and _State_ panels exist equivalently within #vscode as seen in @vscode1, although it is currently not possible to create multiple _State_ panels for reasons outlined in @state-init.
 
-=== Isabelle Fonts
+=== Isabelle Fonts <isabelle-fonts>
 
 #TODO[]
 
@@ -102,34 +96,40 @@ The general setup is quite simple: The client and server communicate via `jsonrp
 - _Request Messages_
 - _Response Messages_
 
-_Notification Messages_ are messages that, as the name suggests, only exist to notify the other party. They must not send a response back. _Request Messages_ are requests sent to the other party and require a _Response Message_ to be sent back once the request has been processed. The structure of these message types is also defined within the LSP Specification:
-#align(center,
-  // box to prevent pagebreak in the middle of the table
-  box(table(
-    columns: 3,
-    // fill: (x, y) => if y == 0 { gray },
-    stroke: (x, y) => (
-      left: if x > 0 { .5pt } else { 0pt },
-      right: 0pt,
-      top: if y == 1 { .5pt } else { 0pt },
-      bottom: 0pt,
-    ),
-    align: left,
-    table.header([*Notification*], [*Request*], [*Response*]),
-    [ jsonrpc: string ],
-    [ jsonrpc: string ],
-    [ jsonrpc: string ],
-    [],
-    [ id: integer | string; ],
-    [ id: integer | string | null; ],
-    [ method: string; ],
-    [ method: string; ],
-    [ result?: Any; ],
-    [ params?: array | object; ],
-    [ params?: array | object; ],
-    [ error?: ResponseError; ],
-  ))
-)
+_Notification Messages_ are messages that, as the name suggests, only exist to notify the other party. They must not send a response back. _Request Messages_ are requests sent to the other party and require a _Response Message_ to be sent back once the request has been processed. The structure of these message types is also defined within the LSP Specification and can be seen in @lsp-message-structure.
+
+#figure(
+  align(center,
+    // box to prevent pagebreak in the middle of the table
+    box(table(
+      columns: 3,
+      // fill: (x, y) => if y == 0 { gray },
+      stroke: (x, y) => (
+        left: if x > 0 { .5pt } else { 0pt },
+        right: 0pt,
+        top: if y == 1 { .5pt } else { 0pt },
+        bottom: 0pt,
+      ),
+      align: left,
+      table.header([*Notification*], [*Request*], [*Response*]),
+      [ jsonrpc: string ],
+      [ jsonrpc: string ],
+      [ jsonrpc: string ],
+      [],
+      [ id: integer | string; ],
+      [ id: integer | string | null; ],
+      [ method: string; ],
+      [ method: string; ],
+      [ result?: Any; ],
+      [ params?: array | object; ],
+      [ params?: array | object; ],
+      [ error?: ResponseError; ],
+    ))
+  ),
+  caption: [General LSP message structure.],
+  kind: table,
+  placement: auto,
+) <lsp-message-structure>
 
 The _jsonrpc_ entry of every message is, at the time of writing, always set to "`2.0`". The _id_ of the Request is sent in order to identify the associated response, thus the _id_ in a Response Message must also be set appropriately. The _params_, _result_ and _error_ entries' shape all depend on the type of Notification/Request/Response sent. This type is specified within the _method_ entry, which is the most important for now.
 
@@ -172,13 +172,13 @@ The first message exchanged between client and server is an #box["`initialize`"]
   placement: auto,
 ) <lsp-init>
 
-What's important for us is that during this back and forth, within the `initialize` request and response, the client and server send each other client and server capabilities respectively. These capabilities describe which features of the LSP the client or server actually supports. For example, not every server supports completions, and even if it does, there is further information needed, like which characters should automatically request completions. By exchanging the capabilities this early on, the client and server can exclude certain parts of messages or even skip sending some entirely, preventing expensive JSON Serialization and Deserialization for messages that the other party cannot deal with anyway.
+What's important for us is that during this back and forth, within the `initialize` request and response, the client and server send each other their capabilities. These capabilities describe which features of the LSP the client or server actually supports. For example, not every server supports completions, and even if it does, there is further information needed, like which characters should automatically request completions. By exchanging the capabilities this early on, the client and server can exclude certain parts of messages or even skip sending some entirely, preventing expensive JSON Serialization and Deserialization for messages that the other party cannot deal with anyway.
 
-=== Isabelle's Language Server
+=== Isabelle Language Server
 
 While the LSP defines most methods required for typical language server usecases, specific language servers may also extend the basic protocol by their own methods. In such cases, the corresponding client will need to define extra handlers for these new methods.
 
-Through Isabelle's interactive nature, the standard Language Server Protocol is not strong enough to represent everything Isabelle needs. For example, in order to keep the _Output_ and _State_ panels updated, the server needs to know the current location of the caret at all times. This is not a typical need for language servers of normal programming languages and is thus not build into the protocol by default.
+Through Isabelle's interactive nature, the standard Language Server Protocol is not enough to represent everything Isabelle needs. For example, in order to keep the _Output_ and _State_ panels updated, the server needs to know the current location of the caret at all times. This is not a typical need for language servers of normal programming languages and is thus not build into the protocol by default.
 
 Isabelle thus extends the LSP with its own methods under the #box["`PIDE/`"] prefix, which have to be enabled with the #box["`vscode_pide_extensions`"] Isabelle option. For example, here are 3 such methods:
 1. "`PIDE/caret_update`": A bidirectional notification for telling the other party that the caret has been moved. Mostly sent from the client to the server.

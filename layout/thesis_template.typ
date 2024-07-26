@@ -84,7 +84,8 @@
   // set block(spacing: 0.8em)
 
   // --- Citations ---
-  set cite(style: "alphanumeric")
+  // use default instead
+  // set cite(style: "alphanumeric")
 
   // --- Figures ---
   show figure: set text(size: 0.85em)
@@ -112,20 +113,18 @@
   body
 
   // List of figures.
-  // pagebreak()
-  // heading(numbering: none)[List of Figures]
-  // outline(
-  //   title:"",
-  //   target: figure.where(kind: image),
-  // )
+  pagebreak()
+  outline(
+    title: "List of Figures",
+    target: figure.where(kind: image),
+  )
 
   // List of tables.
-  // pagebreak()
-  // heading(numbering: none)[List of Tables]
-  // outline(
-  //   title: "",
-  //   target: figure.where(kind: table)
-  // )
+  pagebreak()
+  outline(
+    title: "List of Tables",
+    target: figure.where(kind: table)
+  )
 
   // Appendix.
   // pagebreak()
@@ -133,5 +132,5 @@
   // include("/layout/appendix.typ")
 
   pagebreak()
-  bibliography("/thesis.bib")
+  bibliography("/biblio.yml")
 }

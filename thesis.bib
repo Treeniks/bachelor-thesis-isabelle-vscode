@@ -1,6 +1,131 @@
-@book{bruegge2004object,
-	title = {Object Oriented Software Engineering Using UML, Patterns, and Java},
-	author = {Bruegge, Bernd and Dutoit, Allen H},
-	year = {2009},
-	publisher = {Prentice Hall}
+@article{intro:korselt1911,
+    author = {Korselt, A.},
+    journal = {Mathematische Annalen},
+    pages = {294-296},
+    title = {Über einen Beweis des Äquivalenssatzes. (Mit 1 Figur im Text)},
+    url = {http://eudml.org/doc/158498},
+    volume = {70},
+    year = {1911},
+}
+
+@book{intro:schroder1898,
+    title = "Ueber zwei Definitionen der Endlichkeit und G. Cantor'sche Sätze",
+    author = "Schröder, Ernst",
+    publisher = "Druck von E. Karras",
+    year = "1898",
+    series = "Nova acta. Abh. der Kaiserl. Leop.-Carol. Deutschen Akademie der Naturforscher",
+}
+
+@manual{manual:jedit,
+    title = "Isabelle/jEdit",
+    author = "Makarius Wenzel",
+    month = 5,
+    year = 2024,
+    url = "https://isabelle.in.tum.de/doc/jedit.pdf",
+}
+
+@manual{manual:system,
+    title = "The Isabelle System Manual",
+    author = "Makarius Wenzel",
+    month = 5,
+    year = 2024,
+    url = "https://isabelle.in.tum.de/dist/Isabelle2024/doc/system.pdf",
+}
+
+@techreport{markarius:isabelle-vscode,
+    title = "Isabelle/VSCode in January 2017",
+    author = "Makarius Wenzel",
+    month = 1,
+    year = 2017,
+    url = "https://sketis.net/wp-content/uploads/2017/01/isabelle-vscode-jan-2017.pdf",
+}
+
+@mastersthesis{denis-paluca,
+    title = "Isabelle/VSCode: Editor Improvements and Prover IDE integrations",
+    author = "Denis Paluca",
+    type = "Bachelor's Thesis",
+    year = 2021,
+    url = "https://www21.in.tum.de/students/past/vscode_plugin_improvements/assets/Isabelle_VSCode_Thesis.pdf",
+}
+
+@article{paulson:next-700,
+    author       = {Lawrence C. Paulson},
+    title        = {Isabelle: The Next 700 Theorem Provers},
+    journal      = {CoRR},
+    volume       = {cs.LO/9301106},
+    year         = {1993},
+    url          = {https://arxiv.org/abs/cs/9301106},
+    timestamp    = {Fri, 10 Jan 2020 12:58:43 +0100},
+    biburl       = {https://dblp.org/rec/journals/corr/cs-LO-9301106.bib},
+    bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{paulson:natural-deduction,
+    title = {Natural deduction as higher-order resolution},
+    journal = {The Journal of Logic Programming},
+    volume = {3},
+    number = {3},
+    pages = {237-258},
+    year = {1986},
+    issn = {0743-1066},
+    doi = {https://doi.org/10.1016/0743-1066(86)90015-4},
+    url = {https://www.sciencedirect.com/science/article/pii/0743106686900154},
+    author = {Lawrence C. Paulson},
+    abstract = {An interactive theorem prover, Isabelle, is under development. In lcf, each inference rule is represented by one function for forwards proof and another (a tactic) for backwards proof. In Isabelle, each inference rule is represented by a Horn clause. Resolution gives both forwards and backwards proof, supporting a large class of logics. Isabelle has been used to prove theorems in Martin-Löf's constructive type theory. Quantifiers pose several difficulties: substitution, bound variables, Skolemization. Isabelle's representation of logical syntax is the typed λ-calculus, requiring higher-order unification. It may have potential for logic programming. Depth-first subgoaling along inference rules constitutes a higher-order PROLOG.}
+}
+
+@article{paulson:foundations-generic-theorem-prover,
+    author = {Paulson, Lawrence C.},
+    title = {The foundation of a generic theorem prover},
+    journal = {Journal of Automated Reasoning},
+    year = {1989},
+    month = {Sep},
+    day = {01},
+    volume = {5},
+    number = {3},
+    pages = {363-397},
+    abstract = {Isabelle [28, 30] is an interactive theorem prover that supports a variety of logics. It represents rules as propositions (not as functions) and builds proofs by combining rules. These operations constitute a meta-logic (or `logical framework') in which the object-logics are formalized. Isabelle is now based on higher-order logic-a precise and well-understood foundation.},
+    issn = {1573-0670},
+    doi = {10.1007/BF00248324},
+    url = {https://doi.org/10.1007/BF00248324}
+}
+
+@book{paulson:isabelle-generic-theorem-prover,
+    editor = "Paulson, Lawrence C.",
+    title = "Isabelle: A Generic Theorem Prover",
+    year = "1994",
+    publisher = "Springer Berlin Heidelberg",
+    address = "Berlin, Heidelberg",
+    isbn = "978-3-540-58244-1",
+    doi = {10.1007/BFb0030541},
+    url = "https://doi.org/10.1007/BFb0030541"
+}
+
+@article{paulson:lcf-to-isabelle,
+    author = {Paulson, Lawrence C. and Nipkow, Tobias and Wenzel, Makarius},
+    title = {From LCF to Isabelle/HOL},
+    journal = {Formal Aspects of Computing},
+    year = {2019},
+    month = {Dec},
+    day = {01},
+    volume = {31},
+    number = {6},
+    pages = {675-698},
+    abstract = {Interactive theorem provers have developed dramatically over the past four decades, from primitive beginnings to today's powerful systems. Here, we focus on Isabelle/HOL and its distinctive strengths. They include automatic proof search, borrowing techniques from the world of first order theorem proving, but also the automatic search for counterexamples. They include a highly readable structured language of proofs and a unique interactive development environment for editing live proof documents. Everything rests on the foundation conceived by Robin Milner for Edinburgh LCF: a proof kernel, using abstract types to ensure soundness and eliminate the need to store proofs. Compared with the research prototypes of the 1970s, Isabelle is a practical and versatile tool. It is used by system designers, mathematicians and many others.},
+    issn = {1433-299X},
+    doi = {10.1007/s00165-019-00492-1},
+    url = {https://doi.org/10.1007/s00165-019-00492-1}
+}
+
+@inproceedings{lean:system,
+    author = "de Moura, Leonardo and Kong, Soonho and Avigad, Jeremy and van Doorn, Floris and von Raumer, Jakob",
+    editor = "Felty, Amy P. and Middeldorp, Aart",
+    title = "The Lean Theorem Prover (System Description)",
+    booktitle = "Automated Deduction - CADE-25",
+    year = "2015",
+    publisher="Springer International Publishing",
+    address = "Cham",
+    pages = "378--388",
+    abstract = "Lean is a new open source theorem prover being developed at Microsoft Research and Carnegie Mellon University, with a small trusted kernel based on dependent type theory. It aims to bridge the gap between interactive and automated theorem proving, by situating automated tools and methods in a framework that supports user interaction and the construction of fully specified axiomatic proofs. Lean is an ongoing and long-term effort, but it already provides many useful components, integrated development environments, and a rich API which can be used to embed it into other systems. It is currently being used to formalize category theory, homotopy type theory, and abstract algebra. We describe the project goals, system architecture, and main features, and we discuss applications and continuing work.",
+    isbn = "978-3-319-21401-6"
 }
