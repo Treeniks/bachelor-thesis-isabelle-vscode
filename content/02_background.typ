@@ -67,30 +67,6 @@ Now, the responsibility of semantic understanding of the language has moved enti
 
 The goal is a system in which a new programming language only needs to implement a single language server, while a new code editor only needs to implement a single language client. In the best case scenario, any language server and language client can be used together (although in practice this is still not always the case). If we wanted to support $N$ programming languages for $M$ code editors, without the LSP we would need $N dot M$ implementations of language semantics. With the LSP, this number is reduced drastically to only $N$ implementations of language semantics.
 
-// #figure(
-//   cetz.canvas({
-//     import cetz.draw: *
-//
-//     rect((0, 0), (2.5, 1), name: "client", radius: 10pt)
-//     content("client", align(center)[Client\ (e.g. Editor)])
-//
-//     rect((7, 0), (9.5, 1), name: "server", radius: 10pt)
-//     content("server", [Server])
-//
-//     line("client.east", "server.west", name: "connection", mark: (symbol: "stealth"))
-//     content("connection.mid", align(center)[jsonrpc 2.0\ connection], frame: "rect", stroke: none, fill: white, padding: .1)
-//
-//     line((rel: (0, -1), to: "client.east"), (rel: (0, -1), to: "server.west"), name: "connection2", mark: (end: (symbol: "stealth")))
-//     content((rel: (0, .2), to: "connection2.mid"), [`initialize` request])
-//
-//     line((rel: (0, -2), to: "client.east"), (rel: (0, -2), to: "server.west"), name: "connection3", mark: (start: (symbol: "stealth")))
-//     content((rel: (0, .2), to: "connection3.mid"), [`initialize` response])
-//
-//     line((rel: (0, -3), to: "client.east"), (rel: (0, -3), to: "server.west"), name: "connection4", mark: (end: (symbol: "stealth")))
-//     content((rel: (0, .2), to: "connection4.mid"), [`initialized` notification])
-//   }),
-// )
-
 The general setup is quite simple: The client and server communicate via `jsonrpc 2.0` messages. These messages are mostly either of 3 types:
 - _Notification Messages_
 - _Request Messages_
@@ -152,11 +128,6 @@ The first message exchanged between client and server is an #box["`initialize`"]
 
     line((r, 0), (r, -3), name: "server")
     content((rel: (0, .2), to: "server.start"), align(center)[Server], anchor: "south")
-
-    // content((r / 2, .2), align(center)[jsonrpc 2.0\ connection], anchor: "south")
-
-    // line((1.5, .2), (r - 1.5, .2), name: "connection", mark: (symbol: "stealth"))
-    // content("connection.mid", align(center)[jsonrpc 2.0\ connection], frame: "rect", stroke: none, fill: white, padding: .1)
 
     line((0, -.5), (r, -.5), name: "connection2", mark: (end: m))
     content((rel: (0, .2), to: "connection2.mid"), [`initialize` request])
