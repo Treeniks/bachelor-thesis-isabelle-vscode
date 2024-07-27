@@ -1,10 +1,8 @@
 #let TODO(body, color: yellow) = {
-  rect(
-    width: 100%,
+  box(
+    outset: 3pt,
     radius: 3pt,
-    stroke: 0.5pt,
     fill: color,
-  )[
-    #body
-  ]
+    body
+  )
 }
