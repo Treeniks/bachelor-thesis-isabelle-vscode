@@ -1,7 +1,6 @@
 #let TODO(color: yellow, body) = {
-  box(
-    outset: 3pt,
-    radius: 3pt,
+  rect(
+    width: 100%,
     fill: color,
     body
   )
