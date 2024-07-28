@@ -20,8 +20,6 @@
   set document(title: title-primary, author: author, date: submission-date)
   set page(margin: (left: 30mm, right: 30mm, top: 40mm, bottom: 40mm))
 
-  set text(size: 12pt)
-
   show heading: set block(below: 1em, above: 2em)
   // Reference first-level headings as "chapters"
   show heading.where(level: 1): set heading(supplement: [Chapter])
@@ -38,19 +36,25 @@
   set list(indent: 1em)
   set enum(indent: 1em)
 
+  let cit = upper(text(size: 24pt, [School of Computation,\ Information and Technology\ -- Informatics --]))
+  let tum = upper(text(size: 14pt, [Technical University of Munich]))
+  let degree-program = text(size: 16pt, degree + "’s Thesis in " + program)
+  let title1 = text(weight: "bold", size: 20pt, title-primary)
+  let title2 = text(weight: "regular", size: 20pt, title-secondary)
+
   // ===== Cover =====
   {
     set align(center)
     image("/resources/tum-logo.svg", width: 30%)
-    upper(text(size: 2em, [School of Computation,\ Information and Technology\ -- Informatics --]))
+    cit
     v(0mm)
-    upper(text(size: 1.2em, [Technical University of Munich]))
+    tum
     v(10mm)
-    text(size: 1.4em, degree + "’s Thesis in " + program)
+    degree-program
     v(10mm)
-    text(weight: "semibold", size: 1.8em, title-primary)
+    title1
     v(10mm)
-    text(size: 1.8em, author)
+    text(size: 16pt, author)
     pagebreak(weak: true)
   }
   // ===== Cover =====
@@ -59,20 +63,15 @@
   {
     set align(center)
     image("/resources/tum-logo.svg", width: 30%)
-    upper(
-      text(
-        size: 2em,
-        [School of Computation,\ Information and Technology\ -- Informatics --],
-      )
-    )
+    cit
     v(0mm)
-    upper(text(size: 1.2em, [Technical University of Munich]))
+    tum
     v(10mm)
-    text(size: 1.4em, degree + "’s Thesis in " + program)
+    degree-program
     v(10mm)
-    text(weight: "semibold", size: 1.8em, title-primary)
+    title1
     v(0mm)
-    text(weight: "regular", size: 1.8em, title-secondary)
+    title2
 
     v(1fr)
 
@@ -85,6 +84,7 @@
     entries.push(("Start Date: ", start-date.display("[day].[month].[year]")))
     entries.push(("Submission Date: ", submission-date.display("[day].[month].[year]")))
 
+    set text(size: 11pt)
     grid(
       columns: 2,
       gutter: 0.6em,
@@ -99,6 +99,7 @@
   // ===== Title Page =====
 
   set par(justify: true)
+  set page(margin: (left: 30mm, right: 30mm, top: 30mm, bottom: 60mm))
 
   // ===== Disclaimer =====
   {
@@ -118,7 +119,7 @@
 
   // ===== Acknowledgement =====
   {
-    set page(margin: (left: 50mm, right: 50mm, top: 40mm, bottom: 40mm))
+    set page(margin: (left: 50mm, right: 50mm, top: 40mm, bottom: 60mm))
     show heading: set align(center)
 
     heading("Acknowledgements")
@@ -148,8 +149,8 @@
     }
     outline(
       title: {
-        text(size: 1.5em, weight: "bold", "Contents")
-        v(15mm)
+        text(size: 1.4em, weight: "bold", "Contents")
+        v(2em)
       },
       indent: auto,
     )

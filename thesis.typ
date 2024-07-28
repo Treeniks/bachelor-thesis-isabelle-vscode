@@ -1,6 +1,6 @@
 #import "/template.typ": thesis
 
-#set text(font: "STIX Two Text")
+#set text(font: "STIX Two Text", size: 11pt)
 #show math.equation: set text(font: "STIX Two Math")
 #show raw: set text(font: "JetBrains Mono")
 
