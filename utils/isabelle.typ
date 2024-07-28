@@ -20,4 +20,3 @@
 #let isar = {
   box(emph[Isabelle/Isar])
 }
-

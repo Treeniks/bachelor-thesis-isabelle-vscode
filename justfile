@@ -3,3 +3,6 @@ build:
 
 watch:
     typst watch thesis.typ --font-path ./fonts
+
+clean:
+    rm -rf thesis.pdf
