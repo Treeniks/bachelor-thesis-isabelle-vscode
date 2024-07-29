@@ -20,10 +20,16 @@
   set document(title: title-primary, author: author, date: submission-date)
   set page(margin: (left: 30mm, right: 30mm, top: 40mm, bottom: 40mm))
 
-  show heading: set block(below: 1em, above: 2em)
+  // default
+  show par: set block(spacing: 1.2em)
+
+  show heading: set block(below: 1.6em, above: 2.4em)
   // Reference first-level headings as "chapters"
   show heading.where(level: 1): set heading(supplement: [Chapter])
   show heading.where(level: 1): set text(size: 1.4em)
+  show heading.where(level: 2): set text(size: 1.2em)
+  show heading.where(level: 3): set text(size: 1.1em)
+  show heading.where(level: 4): set text(size: 1.05em)
   // Put chapters on new page and add extra spacing
   show heading.where(level: 1): it => {
     // reset footnote counter
@@ -150,6 +156,7 @@
         }),
       )
     }
+
     outline(
       title: {
         text(size: 1.4em, weight: "bold", "Contents")
@@ -157,6 +164,7 @@
       },
       indent: auto,
     )
+
     pagebreak(weak: true)
   }
   // ===== TOC =====
@@ -167,13 +175,11 @@
 
   doc
 
-  pagebreak(weak: true)
   outline(
     title: "List of Figures",
     target: figure.where(kind: image),
   )
 
-  pagebreak(weak: true)
   outline(
     title: "List of Tables",
     target: figure.where(kind: table),
