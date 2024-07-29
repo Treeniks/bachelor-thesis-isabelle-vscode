@@ -99,7 +99,6 @@
   // ===== Title Page =====
 
   set par(justify: true)
-  set page(margin: (left: 30mm, right: 30mm, top: 30mm, bottom: 60mm))
 
   // ===== Disclaimer =====
   {
@@ -116,10 +115,10 @@
   // ===== Disclaimer =====
 
   set page(numbering: "i")
+  set page(margin: (left: 50mm, right: 50mm, top: 40mm, bottom: 60mm))
 
   // ===== Acknowledgement =====
   {
-    set page(margin: (left: 50mm, right: 50mm, top: 40mm, bottom: 60mm))
     show heading: set align(center)
 
     heading("Acknowledgements")
@@ -133,6 +132,8 @@
     pagebreak(weak: true)
   }
   // ===== Abstract =====
+
+  set page(margin: (left: 30mm, right: 30mm, top: 30mm, bottom: 60mm))
 
   // ===== TOC =====
   {
