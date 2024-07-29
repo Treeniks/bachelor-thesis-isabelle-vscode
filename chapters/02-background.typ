@@ -7,6 +7,8 @@
 
 == Isabelle
 
+#TODO[Isabelle exists as one of the oldest theorem provers, originally conceptualized in .... It doesn't follow any specific logic, but instead (look into paulson's citations for what the wording was again). (add comparison to Lean/Coq etc.?)]
+
 #TODO[stats about Isabelle's usage in the real world]
 
 === Isabelle/Isar
@@ -19,9 +21,9 @@ The #isar syntax consists of three main syntactic concepts: _Commands_, _Methods
 
 Isabelle's core implementation languages are _ML_ and _Scala_. Generally speaking, the ML code is responsible for Isabelle's purely functional and mathematical domain, e.g. its LCF-style kernel @paulson-next-700 @paulson-lcf-to-isabelle, while Scala is responsible for Isabelle's physical domain, e.g. everything to do with the UI and IO. Many modules within the Isabelle code base exist in both Scala and ML, thus creating an almost seamless transition between the two.
 
-Scala, being a JVM based programming language, also effortlessly integrates into jEdit's Java code base. When using #jedit, Isabelle is able to offer an interactive session which does not follow classical layered architectures. The entire Isabelle system has direct access to any data jEdit may hold, and the same is true the other way around. For example, #jedit has a feature to automatically indent parts of or an entire Isabelle theory. Internally, this automatic indentation uses both access to the Isabelle backend and the jEdit buffer at the same time.
+Isabelle employs a monolithic architecture, so while logic is split between modules, there is no limitation on how they can be accessed within the Isabelle system. Additionally, Scala, being a JVM based programming language, effortlessly integrates into jEdit's Java code base. Due to these two facts, when using #jedit, Isabelle is able to offer an interactive session where the entire Isabelle system has direct access to any data jEdit may hold, and the same is true the other way around. For example, #jedit has a feature to automatically indent an Isabelle theory. Internally, this automatic indentation uses both access to the Isabelle system and the jEdit buffer at the same time.
 
-Additionally, Isabelle, being a proof assistant, does not follow conventional programming language practices. For the sake of keeping correctness, the actual Isabelle kernel is kept small (albeit with performance related additions). Many of Isabelle's systems are built within Isabelle itself, including a majority of the #isar syntax. Keywords such as `theorem` do not exist statically, but are instead defined in userspace/* userland? */, and it is thus also possible to extend this syntax if needed. When editing a theory in #jedit, the actual syntax highlighting is done mostly dynamically.
+Additionally, Isabelle, being a proof assistant, does not follow conventional programming language practices. For the sake of keeping correctness, the actual Isabelle kernel is kept small (albeit with performance related additions). Many of Isabelle's systems are built within Isabelle itself, including a majority of the #isar syntax. Keywords such as `theorem` do not exist statically, but are instead defined in userspace, and it is thus also possible to extend this syntax if needed. When editing a theory in #jedit, the actual syntax highlighting is done mostly dynamically.
 
 === Output and State Panels
 
