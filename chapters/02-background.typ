@@ -7,9 +7,9 @@
 
 == Isabelle
 
-#TODO[Isabelle exists as one of the oldest theorem provers, originally conceptualized in .... It doesn't follow any specific logic, but instead (look into paulson's citations for what the wording was again). (add comparison to Lean/Coq etc.?)]
+From proving the prime number theorem @prime-number-theorem, over a verified microkernel @verified-microkernel, all the way to a formalization of a sequential Java-like programming language @jinja, Isabelle has been used for various and numerous formalisations and proofs since its initial relesae in 1986. Additionally, the Archive of Formal Proofs #footnote[https://www.isa-afp.org/] hosts a journal-style collection of many more of such proofs.
 
-#TODO[stats about Isabelle's usage in the real world]
+// #quote(attribution: <paulson-next-700>, block: true)[Isabelle was not designed; it evolved. Not everyone likes this idea.]
 
 === Isabelle/Isar
 
@@ -57,27 +57,23 @@ As an example, let's say you write the implication $A ==> B$ in Isabelle. Within
     ),
     align: left,
 
-    [*ASCII Representation*],
-    [`\<Longrightarrow>`],
-    [*Name*],
-    [`Longrightarrow`],
-    [*Unicode Codepoint*],
-    [`0x27F9`],
-    [*Abbreviations*],
-    [#isabelle(".>"), #isabelle("==>")],
+    [*ASCII Representation*], [`\<Longrightarrow>`],
+    [*Name*], [`Longrightarrow`],
+    [*Unicode Codepoint*], [`0x27F9`],
+    [*Abbreviations*], [#isabelle(".>"), #isabelle("==>")],
   ),
   caption: [Symbol data of #isabelle("⟹")],
   kind: table,
   // placement: auto,
 ) <symbol-data-example>
 
-To deal with these symbols, #jedit uses a custom encoding called #box(emph["UTF-8-Isabelle"]). /* say more */ This encoding ensures that the user sees #isabelle("A ⟹ B") while the actual content of the underlying file is "`A \<Longrightarrow> B`". However, because Isabelle internally uses its own abstracted representation of symbols, it has no trouble dealing with cases where the actual #isabelle("⟹") Unicode symbol is used within a file.
+To deal with these symbols, #jedit uses a custom encoding called #box(emph["UTF-8-Isabelle"]). This encoding ensures that the user sees #isabelle("A ⟹ B") while the actual content of the underlying file is "`A \<Longrightarrow> B`". However, because Isabelle internally uses its own abstracted representation of symbols, it has no trouble dealing with cases where the actual #isabelle("⟹") Unicode symbol is used within a file.
 
-#TODO[
-  Add explanation why this custom encoding is used instead of just unicode:
-  - sub/sup not consistent in Unicode, can even be nested in Isabelle
-  - not dependent on font Unicode support, file can be viewed with virtually any font if needed
-]
+// #TODO[
+//   Add explanation why this custom encoding is used instead of just unicode:
+//   - sub/sup not consistent in Unicode, can even be nested in Isabelle
+//   - not dependent on font Unicode support, file can be viewed with virtually any font if needed
+// ]
 
 === Isabelle/VSCode <isabelle-vscode>
 
@@ -90,13 +86,9 @@ To deal with these symbols, #jedit uses a custom encoding called #box(emph["UTF-
 
 Isabelle nowadays consists of many different components. #jedit is one such component. When we refer to #vscode, we are actually referring to three different Isabelle components: The Isabelle _language server_, Isabelle's own patched _VSCodium_ #footnote[https://vscodium.com/] and the VSCode _extension_ binding the two together. Note in particular that when running #vscode, Isabelle does not actually use a standard distribution of VSCode. Instead, it is a custom VSCodium package. VSCodium is a fully open-source distribution of Microsoft's VSCode with some patches to disable telemetry as well as replacing the VSCode branding with that of VSCodium.
 
-Isabelle adds its own patches on top of VSCodium, in order to add a custom encoding mimicking the functionality of #jedit, as well as integrating custom Isabelle-specific fonts which we will discuss further in @isabelle-fonts. Since neither adding custom encodings nor including custom fonts is possible from within a VSCode plugin, these patches exist instead.
+Isabelle adds its own patches on top of VSCodium, in order to add a custom encoding mimicking the functionality of #jedit, as well as integrating custom Isabelle-specific fonts. Since neither adding custom encodings nor including custom fonts is possible from within a VSCode extension, these patches exist instead.
 
 The concept of _Output_ and _State_ panels exist equivalently within #vscode as seen in @vscode1, although it is currently not possible to create multiple _State_ panels for reasons outlined in @state-init.
-
-=== Fonts <isabelle-fonts>
-
-#TODO[]
 
 == Language Server Protocol (LSP)
 
@@ -125,18 +117,10 @@ _Notification Messages_ are messages that, as the name suggests, only exist to n
     ),
     align: left,
     table.header([*Notification*], [*Request*], [*Response*]),
-    [ jsonrpc: string ],
-    [ jsonrpc: string ],
-    [ jsonrpc: string ],
-    [],
-    [ id: integer | string; ],
-    [ id: integer | string | null; ],
-    [ method: string; ],
-    [ method: string; ],
-    [ result?: Any; ],
-    [ params?: array | object; ],
-    [ params?: array | object; ],
-    [ error?: ResponseError; ],
+    [ jsonrpc: string ], [ jsonrpc: string ], [ jsonrpc: string ],
+    [], [ id: integer | string; ], [ id: integer | string | null; ],
+    [ method: string; ], [ method: string; ], [ result?: Any; ],
+    [ params?: array | object; ], [ params?: array | object; ], [ error?: ResponseError; ],
   ),
   caption: [General LSP message structure.],
   kind: table,

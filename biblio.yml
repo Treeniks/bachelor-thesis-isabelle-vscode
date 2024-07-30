@@ -15,8 +15,8 @@ intro-schroder1898:
   type: book
   title: Über zwei Definitionen der Endlichkeit und G. Cantor'sche Sätze
   author: Ernst Schröder
-  publisher: Druck von E. Karras
   date: 1898
+  publisher: Druck von E. Karras
 
 manual-isar:
   type: reference
@@ -38,6 +38,13 @@ manual-system:
   author: Makarius Wenzel
   date: 2024-05-23
   url: https://isabelle.in.tum.de/dist/Isabelle2024/doc/system.pdf
+
+isar-implementation:
+  type: article
+  title: The Isabelle/Isar Implementation
+  author: Makarius Wenzel
+  date: 2010-06-21
+  url: https://isabelle.in.tum.de/website-Isabelle2009-2/dist/Isabelle/doc/implementation.pdf
 
 markarius-isabelle-vscode:
   type: report
@@ -62,7 +69,6 @@ paulson-next-700:
   serial-number:
     doi: 10.48550/arXiv.cs/9301106
     arxiv: cs/9301106
-  # TODO add parent: arxiv?
 
 paulson-natural-deduction:
   type: article
@@ -127,20 +133,38 @@ paulson-lcf-to-isabelle:
     serial-number:
       issn: 1433-299X
 
+isabelle-framework:
+  type: article
+  title: The Isabelle Framework
+  author: ["Makarius Wenzel", "Lawrence C. Paulson", "Tobias Nipkow"]
+  url: https://link.springer.com/chapter/10.1007/978-3-540-71067-7_7#citeas
+  page-range: 33-38
+  serial-number:
+    doi: 10.1007/978-3-540-71067-7_7
+  parent:
+    type: proceedings
+    title: Theorem Proving in Higher Order Logics
+    url: https://link.springer.com/book/10.1007/978-3-540-71067-7
+    date: 2008-07-30
+    publisher: Springer Berlin Heidelberg
+    serial-number:
+      doi: 10.1007/978-3-540-71067-7
+      isbn: 978-3-540-71067-7
+
 lean-system:
   type: article
   title: The Lean Theorem Prover (System Description)
   author: ["Leonardo de Moura", "Soonho Kong", "Jeremy Avigad", "Floris van Doorn", "Jakob von Raumer"]
-  editor: ["Amy P. Felty", "Aart Middeldorp"]
   url: https://lean-lang.org/papers/system.pdf
   page-range: 378-388
-  date: 2015-01-01
-  publisher: Springer International Publishing
+  date: 2015-07-25
   serial-number:
     doi: 10.1007/978-3-319-21401-6_26
   parent:
     type: proceedings
     title: Automated Deduction - CADE-25
+    editor: ["Amy P. Felty", "Aart Middeldorp"]
+    publisher: Springer Cham
     serial-number:
       isbn: 978-3-319-21401-6
 
@@ -152,5 +176,60 @@ rask-lsp-specification:
   date: 2021-08-06
   serial-number:
     arxiv: 2108.02961
-  # TODO add arxiv parent
 
+afp-redesign:
+  type: article
+  title: Re-imagining the Isabelle Archive of Formal Proofs
+  author: ["Carlin MacKenzie", "Fabian Huch", "James Vaughan", "Jacques Fleuriot"]
+  date: 2022-09-17
+  serial-number:
+    doi: 10.1007/978-3-031-16681-5_11
+  parent:
+    type: proceedings
+    title: Intelligent Computer Mathematics
+    editor: ["Kevin Buzzard", "Temur Kutsia"]
+    publisher: Springer Cham
+    serial-number:
+      doi: 10.1007/978-3-031-16681-5
+      issn: 0302-9743
+      isbn: 978-3-031-16681-5
+
+prime-number-theorem:
+  type: article
+  title: A formally verified proof of the prime number theorem
+  author: ["Jeremy Avigad", "Kevin Donnelly", "David Gray", "Paul Raff"]
+  date: 2006-01-19
+  url: https://arxiv.org/abs/cs/0509025
+  serial-number:
+    arxiv: cs/0509025
+    doi: 10.48550/arXiv.cs/0509025
+
+verified-microkernel:
+  type: article
+  title: Formalising a High-Performance Microkernel
+  author: ["Kevin Elphinstone", "Gerwin Klein", "Rafal Kolanski"]
+  editor: "Rustan Leino"
+  url: https://trustworthy.systems/publications/papers/Elphinstone_KK_06.pdf
+  date: 2006-08
+  page-range: 1-7
+  parent:
+    type: proceedings
+    title: Verified Software. Theories, Tools and Experiments.
+
+jinja:
+  type: article
+  title: A machine-checked model for a Java-like language, virtual machine, and compiler
+  author: ["Gerwin Klein", "Tobias Nipkow"]
+  url: https://dl.acm.org/doi/10.1145/1146809.1146811
+  date: 2006-07-01
+  volume: 28
+  issue: 4
+  page-range: 619-695
+  publisher: Association for Computing Machinery
+  serial-number:
+    doi: 10.1145/1146809.1146811
+  parent:
+    type: periodical
+    title: ACM Transactions on Programming Languages and Systems
+    serial-number:
+      issn: 0164-0925
