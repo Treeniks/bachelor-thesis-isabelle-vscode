@@ -3,22 +3,17 @@
 
 = Introduction
 
-In 1911, Alwin Korselt @intro-korselt1911 showed that Ernst Schröder's proof of the Cantor-Bernstein-Schröder theorem, originally published in 1898 @intro-schroder1898, contained an error. While the theorem was correct, and other proofs of this theorem existed even back then, this isn't the only instance where mathematicians tried to proof a statement, thought they conceived such proof and later found that the proof was incorrect or incomplete. Thus, there exist software tools called proof assistants which allow one to formalize mathematical proofs and have the computer check for the proof's correctness. One such tool is _Isabelle_ #footnote[https://isabelle.in.tum.de/], originally developed at the _University of Cambridge_ and _Technical University of Munich_ @paulson-natural-deduction.
+In 1911, Alwin Korselt @intro-korselt1911 showed that Ernst Schröder's proof of the Cantor-Bernstein-Schröder theorem, originally published in 1898 @intro-schroder1898, contained an error. While the theorem was correct, and other proofs of this theorem existed even back then, this isn't the only instance where mathematicians tried to proof a statement, thought they conceived such proof and later found that the proof was incorrect or incomplete. Thus, there exist software tools called proof assistants which allow one to formalize mathematical proofs and have the computer check for the proof's correctness. One such tool is _Isabelle_ #footnote[https://isabelle.in.tum.de/], originally developed at the _University of Cambridge_ and _Technical University of Munich_.
 
-To interact with the Isabelle system, the Isabelle distribution bundles the #jedit code editor @manual-jedit, a modified version of the Java-based code editor _jEdit_ #footnote[https://www.jedit.org/]. Through that, the user is offered a fully interactive Isabelle session, in which proofs are written and checked in real-time. However, #jedit has many accessibility shortcomings. To tackle this problem, #vscode was built to create support for Isabelle from within the popular code editor _Visual Studio Code_ utilizing the _Language Server Protocol_ #footnote[https://microsoft.github.io/language-server-protocol/] (or _LSP_ for short) @markarius-isabelle-vscode.
+To interact with the Isabelle system, the Isabelle distribution bundles the #jedit code editor @manual-jedit, a modified version of the Java-based code editor _jEdit_ #footnote[https://www.jedit.org/]. Through that, the user is offered a fully interactive Isabelle session, in which proofs are written and checked in real-time. However, #jedit has many accessibility shortcomings. To tackle this problem, #vscode was built to create support for Isabelle from within the popular code editor _Visual Studio Code_ utilizing the _Language Server Protocol_ #footnote[https://microsoft.github.io/language-server-protocol/] (or _LSP_ for short) @markarius-isabelle-vscode @accessibility-vscode.
 
 This protocol was originally developed by Microsoft specifically for VSCode. It consists of two main components: A language _server_, responsible for understanding the language on a semantic level, and a language _client_, which is typically the code editor itself. Later, the protocol became a standardized specification and is now widely used by many different programming languages and code editors to more easily support IDE functions like completions and diagnostics.
 
-Unfortunately, the current state of #vscode is not on par with the experience of #jedit. There are issues with usability, missing features, and the underlying language server lacks the necessary capabilities to support the development of an Isabelle language client for another code editor. The goal of this thesis is to tackle these problems, thus bringing #vscode closer to the experience of #jedit and improve and extend the language server.
+Unfortunately, the current state of #vscode is not on par with the experience of #jedit. There are issues with usability and missing features. Additionally, the underlying language server lacks the necessary capabilities to support the development of an Isabelle language client for another code editor.
 
-#TODO[
-  Roter Faden: Can a general language server even be built, or must it always be a specific implementation? What are the challenges, what are its solutions?
+To combat these deficiencies, we will look at the various aspects in which the current #vscode is lacking, then evaluate potential solutions to enhance its functionality. Given that Isabelle's design is often fundamentally incompatible with the LSP specification, the primary question throughout this endeavor is, whether the existing LSP spec can be utilized to fit the needs of Isabelle's unique requirements, whether a completely custom solution needs to be built for each language client, or whether there is a middle ground, in which the language server can take over much of the work, but custom handlers will still need to be present for the client.
 
-  Potentially introduce Fabian's system:
-  - Problem
-  - Solutions
-  - Contributions
-]
+The primary contribution of this thesis is the implementation of several such solutions to create a more flexible language server, unchaining Isabelle from its reliance on jEdit and VSCode, enabling support for other code editors, and giving it potential to flourish within other development environments. Moreover, the VSCode extension was extended and modified to accommodate these new changes, as well as bring its user experience closer to that of #jedit.
 
 == Motivation
 

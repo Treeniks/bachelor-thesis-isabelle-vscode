@@ -53,6 +53,23 @@ markarius-isabelle-vscode:
   date: 2017-01-26
   url: https://sketis.net/wp-content/uploads/2017/01/isabelle-vscode-jan-2017.pdf
 
+accessibility-vscode:
+  type: article
+  title: Towards an Accessible Mathematics Working Environment Based on Isabelle/VSCode
+  author: ["Klaus Miesenberger", "Walther Neuper", "Bernhard Stöger", "Makarius Wenzel"]
+  date: 2023-03-10
+  url: http://dx.doi.org/10.4204/EPTCS.375.8
+  volume: 375
+  page-range: 92-111
+  serial-number:
+    doi: 10.4204/eptcs.375.8
+    arxiv: 2303.05868
+  parent:
+    type: periodical
+    title: Electronic Proceedings in Theoretical Computer Science
+    serial-number:
+      issn: 2075-2180
+
 denis-paluca:
   type: thesis
   title: "Isabelle/VSCode: Editor Improvements and Prover IDE integrations"
