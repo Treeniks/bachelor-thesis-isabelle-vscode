@@ -179,7 +179,7 @@
     target: figure.where(kind: table),
   )
 
-  bibliography("/biblio.yml", style: "association-for-computing-machinery")
+  bibliography("/biblio.bib", style: "association-for-computing-machinery")
 
   // Appendix
   if appendix != none {

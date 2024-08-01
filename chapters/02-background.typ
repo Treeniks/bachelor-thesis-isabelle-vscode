@@ -13,19 +13,19 @@ From proving the prime number theorem @prime-number-theorem, over a verified mic
 
 === Isabelle/Isar
 
-When one wants to write an Isabelle theory, i.e. a document containing a number of theorems, lemmas, function definitions and more, Isabelle offers its own proof language called #isar, allowing its users to write human-readable structured proofs @manual-isar.
+When one wants to write an Isabelle theory, i.e. a document containing a number of theorems, lemmas, function definitions and more, Isabelle offers its own proof language called #isar, allowing its users to write human-readable structured proofs @manual-isar-ref.
 
 The #isar syntax consists of three main syntactic concepts: _Commands_, _Methods_ and _Attributes_. Particularly relevant for us are the _Commands_, which includes keywords like `theorem` with which one can state a proposition followed by a proof, or `apply` with which one can apply a proof _Method_.
 
 === Implementation Design
 
-Isabelle's core implementation languages are _ML_ and _Scala_. Generally speaking, the ML code is responsible for Isabelle's purely functional and mathematical domain, e.g. its LCF-style kernel @paulson-next-700 @paulson-lcf-to-isabelle, while Scala is responsible for Isabelle's physical domain, e.g. everything to do with the UI and IO @manual-system[Chapter~5]. Many modules within the Isabelle code base exist in both Scala and ML, thus creating an almost seamless transition between the two.
+Isabelle's core implementation languages are _ML_ and _Scala_. Generally speaking, the ML code is responsible for Isabelle's purely functional and mathematical domain, e.g. its LCF-style kernel @paulson-next-700 @lcf-to-isabelle, while Scala is responsible for Isabelle's physical domain, e.g. everything to do with the UI and IO @manual-system[Chapter~5]. Many modules within the Isabelle code base exist in both Scala and ML, thus creating an almost seamless transition between the two.
 
 Isabelle employs a monolithic architecture, so while logic is split between modules, there is no limitation on how they can be accessed within the Isabelle system. Moreover, Scala, being a JVM based programming language, effortlessly integrates into jEdit's Java code base. Due to these two facts, when using #jedit, Isabelle is able to offer an interactive session where the entire Isabelle system has direct access to any data jEdit may hold, and the same is true the other way around. For example, #jedit has a feature to automatically indent an Isabelle theory. Internally, this automatic indentation uses both access to the Isabelle system and the jEdit buffer at the same time.
 
 Isabelle, being a proof assistant, also does not follow conventional programming language design practices. For the sake of keeping correctness, the actual Isabelle kernel is kept small (albeit with performance related additions). Many of Isabelle's systems are built within Isabelle itself, including a majority of the #isar syntax.
 
-#quote(block: true, attribution: <markarius-isabelle-vscode>)[Note that static grammar and language definitions are not ideal: Isabelle syntax depends on theory imports: new commands may be defined in user libraries.]
+#quote(block: true, attribution: <markarius-isabelle-vscode-2017>)[Note that static grammar and language definitions are not ideal: Isabelle syntax depends on theory imports: new commands may be defined in user libraries.]
 
 Even quite fundamental keywords such as `theorem` do not exist statically, but are instead defined in user space. When editing a theory in #jedit, the actual syntax highlighting is done mostly dynamically.
 
@@ -176,7 +176,7 @@ What's important for us is that during this back and forth, within the `initiali
 
 While the LSP defines most methods required for typical language server use cases, specific language servers may also extend the basic protocol by their own methods. In such cases, the corresponding client will need to define extra handlers for these new methods.
 
-Since the standard Language Server Protocol is designed for normal programming languages in mind, it defines little for other types of languages, particularly theorem provers @rask-lsp-specification, and is thus insufficient for Isabelle's needs. For example, in order to keep the _Output_ and _State_ panels updated, the server needs to know the current location of the caret at all times. This is not a typical need for language servers of normal programming languages and is thus not build into the protocol by default.
+Since the standard Language Server Protocol is designed for normal programming languages in mind, it defines little for other types of languages, particularly theorem provers @lsp-spec-extension, and is thus insufficient for Isabelle's needs. For example, in order to keep the _Output_ and _State_ panels updated, the server needs to know the current location of the caret at all times. This is not a typical need for language servers of normal programming languages and is thus not build into the protocol by default.
 
 Isabelle thus extends the LSP with its own methods under the #box["`PIDE/`"] prefix, which have to be enabled with the #box["`vscode_pide_extensions`"] Isabelle option. For example, here are 3 such methods:
 1. "`PIDE/caret_update`": A bidirectional notification for telling the other party that the caret has been moved. Mostly sent from the client to the server.
