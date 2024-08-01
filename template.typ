@@ -26,6 +26,8 @@
   show heading.where(level: 1): set text(size: 1.4em)
   // Put chapters on new page and add extra spacing
   show heading.where(level: 1): it => {
+    // reset footnote counter
+    counter(footnote).update(0)
     pagebreak(weak: true)
     v(3em)
     it
