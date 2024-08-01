@@ -4,3 +4,9 @@ VSCode
 VSCodium
 Deserialization
 Neovim
+Isar
+JEdit
+jsonrpc
+provers
+pide
+vscode
