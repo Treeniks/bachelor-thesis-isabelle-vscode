@@ -7,7 +7,7 @@
 
 == Isabelle
 
-From proving the prime number theorem @prime-number-theorem, over a verified microkernel @verified-microkernel, all the way to a formalization of a sequential Java-like programming language @jinja, Isabelle has been used for various and numerous formalisations and proofs since its initial relesae in 1986. Additionally, the Archive of Formal Proofs #footnote[https://www.isa-afp.org/] hosts a journal-style collection of many more of such proofs.
+From proving the prime number theorem @prime-number-theorem, over a verified microkernel @verified-microkernel, all the way to a formalization of a sequential Java-like programming language @jinja, Isabelle has been used for various and numerous formalizations and proofs since its initial release in 1986. Additionally, the Archive of Formal Proofs #footnote[https://www.isa-afp.org/] hosts a journal-style collection of many more of such proofs.
 
 // #quote(attribution: <paulson-next-700>, block: true)[Isabelle was not designed; it evolved. Not everyone likes this idea.]
 
@@ -23,7 +23,7 @@ Isabelle's core implementation languages are _ML_ and _Scala_. Generally speakin
 
 Isabelle employs a monolithic architecture, so while logic is split between modules, there is no limitation on how they can be accessed within the Isabelle system. Additionally, Scala, being a JVM based programming language, effortlessly integrates into jEdit's Java code base. Due to these two facts, when using #jedit, Isabelle is able to offer an interactive session where the entire Isabelle system has direct access to any data jEdit may hold, and the same is true the other way around. For example, #jedit has a feature to automatically indent an Isabelle theory. Internally, this automatic indentation uses both access to the Isabelle system and the jEdit buffer at the same time.
 
-Additionally, Isabelle, being a proof assistant, does not follow conventional programming language practices. For the sake of keeping correctness, the actual Isabelle kernel is kept small (albeit with performance related additions). Many of Isabelle's systems are built within Isabelle itself, including a majority of the #isar syntax. Keywords such as `theorem` do not exist statically, but are instead defined in userspace, and it is thus also possible to extend this syntax if needed. When editing a theory in #jedit, the actual syntax highlighting is done mostly dynamically.
+Additionally, Isabelle, being a proof assistant, does not follow conventional programming language practices. For the sake of keeping correctness, the actual Isabelle kernel is kept small (albeit with performance related additions). Many of Isabelle's systems are built within Isabelle itself, including a majority of the #isar syntax. Keywords such as `theorem` do not exist statically, but are instead defined in user space, and it is thus also possible to extend this syntax if needed. When editing a theory in #jedit, the actual syntax highlighting is done mostly dynamically.
 
 === Output and State Panels
 
@@ -42,7 +42,7 @@ _State_ panels on the other hand display the current internal proof state within
 
 Isabelle uses a lot of custom symbols to allow logical terms to be written in a syntax close to that of mathematics. The concept of what an _Isabelle symbol_ is exactly is rather broad, so for simplicity we will focus primarily on a certain group of symbols typically used in mathematical formulas.
 
-Each Isabelle symbol roughly consists of four points of data: An ASCII representation of the symbol, a name, an optional unicode codepoint and a list of abbreviations for this symbol. These four points are not the whole story, however for the sake of simplicity, we will skip some details.
+Each Isabelle symbol roughly consists of four points of data: An ASCII representation of the symbol, a name, an optional Unicode code point and a list of abbreviations for this symbol. These four points are not the whole story, however for the sake of simplicity, we will skip some details.
 
 As an example, let's say you write the implication $A ==> B$ in Isabelle. Within jEdit, you will see it written out as #isabelle("A ⟹ B"), however internally the #isabelle("⟹") is an Isabelle symbol. Its corresponding data is outlined in @symbol-data-example.
 
