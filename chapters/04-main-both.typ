@@ -34,7 +34,7 @@ Previously, when switching theories within #vscode, the dynamic syntax highlight
   ],
   caption: [Example `PIDE/decoration` notification sent by the language server.],
   kind: raw,
-  // placement: auto,
+  placement: auto,
 ) <pide-decoration-json>
 
 To understand how #vscode does dynamic syntax highlighting, we will first take a look at the structure of the `PIDE/decoration` notifications. Recall that the primary data of notifications is sent within a `params` field. In this case, this field contains two components: A `uri` field with the relevant theory file's URI, and a list of decorations called `entries`. Each of these entries then consists of a `type` and a list of ranges called `content`. The `type` is a string identifier for an Isabelle decoration type. This includes things like `text_skolem` for Skolem variables and `dotted_warning` for things that should have a dotted underline. Each entry in the `content` list is another list of 4 integers describing the line start, line end, column start, and column end of the range the specified decoration type should be applied to. @pide-decoration-json shows an example of what a `PIDE/decoration` message may look like.

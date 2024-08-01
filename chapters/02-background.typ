@@ -85,7 +85,7 @@ To deal with these symbols, #jedit uses a custom encoding called #box(emph["UTF-
   image("/resources/vscode1-dark.png", width: 80%),
   caption: [VSCode with both _Output_ and _State_ panels open. _Output_ on the bottom, _State_ on the right.],
   kind: image,
-  // placement: auto,
+  placement: auto,
 ) <vscode1>
 
 Isabelle nowadays consists of many different components. #jedit is one such component. When we refer to #vscode, we are actually referring to three different Isabelle components: The Isabelle _language server_, Isabelle's own patched _VSCodium_ #footnote[https://vscodium.com/] and the VSCode _extension_ binding the two together. Note in particular that when running #vscode, Isabelle does not actually use a standard distribution of VSCode. Instead, it is a custom VSCodium package. VSCodium is a fully open-source distribution of Microsoft's VSCode with some patches to disable telemetry as well as replacing the VSCode branding with that of VSCodium.
