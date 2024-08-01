@@ -18,6 +18,14 @@ intro-schroder1898:
   date: 1898
   publisher: Druck von E. Karras
 
+intro-dedekind1887:
+  type: book
+  title: Gesammelte mathematische Werke
+  author: Richard Dedekind
+  editor: ["Robert Fricke", "Emmy Noether", "Øystein Ore"]
+  volume: 3
+  url: http://resolver.sub.uni-goettingen.de/purl?PPN23569441X
+
 manual-isar:
   type: reference
   title: The Isabelle/Isar Reference Manual
