@@ -26,6 +26,14 @@ intro-dedekind1887:
   volume: 3
   url: http://resolver.sub.uni-goettingen.de/purl?PPN23569441X
 
+lsp-spec:
+  type: reference
+  title: Language Server Protocol Specification - 3.17
+  author: Microsoft
+  url:
+    value: https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/
+    date: 2024-08-01
+
 manual-isar:
   type: reference
   title: The Isabelle/Isar Reference Manual

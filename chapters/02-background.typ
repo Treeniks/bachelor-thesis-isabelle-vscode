@@ -19,11 +19,15 @@ The #isar syntax consists of three main syntactic concepts: _Commands_, _Methods
 
 === Implementation Design
 
-Isabelle's core implementation languages are _ML_ and _Scala_. Generally speaking, the ML code is responsible for Isabelle's purely functional and mathematical domain, e.g. its LCF-style kernel @paulson-next-700 @paulson-lcf-to-isabelle, while Scala is responsible for Isabelle's physical domain, e.g. everything to do with the UI and IO. Many modules within the Isabelle code base exist in both Scala and ML, thus creating an almost seamless transition between the two.
+Isabelle's core implementation languages are _ML_ and _Scala_. Generally speaking, the ML code is responsible for Isabelle's purely functional and mathematical domain, e.g. its LCF-style kernel @paulson-next-700 @paulson-lcf-to-isabelle, while Scala is responsible for Isabelle's physical domain, e.g. everything to do with the UI and IO @manual-system[Chapter~5]. Many modules within the Isabelle code base exist in both Scala and ML, thus creating an almost seamless transition between the two.
 
-Isabelle employs a monolithic architecture, so while logic is split between modules, there is no limitation on how they can be accessed within the Isabelle system. Additionally, Scala, being a JVM based programming language, effortlessly integrates into jEdit's Java code base. Due to these two facts, when using #jedit, Isabelle is able to offer an interactive session where the entire Isabelle system has direct access to any data jEdit may hold, and the same is true the other way around. For example, #jedit has a feature to automatically indent an Isabelle theory. Internally, this automatic indentation uses both access to the Isabelle system and the jEdit buffer at the same time.
+Isabelle employs a monolithic architecture, so while logic is split between modules, there is no limitation on how they can be accessed within the Isabelle system. Moreover, Scala, being a JVM based programming language, effortlessly integrates into jEdit's Java code base. Due to these two facts, when using #jedit, Isabelle is able to offer an interactive session where the entire Isabelle system has direct access to any data jEdit may hold, and the same is true the other way around. For example, #jedit has a feature to automatically indent an Isabelle theory. Internally, this automatic indentation uses both access to the Isabelle system and the jEdit buffer at the same time.
 
-Additionally, Isabelle, being a proof assistant, does not follow conventional programming language practices. For the sake of keeping correctness, the actual Isabelle kernel is kept small (albeit with performance related additions). Many of Isabelle's systems are built within Isabelle itself, including a majority of the #isar syntax. Keywords such as `theorem` do not exist statically, but are instead defined in user space, and it is thus also possible to extend this syntax if needed. When editing a theory in #jedit, the actual syntax highlighting is done mostly dynamically.
+Isabelle, being a proof assistant, also does not follow conventional programming language design practices. For the sake of keeping correctness, the actual Isabelle kernel is kept small (albeit with performance related additions). Many of Isabelle's systems are built within Isabelle itself, including a majority of the #isar syntax.
+
+#quote(block: true, attribution: <markarius-isabelle-vscode>)[Note that static grammar and language definitions are not ideal: Isabelle syntax depends on theory imports: new commands may be defined in user libraries.]
+
+Even quite fundamental keywords such as `theorem` do not exist statically, but are instead defined in user space. When editing a theory in #jedit, the actual syntax highlighting is done mostly dynamically.
 
 === Output and State Panels
 
@@ -96,9 +100,9 @@ Before the introduction of the Language Server Protocol, it was common for code 
 
 Now, the responsibility of semantic understanding of the language has moved entirely to the language server, while the language client is responsible only for handling user interaction.
 
-The goal is a system in which a new programming language only needs to implement a single language server, while a new code editor only needs to implement a single language client. In the best case scenario, any language server and language client can be used together (although in practice this is still not always the case). If we wanted to support $N$ programming languages for $M$ code editors, without the LSP we would need $N dot M$ implementations of language semantics @rask-lsp-specification. With the LSP, this number is reduced drastically to only $N$ language server and $M$ language client implementations.
+The goal is a system in which a new programming language only needs to implement a single language server, while a new code editor only needs to implement a single language client. In the best case scenario, any language server and language client can be used together (although in practice this is still not always the case). If we wanted to support $N$ programming languages for $M$ code editors, without the LSP we would need $N dot M$ implementations of language semantics. With the LSP, this number is reduced drastically to only $N$ language server and $M$ language client implementations.
 
-The general setup is quite simple: The client and server communicate via `jsonrpc 2.0` messages. These messages are mostly either of 3 types:
+#cite(form: "prose", <lsp-spec>) describes the general setup: The client and server communicate via `jsonrpc 2.0` messages. These messages are mostly either of 3 types:
 - _Notification Messages_
 - _Request Messages_
 - _Response Messages_
@@ -106,30 +110,33 @@ The general setup is quite simple: The client and server communicate via `jsonrp
 _Notification Messages_ are messages that, as the name suggests, only exist to notify the other party. They must not send a response back. _Request Messages_ are requests sent to the other party and require a _Response Message_ to be sent back once the request has been processed. The structure of these message types is also defined within the LSP Specification and can be seen in @lsp-message-structure.
 
 #figure(
-  table(
-    columns: 3,
-    // fill: (x, y) => if y == 0 { gray },
-    stroke: (x, y) => (
-      left: if x > 0 { .5pt } else { 0pt },
-      right: 0pt,
-      top: if y == 1 { .5pt } else { 0pt },
-      bottom: 0pt,
-    ),
-    align: left,
-    table.header([*Notification*], [*Request*], [*Response*]),
-    [ jsonrpc: string ], [ jsonrpc: string ], [ jsonrpc: string ],
-    [], [ id: integer | string; ], [ id: integer | string | null; ],
-    [ method: string; ], [ method: string; ], [ result?: Any; ],
-    [ params?: array | object; ], [ params?: array | object; ], [ error?: ResponseError; ],
-  ),
+  {
+    set raw(lang: "ts")
+    table(
+      columns: 3,
+      // fill: (x, y) => if y == 0 { gray },
+      stroke: (x, y) => (
+        left: if x > 0 { .5pt } else { 0pt },
+        right: 0pt,
+        top: if y == 1 { .5pt } else { 0pt },
+        bottom: 0pt,
+      ),
+      align: left,
+      table.header([*Notification*], [*Request*], [*Response*]),
+      [ `jsonrpc: string` ], [ `jsonrpc: string` ], [ `jsonrpc: string` ],
+      [], [ `id: integer | string` ], [ `id: integer | string | null` ],
+      [ `method: string` ], [ `method: string` ], [ `result?: Any` ],
+      [ `params?: array | object` ], [ `params?: array | object` ], [ `error?: ResponseError` ],
+    )
+  },
   caption: [General LSP message structure.],
   kind: table,
   // placement: auto,
 ) <lsp-message-structure>
 
-The _jsonrpc_ entry of every message is, at the time of writing, always set to "`2.0`". The _id_ of the Request is sent in order to identify the associated response, thus the _id_ in a Response Message must also be set appropriately. The _params_, _result_ and _error_ entries' shape all depend on the type of Notification/Request/Response sent. This type is specified within the _method_ entry, which is the most important for now.
+The `jsonrpc` entry of every message is, at the time of writing, always set to "`2.0`". The `id` of the request is sent in order to identify the associated response, thus the `id` in a response message must also be set appropriately. The `method` entry is an identifier for the _kind_ of message at hand and dictates the shape of the `params`, `result` and `error` entries, which in turn contain the primary data of the message.
 
-There are many different #emph[method]s. For example, messages dealing with text documents are sent under the #box["`textDocument/`"] method prefix, like the #box["`textDocument/hover`"] request which requests for hover information, or the #box["`textDocument/didChange`"] notification, sent by the client to keep the server informed about changes made to the document's text.
+There are many different _methods_. For example, messages dealing with text documents are sent under the #box["`textDocument/`"] method prefix, like the #box["`textDocument/hover`"] request which requests for hover information, or the #box["`textDocument/didChange`"] notification, sent by the client to keep the server informed about changes made to the document's text.
 
 === Initialization
 
