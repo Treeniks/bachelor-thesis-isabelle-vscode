@@ -170,7 +170,7 @@ isabelle-framework:
   type: article
   title: The Isabelle Framework
   author: ["Makarius Wenzel", "Lawrence C. Paulson", "Tobias Nipkow"]
-  url: https://link.springer.com/chapter/10.1007/978-3-540-71067-7_7#citeas
+  url: https://link.springer.com/chapter/10.1007/978-3-540-71067-7_7
   page-range: 33-38
   serial-number:
     doi: 10.1007/978-3-540-71067-7_7
