@@ -2,7 +2,7 @@
 
 #set text(font: "STIX Two Text", size: 11pt)
 #show math.equation: set text(font: "STIX Two Math")
-#show raw: set text(font: "JetBrains Mono")
+#show raw: set text(font: "JetBrains Mono", size: 1.1em)
 
 #let acknowledgements = [#lorem(150)]
 #let abstract = [#lorem(150)]
