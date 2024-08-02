@@ -65,7 +65,56 @@ Later on, we found that client-side caching was already implemented for the Isab
 
 == Pretty Formatting for Panels
 
-Isabelle uses an internal module called `Pretty` to manage the formatting of content in _State_ and _Output_ panels. Specifically, this module is responsible for adding line breaks and indenting to these outputs if the panels are not wide enough to display something in a single line. The language server did not use the `Pretty` module at all, meaning that it was the responsibility of the client to add correct line breaks, which #vscode did not do.
+Isabelle uses an internal module called `Pretty` to manage the formatting of content in State and Output panels. Specifically, this module is responsible for adding line breaks and indentation to these outputs if the panels are not wide enough to display something in a single line. The language server did not use the `Pretty` module at all, meaning that it was the responsibility of the client to add correct line breaks, which #vscode did not do. The result, seen in @state-comparison, was that #vscode used its default word wrap linebreaks, instead of the semantic-aware linebreaks seen in #jedit.
+
+#figure(
+  {
+    show raw: set text(size: 8pt)
+    show "Γ": set text(green)
+    show "τ": set text(green)
+    show "a1": set text(green)
+    show "a2": set text(green)
+
+    table(
+      columns: 2,
+      align: left,
+      stroke: (x, y) => (
+        left: if x > 0 { .5pt } else { 0pt },
+        right: 0pt,
+        top: if y > 0 { .5pt } else { 0pt },
+        bottom: 0pt,
+      ),
+      fill: (_, y) => if y == 1 { luma(235) } else { none },
+      table.header([*jEdit State Panel*], [*VSCode State Panel*]),
+      [
+        #show raw: set text(font: "Isabelle DejaVu Sans Mono")
+`proof (state)
+`#text(eastern)[`goal`]` (4 subgoals):
+ 1. ⋀Γ `#text(green)[`i`]`. Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (Ic `#text(green)[`i`]`) `#text(blue)[`s`]`)
+ 2. ⋀Γ `#text(green)[`r`]`. Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (Rc `#text(green)[`r`]`) `#text(blue)[`s`]`)
+ 3. ⋀Γ `#text(green)[`x`]`. Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (V `#text(green)[`x`]`) `#text(blue)[`s`]`)
+ 4. ⋀Γ a1 τ a2.
+       Γ ⊢ a1 : τ ⟹
+       (Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval a1 `#text(blue)[`s`]`)) ⟹
+       Γ ⊢ a2 : τ ⟹
+       (Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval a2 `#text(blue)[`s`]`)) ⟹
+       Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (Plus a1 a2) `#text(blue)[`s`]`)`
+      ],
+      [
+        #show raw: set text(font: "Noto Sans Mono")
+`proof (state)
+`#text(purple)[`goal`]` (4 subgoals):
+ 1. ⋀Γ `#text(green)[`i`]`. Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (Ic `#text(green)[`i`]`) `#text(blue)[`s`]`)
+ 2. ⋀Γ `#text(green)[`r`]`. Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (Rc `#text(green)[`r`]`) `#text(blue)[`s`]`)
+ 3. ⋀Γ `#text(green)[`x`]`. Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (V `#text(green)[`x`]`) `#text(blue)[`s`]`)
+ 4. ⋀Γ a1 τ a2. Γ ⊢ a1 : τ ⟹ (Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval a1 `#text(blue)[`s`]`)) ⟹ Γ ⊢ a2 : τ ⟹ (Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval a2 `#text(blue)[`s`]`)) ⟹ Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (Plus a1 a2) `#text(blue)[`s`]`)`
+      ]
+    )
+  },
+  caption: [Comparison of #jedit State display and previous #vscode State display],
+  kind: table,
+  placement: auto,
+) <state-comparison>
 
 === Isabelle's Internal XML
 
