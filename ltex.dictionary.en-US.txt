@@ -10,3 +10,4 @@ jsonrpc
 provers
 pide
 vscode
+Skolem
