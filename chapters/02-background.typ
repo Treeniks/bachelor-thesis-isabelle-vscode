@@ -33,14 +33,14 @@ Even quite fundamental keywords such as `theorem` do not exist statically, but a
 
 #figure(
   image("/resources/jedit1.png", width: 80%),
-  caption: [JEdit with both _Output_ and _State_ panels open. _Output_ on the bottom, _State_ on the right.],
+  caption: [JEdit with both Output and State panels open. Output on the bottom, State on the right.],
   kind: image,
   // placement: auto,
 ) <jedit1>
 
-Isabelle has a few different types of panels which give crucial information to the user. The two most relevant to us are the _Output_ panel and _State_ panels as seen in @jedit1. The point of the _Output_ panel is to show messages that correspond to a given command, which can include general information, warnings or errors. This also means, that the content of the _Output_ panel is directly tied to a specific command in the theory. The command is typically determined by the current position of the caret.
+Isabelle has a few different types of panels which give crucial information to the user. The two most relevant to us are the _Output_ panel and _State_ panels as seen in @jedit1. The point of the Output panel is to show messages that correspond to a given command, which can include general information, warnings or errors. This also means, that the content of the Output panel is directly tied to a specific command in the theory. The command is typically determined by the current position of the caret.
 
-_State_ panels on the other hand display the current internal proof state within a proof. While there can only be one _Output_ panel, it is possible to have multiple _State_ panels open, which may show states at different positions within the document. Whether moving the caret updates the currently displayed _Output_ or _State_ depends on the _Auto update_ setting of the respective panel.
+State panels on the other hand display the current internal proof state within a proof. While there can only be one Output panel, it is possible to have multiple State panels open, which may show states at different positions within the document. Whether moving the caret updates the currently displayed Output or State depends on the _Auto update_ setting of the respective panel.
 
 === Symbols
 
@@ -83,7 +83,7 @@ To deal with these symbols, #jedit uses a custom encoding called #box(emph["UTF-
 
 #figure(
   image("/resources/vscode1-dark.png", width: 80%),
-  caption: [VSCode with both _Output_ and _State_ panels open. _Output_ on the bottom, _State_ on the right.],
+  caption: [VSCode with both Output and State panels open. Output on the bottom, State on the right.],
   kind: image,
   placement: auto,
 ) <vscode1>
@@ -92,7 +92,7 @@ Isabelle nowadays consists of many different components. #jedit is one such comp
 
 Isabelle adds its own patches on top of VSCodium, in order to add a custom encoding mimicking the functionality of #jedit, as well as integrating custom Isabelle-specific fonts. Since neither adding custom encodings nor including custom fonts is possible from within a VSCode extension, these patches exist instead.
 
-The concept of _Output_ and _State_ panels exist equivalently within #vscode as seen in @vscode1, although it is currently not possible to create multiple _State_ panels for reasons outlined in @state-init.
+The concept of Output and State panels exist equivalently within #vscode as seen in @vscode1, although it is currently not possible to create multiple State panels for reasons outlined in @state-init.
 
 == Language Server Protocol (LSP)
 
@@ -176,12 +176,12 @@ What's important for us is that during this back and forth, within the `initiali
 
 While the LSP defines most methods required for typical language server use cases, specific language servers may also extend the basic protocol by their own methods. In such cases, the corresponding client will need to define extra handlers for these new methods.
 
-Since the standard Language Server Protocol is designed for normal programming languages in mind, it defines little for other types of languages, particularly theorem provers @lsp-spec-extension, and is thus insufficient for Isabelle's needs. For example, in order to keep the _Output_ and _State_ panels updated, the server needs to know the current location of the caret at all times. This is not a typical need for language servers of normal programming languages and is thus not build into the protocol by default.
+Since the standard Language Server Protocol is designed for normal programming languages in mind, it defines little for other types of languages, particularly theorem provers @lsp-spec-extension, and is thus insufficient for Isabelle's needs. For example, in order to keep the Output and State panels updated, the server needs to know the current location of the caret at all times. This is not a typical need for language servers of normal programming languages and is thus not build into the protocol by default.
 
 Isabelle thus extends the LSP with its own methods under the #box["`PIDE/`"] prefix, which have to be enabled with the #box["`vscode_pide_extensions`"] Isabelle option. For example, here are 3 such methods:
 1. "`PIDE/caret_update`": A bidirectional notification for telling the other party that the caret has been moved. Mostly sent from the client to the server.
 
-2. "`PIDE/dynamic_output`": A notification sent from the server to the client containing the current content of the _Output_ panel.
+2. "`PIDE/dynamic_output`": A notification sent from the server to the client containing the current content of the Output panel.
 
 3. "`PIDE/decoration`": A notification sent from the server to the client containing information on the dynamic syntax highlighting within the current theory.
 
