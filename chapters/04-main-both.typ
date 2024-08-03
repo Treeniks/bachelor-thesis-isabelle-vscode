@@ -3,11 +3,11 @@
 
 = Changes to both Server and Client
 
-As mentioned in @isabelle-vscode, #vscode describes multiple Isabelle components working in unison to support Isabelle within VSCode. As such, the work done on #vscode can be roughly categorized on whether it deals with the language server, the language client (i.e. the VSCode extension), or both, the latter of which we will look at first.
+As mentioned in @isabelle-vscode, #vscode() describes multiple Isabelle components working in unison to support Isabelle within VSCode. As such, the work done on #vscode() can be roughly categorized on whether it deals with the language server, the language client (i.e. the VSCode extension), or both, the latter of which we will look at first.
 
 == Decorations on File Switch
 
-Previously, when switching theories within #vscode, the dynamic syntax highlighting would not persist. It was possible to get the highlighting to work again by changing the buffer's content; however, until this was done, it never recovered by itself. This was a problem when working on multiple theory files.
+Previously, when switching theories within #vscode(), the dynamic syntax highlighting would not persist. It was possible to get the highlighting to work again by changing the buffer's content; however, until this was done, it never recovered by itself. This was a problem when working on multiple theory files.
 
 #figure(
   [
@@ -37,7 +37,7 @@ Previously, when switching theories within #vscode, the dynamic syntax highlight
   placement: auto,
 ) <pide-decoration-json>
 
-To understand how #vscode does dynamic syntax highlighting, we will first take a look at the structure of the `PIDE/decoration` notifications. Recall that the primary data of notifications is sent within a `params` field. In this case, this field contains two components: A `uri` field with the relevant theory file's URI, and a list of decorations called `entries`. Each of these entries then consists of a `type` and a list of ranges called `content`. The `type` is a string identifier for an Isabelle decoration type. This includes things like `text_skolem` for Skolem variables and `dotted_warning` for things that should have a dotted underline. Each entry in the `content` list is another list of 4 integers describing the line start, line end, column start, and column end of the range the specified decoration type should be applied to. @pide-decoration-json shows an example of what a `PIDE/decoration` message may look like.
+To understand how #vscode() does dynamic syntax highlighting, we will first take a look at the structure of the `PIDE/decoration` notifications. Recall that the primary data of notifications is sent within a `params` field. In this case, this field contains two components: A `uri` field with the relevant theory file's URI, and a list of decorations called `entries`. Each of these entries then consists of a `type` and a list of ranges called `content`. The `type` is a string identifier for an Isabelle decoration type. This includes things like `text_skolem` for Skolem variables and `dotted_warning` for things that should have a dotted underline. Each entry in the `content` list is another list of 4 integers describing the line start, line end, column start, and column end of the range the specified decoration type should be applied to. @pide-decoration-json shows an example of what a `PIDE/decoration` message may look like.
 
 Since this is not part of the standard LSP specification, a language client must implement a special handler for such decoration notifications. Additionally, it was not possible to explicitly request these decorations from the language server. Instead, the language server would send new decorations whenever it deemed necessary, e.g., because the caret moved into areas of the text that haven't been decorated yet or because the document's content has changed.
 
@@ -54,7 +54,7 @@ Because of this, we instead introduced a new `PIDE/decoration_request` notificat
 
 The reason for this is twofold: There was already precedent for such behavior in the Isabelle language server, specifically with `PIDE/preview_request` and `PIDE/preview_response` notifications, and, the `PIDE/decoration` notification is not only sent after a request. The original automatic sending behavior that existed before is still present and was not altered. If we were to implement `PIDE/decoration_request`s as an LSP request instead, this would only result in extra implementation work on the client side because a client would need to implement the same decoration application logic for both the `PIDE/decoration` notification and the `PIDE/decoration_request` response. By defining `PIDE/decoration_request`s as notifications, the client only needs to implement a singular handler for `PIDE/decoration` notifications and automatically covers both scenarios simultaneously.
 
-Later on, we found that client-side caching was already implemented for the Isabelle VSCode extension; however, incorrectly so. The caching was done via a JavaScript `Map` #footnote[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map], with files as keys and the content list from the decoration messages as values. For the keys, the specific value used was of type `URI` #footnote[https://code.visualstudio.com/api/references/vscode-api#Uri], which does not explicitly implement an equality function, thus resulting in an inconsistent equality check where two URIs pointing to the same file may not have been the same URI in TypeScript-land. Switching the key to using string representations of the URIs fixed the issue. However, we decided to keep the `PIDE/decoration_request` notification. While it may not be in use by #vscode directly, other Isabelle language client implementations may make use of this functionality anyway.
+Later on, we found that client-side caching was already implemented for the Isabelle VSCode extension; however, incorrectly so. The caching was done via a JavaScript `Map` #footnote[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map], with files as keys and the content list from the decoration messages as values. For the keys, the specific value used was of type `URI` #footnote[https://code.visualstudio.com/api/references/vscode-api#Uri], which does not explicitly implement an equality function, thus resulting in an inconsistent equality check where two URIs pointing to the same file may not have been the same URI in TypeScript-land. Switching the key to using string representations of the URIs fixed the issue. However, we decided to keep the `PIDE/decoration_request` notification. While it may not be in use by #vscode() directly, other Isabelle language client implementations may make use of this functionality anyway.
 
 // #TODO[
 //   - currently breaks when switching files/tabs
@@ -65,7 +65,7 @@ Later on, we found that client-side caching was already implemented for the Isab
 
 == Pretty Formatting for Panels
 
-Isabelle uses an internal module called `Pretty` to manage the formatting of content in State and Output panels. Specifically, this module is responsible for adding line breaks and indentation to these outputs if the panels are not wide enough to display something in a single line. The language server did not use the `Pretty` module at all, meaning that it was the responsibility of the client to add correct line breaks, which #vscode did not do. The result, seen in @state-comparison, was that #vscode used its default word wrap linebreaks, instead of the semantic-aware linebreaks seen in #jedit.
+Isabelle uses an internal module called `Pretty` to manage the formatting of content in State and Output panels. Specifically, this module is responsible for adding line breaks and indentation to these outputs if the panels are not wide enough to display something in a single line. The language server did not use the `Pretty` module at all, meaning that it was the responsibility of the client to add correct line breaks, which #vscode() did not do. The result, seen in @state-comparison, was that #vscode() used its default word wrap linebreaks, instead of the semantic-aware linebreaks seen in #jedit().
 
 #figure(
   {
@@ -111,7 +111,7 @@ Isabelle uses an internal module called `Pretty` to manage the formatting of con
       ]
     )
   },
-  caption: [Comparison of #jedit State display and previous #vscode State display],
+  caption: [Comparison of #jedit() State display and previous #vscode() State display],
   kind: table,
   placement: auto,
 ) <state-comparison>
@@ -126,9 +126,9 @@ The `Pretty` module acts primarily on these XML bodies. There are 2 relevant fun
 
 Lastly, Isabelle's `XML` module includes a "`content`" function, which reduces an XML body down into a string, using the information stored within the markups where applicable (like adding the correct separation character for a separator markup).
 
-=== Using `Pretty` for #vscode
+=== Using `Pretty` for #vscode()
 
-The problem with adding support for correct formatting of these panels to #vscode is that, for `Pretty` to be able to correctly format some output, it needs to know the margin of the panel in question. In #jedit this is a non-issue, since the #jedit UI and the `Pretty` module all exist within the same Scala codebase. With #vscode however, this is not possible.
+The problem with adding support for correct formatting of these panels to #vscode() is that, for `Pretty` to be able to correctly format some output, it needs to know the margin of the panel in question. In #jedit() this is a non-issue, since the #jedit() UI and the `Pretty` module all exist within the same Scala codebase. With #vscode() however, this is not possible.
 
 Once again, there are several possibilities that we considered:
 1. Rebuild the `Pretty` module within the VSCode extension.
@@ -139,7 +139,7 @@ Once again, there are several possibilities that we considered:
 
 Option 1 would've required fundamentally changing the format in which the language client receives _State_ and _Output_ content. Previously, the language client would get HTML code that it could just display inside a WebView. While generating this HTML code, information stored within the XML body's markup was used to create highlighting as well as hyperlinks, such that the user can click on some elements and be transported to its definition (e.g. for functions). In order for the language client to correctly format this content, it would instead need access to Isabelle's underlying XML. Such a change would've also required significantly more work for every Isabelle language client implementation, and was thus not pursued.
 
-Option 2 is promising in that it allows a language client to use the `Pretty` module the same way #jedit would. However, the problem of requiring Isabelle's underlying XML content remains. Whenever the content of a panel were to change, the following would need to happen:
+Option 2 is promising in that it allows a language client to use the `Pretty` module the same way #jedit() would. However, the problem of requiring Isabelle's underlying XML content remains. Whenever the content of a panel were to change, the following would need to happen:
 1. The language server sends the panel's XML body to the client.
 2. The client then proceeds to send a `Pretty/separate` request to call the `Pretty` module's `separate` function on the XML body. The server calls said function and sends the resulting XML body back to the client.
 3. The client sends a `Pretty/formatted` request to the server, the server calls `formatted` and sends the result back.
@@ -149,9 +149,9 @@ In step 3 the client can easily send over the current panel's margin in its requ
 
 Option 3 however requires the least amount of work for the language client. For this option, the client only needs to inform the server about the current panel margin and the server can decide completely on its own whether a re-send of the panel's content is necessary. From the perspective of a language client, it is thus the simplest solution, because all the actual output logic is done by the language server.
 
-Due to its simplicity, Option 3 is the option we chose to implement. To this end, a new "`Pretty_Text_Panel`" module was added to #vscode, which implements the output logic, as well as two new notifications: "`PIDE/output_set_margin`" and "`PIDE/state_set_margin`". Both _Output_ and _State_ internally save one such `Pretty_Text_Panel` and simply tell it to refresh whenever the margin or content has changed. The `Pretty_Text_Panel` can then decide for itself if the actual content has changed and only send the appropriate notification to the client if it did.
+Due to its simplicity, Option 3 is the option we chose to implement. To this end, a new "`Pretty_Text_Panel`" module was added to #vscode(), which implements the output logic, as well as two new notifications: "`PIDE/output_set_margin`" and "`PIDE/state_set_margin`". Both _Output_ and _State_ internally save one such `Pretty_Text_Panel` and simply tell it to refresh whenever the margin or content has changed. The `Pretty_Text_Panel` can then decide for itself if the actual content has changed and only send the appropriate notification to the client if it did.
 
-While this solution has worked well in practice, note that one has to be careful how to send these margin updates. In VSCode for example, panel width can only be polled in pixels. The Isabelle language server however requires the margin to be in symbols, i.e. how many symbols currently fit horizontally into the panel. Since Isabelle symbols are not necessarily all monospaced, this instigates a unique problem: How do we measure symbol width? In #jedit, this is solved by using the test string "mix", measuring its width and dividing that width by 3, thus we did the same in #vscode. Additionally, we added a limit on how often the margin update notifications are sent. If we were to send this notification for every single change in panel width, we would send a notification for every single pixel, which is extremely wasteful. In Neovim, by its terminal based nature, neither of these problems exist, because all characters have the same width and the width of a Neovim window only exists within discrete character counts.
+While this solution has worked well in practice, note that one has to be careful how to send these margin updates. In VSCode for example, panel width can only be polled in pixels. The Isabelle language server however requires the margin to be in symbols, i.e. how many symbols currently fit horizontally into the panel. Since Isabelle symbols are not necessarily all monospaced, this instigates a unique problem: How do we measure symbol width? In #jedit(), this is solved by using the test string "mix", measuring its width and dividing that width by 3, thus we did the same in #vscode(). Additionally, we added a limit on how often the margin update notifications are sent. If we were to send this notification for every single change in panel width, we would send a notification for every single pixel, which is extremely wasteful. In Neovim, by its terminal based nature, neither of these problems exist, because all characters have the same width and the width of a Neovim window only exists within discrete character counts.
 
 // === Server
 //
