@@ -1,5 +1,6 @@
 #import "/utils/todo.typ": TODO
 #import "/utils/isabelle.typ": *
+#import "@preview/gentle-clues:0.9.0": *
 
 = Changes to both Server and Client
 
@@ -171,6 +172,53 @@ While this solution has worked well in practice, note that one has to be careful
 // ]
 
 == Symbol Options
+
+As described in @isabelle-symbols, Isabelle utilizes its own _UTF-8-Isabelle_ encoding to deal with Isabelle Symbols. It is important to distinguish between 3 different domains:
+
+#{
+  set par(hanging-indent: 1em)
+
+  [
+    *Physical.*
+      This is the actual contents of the file. It's really just a list of bytes, which need to be interpreted. Certainly, a theory file contains text, meaning the bytes represent some list of symbols. However, even then the exact interpretation of the bytes can vary depending on the encoding used. For example, the two subsequent bytes `0xC2` and `0xA5` can mean different symbols depending on the encoding used. If the encoding is #box[_UTF-8_], those two bytes stand for the symbol for Japanese Yen #isabelle("¥"). If, however, the encoding is #box[_ISO-8859-1 (Western Europe)_], the bytes are interpreted as #isabelle("Â¥"). The file itself does not note the supposed encoding, meaning without knowing the encoding, the meaning of a file's contents may be lost.
+
+    *Isabelle System.*
+      This is where the language server lives. Here, an Isabelle Symbol is simply an instance of an interal struct whose layout is outlined in @symbol-data-example.
+
+    *Editor.*
+      This is where the language client lives. When opening a file in a code editor, it gets loaded into some internal structure the editor uses for its text buffers. During this loading, the editor will need to know the encoding to use, which will also affect what bytes the editor will write back to disk.
+  ]
+}
+
+When using #jedit() and loading a theory with the _UTF-8-Isabelle_ encoding, the bytes of the file will be interpreted as UTF-8, and additionally ASCII representations of symbols will be interpreted as their UTF-8 counterparts. When writing back to disk, this conversion is done in reverse. Thus, as long as all symbols within a theory are valid Isabelle symbols, which all have ASCII representations, a file saved with the _UTF-8-Isabelle_ encoding can be viewed as plain ASCII.
+
+When we get to #vscode(), we get the additional problem that the *Isabelle System* does not have direct access to our editor's buffer. As mentioned in @isabelle-vscode, Isabelle patches VSCodium to include a new _UTF-8-Isabelle_ encoding, so loading the file works virtually the same as in #jedit().
+// #footnote[One particular difference between #vscode(suffix: ['s]) and #jedit(suffix: ['s]) implementation of the _UTF-8-Isabelle_ encoding is that the set of Isabelle Symbols that #vscode() understands is static. It is possible to extend this set and #jedit() can deal with newly defined symbols while #vscode() can not, although this is rarely a problem in practice.]
+However, the language server must still somehow get the file's contents.
+
+#info[One particular difference between #vscode(suffix: ['s]) and #jedit(suffix: ['s]) implementation of the _UTF-8-Isabelle_ encoding is that the set of Isabelle Symbols that #vscode() understands is static. It is possible to extend this set and #jedit() can deal with newly defined symbols while #vscode() can not, although this is rarely a problem in practice.]
+
+The LSP specification defines multiple notifications for text document synchronization, like the `textDocument/didOpen` and `textDocument/didChange` notifications, both of which contain data that informs the language server about the contents of a file. We will look at the `textDocument/didChange` notification in more detail in @didchange, so we will focus on `textDocument/didOpen` for now. This notification's `params` field contains a "`TextDocumentItem`" instance, whose interface definition is seen in @text-document-item.
+
+#figure(
+  [
+    ```typescript
+    interface TextDocumentItem {
+      uri: DocumentUri;
+      languageId: string;
+      version: integer;
+      text: string;
+    }
+    ```
+  ],
+  caption: [`TextDocumentItem` interface definition @lsp-spec.],
+  kind: raw,
+  // placement: auto,
+) <text-document-item>
+
+The most relevant piece of data in there is the `text` field which contains the content of the entire text document that was opened. Aside from the header which is plain ASCII, the json data sent between client and server is interpreted as UTF-8, thus the `text` string is also interpreted as UTF-8 content. The exact content of this string depends on the text editor. In #vscode(), thanks to the custom _UTF-8-Isabelle_ encoding, the language server will receive full UTF-8 encoded content of the file (i.e. #isabelle("⟹") instead of #isabelle("\<Longrightarrow>")), however this may not be the case for another editor.
+
+Thankfully, the Isabelle system internally deals with all types of Isabelle Symbol representations equally, so the editor is free to mix and match whichever representation is most convenient for it.
 
 #TODO[
   - difference between ASCII representation of Symbols and Unicode representation of Symbols
