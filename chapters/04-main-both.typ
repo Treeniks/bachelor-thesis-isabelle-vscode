@@ -51,9 +51,11 @@ There were two primary ways to fix this issue:
 
 The main advantage of option 1 is performance. If the client handles caching of decorations, then the server won't have to calculate the decorations anew (which is a rather expensive operation), nor will another round of JSON Serialization and Deserialization have to happen. However, the trade-off is that more work needs to be done on the client side, making new client implementations for other editors potentially harder.
 
-Because of this, we instead introduced a new `PIDE/decoration_request` notification, sent by the client to explicitly signal to the server that it should send a `PIDE/decoration` notification back no matter what. Note that this system is atypical for the LSP. The `PIDE/decoration_request` notification is, semantically speaking, a request and intends a response from the server, yet from the perspective of the LSP, it is a unidirectional notification, while its response is also a unidirectional `PIDE/decoration` notification.
+Because of this, we instead introduced a new `PIDE/decoration_request` notification, sent by the client to explicitly signal to the server that it should send a `PIDE/decoration` notification back no matter what.
 
-The reason for this is twofold: There was already precedent for such behavior in the Isabelle language server, specifically with `PIDE/preview_request` and `PIDE/preview_response` notifications, and, the `PIDE/decoration` notification is not only sent after a request. The original automatic sending behavior that existed before is still present and was not altered. If we were to implement `PIDE/decoration_request`s as an LSP request instead, this would only result in extra implementation work on the client side because a client would need to implement the same decoration application logic for both the `PIDE/decoration` notification and the `PIDE/decoration_request` response. By defining `PIDE/decoration_request`s as notifications, the client only needs to implement a singular handler for `PIDE/decoration` notifications and automatically covers both scenarios simultaneously.
+Note that this system is atypical for the LSP. The `PIDE/decoration_request` notification is, semantically speaking, a request and intends a response from the server, yet from the perspective of the LSP, it is a unidirectional notification, while its response is also a unidirectional `PIDE/decoration` notification. The reason we did it anyway is twofold:
+1. There was already precedent for such behavior in the Isabelle language server, specifically with `PIDE/preview_request`.
+2. `PIDE/preview_response` notifications, and, the `PIDE/decoration` notification is not only sent after a request. The original automatic sending behavior that existed before is still present and was not altered. If we were to implement `PIDE/decoration_request`s as an LSP request instead, this would only result in extra implementation work on the client side because a client would need to implement the same decoration application logic for both the `PIDE/decoration` notification and the `PIDE/decoration_request` response. By defining `PIDE/decoration_request`s as notifications, the client only needs to implement a singular handler for `PIDE/decoration` notifications and automatically covers both scenarios simultaneously.
 
 Later on, we found that client-side caching was already implemented for the Isabelle VSCode extension; however, incorrectly so. The caching was done via a JavaScript `Map` #footnote[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map], with files as keys and the content list from the decoration messages as values. For the keys, the specific value used was of type `URI` #footnote[https://code.visualstudio.com/api/references/vscode-api#Uri], which does not explicitly implement an equality function, thus resulting in an inconsistent equality check where two URIs pointing to the same file may not have been the same URI in TypeScript-land. Switching the key to using string representations of the URIs fixed the issue. However, we decided to keep the `PIDE/decoration_request` notification. While it may not be in use by #vscode() directly, other Isabelle language client implementations may make use of this functionality anyway.
 
@@ -221,17 +223,25 @@ The LSP specification defines multiple notifications for text document synchroni
 
 The most relevant piece of data in there is the `text` field which contains the content of the entire text document that was opened. Aside from the header which is plain ASCII, the json data sent between client and server is interpreted as UTF-8, thus the `text` string is also interpreted as UTF-8 content. The exact content of this string depends on the text editor. In #vscode(), thanks to the custom _UTF-8-Isabelle_ encoding, the language server will receive full UTF-8 encoded content of the file (i.e. #isabelle("⟹") instead of #isabelle("\<Longrightarrow>")), however this may not be the case for another editor.
 
-Thankfully, the Isabelle system internally deals with all types of Isabelle Symbol representations equally, so the editor is free to mix and match whichever representation is most convenient for it.
+Thankfully, the Isabelle system internally deals with all types of Isabelle Symbol representations equally, so the editor is free to mix and match whichever representation is most convenient for it. However, what about the other direction? There a many messages sent from the server to the client containing different types of content potentially containing Isabelle Symbols. `window/showMessage` notifications sent by the server to ask the client to display a particular message, text edits sent for completions, text inserts sent for code actions, content sent for _Output_ and _State_ panels, and many more.
 
-#TODO[
-  - difference between ASCII representation of Symbols and Unicode representation of Symbols
-    - not always the case
-    - Isabelle internally makes no difference
-    - add Encoding graphic and explanation here
-  - before: `vscode_unicode_symbols`
-    - inconsistently used throughout the server codebase
-    - badly defined which symbols this affects
-  - now: two settings `vscode_unicode_symbols_output` and `vscode_unicode_symbols_edits`
-    - output for all output (e.g. panels, messages)
-    - edits for all edits (TextEdit objects, e.g. for autocompletion/code actions)
-]
+Previously, there was a single Isabelle option called `vscode_unicode_symbols` which was supposed to control whether these messages sent by the server should send Isabelle Symbols in their Unicode or ASCII representations, however this option only affected a few messages (like hover information and diagnostics). Things like completions were hardcoded to always use Unicode, as that is what VSCode needs.
+
+When viewing #vscode() in its entirety, this is not a problem. If the VSCode Isabelle client expects Unicode symbols in certain scenarios and the language server is hard-coded to do so, then it works for #vscode(). However, once you move to a different client, this is a problematic limitation. For example, in the Neovim code editor, it is possible to programmatically change how certain symbol sequences are displayed to the user using a feature called conceal. #footnote[https://neovim.io/doc/user/options.html#'conceallevel'] Through this feature, Neovim is able to have the ASCII representation (#isabelle("\<Longrightarrow>")) within the file and buffer, and still display the Unicode representation (#isabelle("⟹")) to the user, without the need of a custom encoding. In this case, it would be desirable to have messages sent by the server also use ASCII for consistency.
+
+There is another thing to consider though: Even if Neovim may want ASCII representations of symbols within the theory file, this may not necessarily be the case for _Output_ and _State_ panels. While there is many different types of content sent by the server, it can generally be grouped into two categories: Content that is only supposed to get _displayed_ and content that is supposed to be _placed_ within the theory file.
+
+To that extent, we replaced the original `vscode_unicode_symbols` option by two new options: `vscode_unicode_symbols_output` for _displayed_ content, and `vscode_unicode_symbols_edits` for _placed_ content. Additionally, we made use of these new options in the respective places within the language server code base, removing the previously hard-coded values.
+
+// #TODO[
+//   - difference between ASCII representation of Symbols and Unicode representation of Symbols
+//     - not always the case
+//     - Isabelle internally makes no difference
+//     - add Encoding graphic and explanation here
+//   - before: `vscode_unicode_symbols`
+//     - inconsistently used throughout the server codebase
+//     - badly defined which symbols this affects
+//   - now: two settings `vscode_unicode_symbols_output` and `vscode_unicode_symbols_edits`
+//     - output for all output (e.g. panels, messages)
+//     - edits for all edits (TextEdit objects, e.g. for autocompletion/code actions)
+// ]
