@@ -1,5 +1,3 @@
-#import "@preview/codly:1.0.0": *
-
 #let thesis(
   title-primary: [],
   title-secondary: [],
@@ -15,10 +13,7 @@
   appendix: none,
   doc,
 ) = {
-  show: codly-init.with()
-
   set document(title: title-primary, author: author, date: submission-date)
-  set page(margin: (left: 30mm, right: 30mm, top: 40mm, bottom: 40mm))
 
   // default
   show par: set block(spacing: 1.2em)
@@ -43,6 +38,8 @@
 
   set list(indent: 1em)
   set enum(indent: 1em)
+
+  set page(margin: (left: 30mm, right: 30mm, top: 40mm, bottom: 40mm))
 
   let cit = upper(text(size: 24pt, [School of Computation,\ Information and Technology\ -- Informatics --]))
   let tum = upper(text(size: 14pt, [Technical University of Munich]))

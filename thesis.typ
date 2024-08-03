@@ -1,5 +1,8 @@
 #import "/template.typ": thesis
 
+#import "@preview/codly:1.0.0": *
+#import "@preview/gentle-clues:0.9.0": *
+
 #set text(font: "STIX Two Text", size: 11pt)
 #show math.equation: set text(font: "STIX Two Math")
 #show raw: set text(font: "JetBrains Mono", size: 1.1em)
@@ -23,6 +26,14 @@
   abstract: abstract,
   appendix: appendix,
 )
+
+#show: codly-init.with()
+#codly(
+  zebra-fill: luma(245),
+  stroke: 2pt + luma(230),
+  lang-stroke: none,
+)
+#show: gentle-clues.with(headless: true)
 
 // Sei $x in (a, b)$ und $h in RR without {0}$ mit $x + h in [a, b]$. Es gilt:
 // $ (F(x + h) - F(x))/h &= 1/h (integral^(x + h)_a f(t) d t - integral^x_a f(t) d t) = 1/h integral^(x + h)_x f(t) d t\
