@@ -32,7 +32,7 @@ Even quite fundamental keywords such as `theorem` do not exist statically, but a
 === Output and State Panels
 
 #figure(
-  image("/resources/jedit1.png", width: 80%),
+  box(stroke: 1pt, image("/resources/jedit1.png", width: 80%)),
   caption: [JEdit with both _Output_ and _State_ panels open. _Output_ on the bottom, _State_ on the right.],
   kind: image,
   // placement: auto,
@@ -82,7 +82,7 @@ To deal with these symbols, #jedit() uses a custom encoding called #box(emph["UT
 === Isabelle/VSCode <isabelle-vscode>
 
 #figure(
-  image("/resources/vscode1-dark.png", width: 80%),
+  box(stroke: 1pt, image("/resources/vscode1-light.png", width: 80%)),
   caption: [VSCode with both _Output_ and _State_ panels open. _Output_ on the bottom, _State_ on the right.],
   kind: image,
   placement: auto,

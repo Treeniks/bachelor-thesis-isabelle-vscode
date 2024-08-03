@@ -76,19 +76,21 @@ Isabelle uses an internal module called `Pretty` to manage the formatting of con
     show "a1": set text(green)
     show "a2": set text(green)
 
-    table(
-      columns: 2,
-      align: left,
-      stroke: (x, y) => (
-        left: if x > 0 { .5pt } else { 0pt },
-        right: 0pt,
-        top: if y > 0 { .5pt } else { 0pt },
-        bottom: 0pt,
-      ),
-      fill: (_, y) => if y == 1 { luma(235) } else { none },
-      table.header([*jEdit State Panel*], [*VSCode State Panel*]),
-      [
-        #show raw: set text(font: "Isabelle DejaVu Sans Mono")
+    box(
+      fill: luma(235),
+      radius: 5%,
+      table(
+        columns: 2,
+        align: left,
+        stroke: (x, y) => (
+          left: if x > 0 { .5pt } else { 0pt },
+          right: 0pt,
+          top: if y > 0 { .5pt } else { 0pt },
+          bottom: 0pt,
+        ),
+        table.header([*jEdit State Panel*], [*VSCode State Panel*]),
+        [
+          #show raw: set text(font: "Isabelle DejaVu Sans Mono")
 `proof (state)
 `#text(eastern)[`goal`]` (4 subgoals):
  1. ⋀Γ `#text(green)[`i`]`. Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (Ic `#text(green)[`i`]`) `#text(blue)[`s`]`)
@@ -100,16 +102,17 @@ Isabelle uses an internal module called `Pretty` to manage the formatting of con
        Γ ⊢ a2 : τ ⟹
        (Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval a2 `#text(blue)[`s`]`)) ⟹
        Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (Plus a1 a2) `#text(blue)[`s`]`)`
-      ],
-      [
-        #show raw: set text(font: "Noto Sans Mono")
+        ],
+        [
+          #show raw: set text(font: "Noto Sans Mono")
 `proof (state)
 `#text(purple)[`goal`]` (4 subgoals):
  1. ⋀Γ `#text(green)[`i`]`. Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (Ic `#text(green)[`i`]`) `#text(blue)[`s`]`)
  2. ⋀Γ `#text(green)[`r`]`. Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (Rc `#text(green)[`r`]`) `#text(blue)[`s`]`)
  3. ⋀Γ `#text(green)[`x`]`. Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (V `#text(green)[`x`]`) `#text(blue)[`s`]`)
  4. ⋀Γ a1 τ a2. Γ ⊢ a1 : τ ⟹ (Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval a1 `#text(blue)[`s`]`)) ⟹ Γ ⊢ a2 : τ ⟹ (Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval a2 `#text(blue)[`s`]`)) ⟹ Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (Plus a1 a2) `#text(blue)[`s`]`)`
-      ]
+        ]
+      )
     )
   },
   caption: [Comparison of #jedit() State display and previous #vscode() State display],
