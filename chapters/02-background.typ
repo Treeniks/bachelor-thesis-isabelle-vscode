@@ -46,7 +46,7 @@ _State_ panels on the other hand display the current internal proof state within
 
 Isabelle uses a lot of custom symbols to allow logical terms to be written in a syntax close to that of mathematics. The concept of what an _Isabelle symbol_ is exactly is rather broad, so for simplicity we will focus primarily on a certain group of symbols typically used in mathematical formulas.
 
-Each Isabelle symbol roughly consists of four points of data: An ASCII representation of the symbol, a name, an optional Unicode code point and a list of abbreviations for this symbol. These four points are not the whole story, however for the sake of simplicity, we will skip some details.
+Each Isabelle symbol roughly consists of four points of data: An ASCII representation of the symbol, a name, an optional UTF-16 code point and a list of abbreviations for this symbol. These four points are not the whole story, however for the sake of simplicity, we will skip some details.
 
 As an example, let's say you write the implication $A ==> B$ in Isabelle. Within jEdit, you will see it written out as #isabelle("A ⟹ B"), however internally the #isabelle("⟹") is an Isabelle symbol. Its corresponding data is outlined in @symbol-data-example.
 
@@ -63,7 +63,7 @@ As an example, let's say you write the implication $A ==> B$ in Isabelle. Within
 
     [*ASCII Representation*], [`\<Longrightarrow>`],
     [*Name*], [`Longrightarrow`],
-    [*Unicode Codepoint*], [`0x27F9`],
+    [*UTF-16 Codepoint*], [`0x27F9`],
     [*Abbreviations*], [#isabelle(".>"), #isabelle("==>")],
   ),
   caption: [Symbol data of #isabelle("⟹")],
@@ -71,7 +71,7 @@ As an example, let's say you write the implication $A ==> B$ in Isabelle. Within
   // placement: auto,
 ) <symbol-data-example>
 
-To deal with these symbols, #jedit uses a custom encoding called #box(emph["UTF-8-Isabelle"]). This encoding ensures that the user sees #isabelle("A ⟹ B") while the actual content of the underlying file is "`A \<Longrightarrow> B`". However, because Isabelle internally uses its own abstracted representation of symbols, it has no trouble dealing with cases where the actual #isabelle("⟹") Unicode symbol is used within a file.
+To deal with these symbols, #jedit uses a custom encoding called #box(emph["UTF-8-Isabelle"]). This encoding ensures that the user sees #isabelle("A ⟹ B") while the actual content of the underlying file is "`A \<Longrightarrow> B`". However, Isabelle has no trouble dealing with cases where the actual #isabelle("⟹") Unicode symbol is used within a file.
 
 // #TODO[
 //   Add explanation why this custom encoding is used instead of just unicode:
