@@ -106,7 +106,7 @@ Isabelle uses an internal module called `Pretty` to manage the formatting of con
        Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (Plus a1 a2) `#text(blue)[`s`]`)`
         ],
         [
-          #show raw: set text(font: "Noto Sans Mono")
+          #show raw: set text(font: ("Noto Sans Mono", "DejaVu Sans"))
 `proof (state)
 `#text(purple)[`goal`]` (4 subgoals):
  1. ⋀Γ `#text(green)[`i`]`. Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (Ic `#text(green)[`i`]`) `#text(blue)[`s`]`)
