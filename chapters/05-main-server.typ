@@ -2,7 +2,7 @@
 
 = Changes to the Language Server
 
-== Desync on file changes
+== Desync on File Changes
 
 #TODO[explanation of the `textDocument/didChange` notification and desync problem]
 
