@@ -153,7 +153,7 @@ When the Isabelle language server receives a Code Action request, the generation
 1. Find all #isar() commands within the given range.
 2. Get the command results of all these commands.
 3. Extract all sendback markup out of these command results.
-4. Create LSP text edit json objects, inserting the sendback markup's content at the respective command's position.
+4. Create LSP text edit JSON objects, inserting the sendback markup's content at the respective command's position.
 
 Once the list of these Code Actions is sent to the language client, the server's work is done. The LSP text edit objects exist in a format standardized in the LSP, so the actual execution of the text edit can be done entirely in the client.
 
@@ -161,20 +161,20 @@ We also considered how to deal with correct indentation for the inserted text. I
 
 An example of the resulting implementation for #vscode() can be seen in @active-markup-sledgehammer-vscode.
 
-#TODO[
-  - explanation of active markup
-  - adding support for clicking is somewhat difficult and goes way beyond the LSP Spec
-  - code actions are a way for the server to send different options to client, and the client to then be able to select one
-    - can include just text edits, client commands or even server commands
-    - thus very flexible
-    - most clients already implement logic for it, so no need for manual implementation on client
-  - now works for sendbacks (insertions)
-    - example with sledgehammer/try0
-    - indentation is copied from current line
-      - indentation on jEdit is handled via global indent function
-      - uses internal jEdit buffers, thus not easily translatable to server
-  - TODO look into git history for more difficulties
-]
+// #TODO[
+//   - explanation of active markup
+//   - adding support for clicking is somewhat difficult and goes way beyond the LSP Spec
+//   - code actions are a way for the server to send different options to client, and the client to then be able to select one
+//     - can include just text edits, client commands or even server commands
+//     - thus very flexible
+//     - most clients already implement logic for it, so no need for manual implementation on client
+//   - now works for sendbacks (insertions)
+//     - example with sledgehammer/try0
+//     - indentation is copied from current line
+//       - indentation on jEdit is handled via global indent function
+//       - uses internal jEdit buffers, thus not easily translatable to server
+//   - TODO look into git history for more difficulties
+// ]
 
 == Completions
 
