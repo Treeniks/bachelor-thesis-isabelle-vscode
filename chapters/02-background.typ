@@ -66,7 +66,7 @@ As an example, let's say you write the implication $A ==> B$ in Isabelle. Within
     [*UTF-16 Codepoint*], [`0x27F9`],
     [*Abbreviations*], [#isabelle(".>"), #isabelle("==>")],
   ),
-  caption: [Symbol data of #isabelle("⟹")],
+  caption: [Symbol data of #isabelle("⟹").],
   kind: table,
   // placement: auto,
 ) <symbol-data-example>
