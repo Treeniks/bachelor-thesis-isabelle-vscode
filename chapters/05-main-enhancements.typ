@@ -108,6 +108,7 @@ Unlike other features discussed in this work, active markups are a concept that 
 
 There exist two major problems when trying to replicate the user experience of #jedit[]:
 1. For the sake of accessibility, it is usually possible to control VSCode completely with the Keyboard. To keep this up, we decided it should also be possible to interact with active markup entirely with the keyboard.
+
 2. It would need a completely custom solution for both the language server and language client, increasing complexity and reducing the barrier of entry for new potential Isabelle IDEs. We would potentially need to reimagine the way that output panel content is sent to the client, and if so, it would be very difficult expanding the functionality to other types of active markup that live within the theory.
 
 Instead, we decided to explore completely new interaction methods, utilizing existing LSP features where possible. And luckily, the LSP spec defines a concept called _Code Actions_ which we could utilize for active markup.
@@ -145,8 +146,11 @@ To initiate a Code Action, the language client sends a `textDocument/codeAction`
 
 When the Isabelle language server receives a Code Action request, the generation of the Code Actions list for its response is roughly done in these four steps:
 1. Find all #isar[] commands within the given range.
+
 2. Get the command results of all these commands.
+
 3. Extract all sendback markup out of these command results.
+
 4. Create LSP text edit JSON objects, inserting the sendback markup's content at the respective command's position.
 
 Once the list of these Code Actions is sent to the language client, the server's work is done. The LSP text edit objects exist in a format standardized in the LSP, so the actual execution of the text edit can be done entirely in the client.
