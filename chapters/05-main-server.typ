@@ -80,35 +80,12 @@ One feature of #jedit() that was missing entirely in #vscode() is Isabelle's _Ac
   table(
     columns: 2,
     stroke: none,
-    box(stroke: 1pt, image("/resources/jedit-active-markup-sledgehammer-before.png")),
-    box(stroke: 1pt, image("/resources/jedit-active-markup-sledgehammer-after.png")),
+    box(stroke: 1pt, image("/resources/jedit-active-sledgehammer-before.png")),
+    box(stroke: 1pt, image("/resources/jedit-active-sledgehammer-after.png")),
   ),
   kind: image,
   caption: [Active Markup in #jedit() when using sledgehammer.\ Before and after clicking on the area with gray background.],
 ) <active-markup-sledgehammer-jedit>
-
-// // #place(
-// //   auto,
-// //   float: true,
-// #{
-//   set par(justify: false)
-//   table(
-//     columns: 2,
-//     align: left,
-//     stroke: none,
-//     [#figure(
-//       box(stroke: 1pt, image("/resources/jedit-active-markup-sledgehammer-before.png")),
-//       caption: [Active Markup in jEdit when using sledgehammer, seen with gray background\ in output panel.],
-//       kind: image,
-//     ) <active-markup-sledgehammer-jedit-before>],
-//     [#figure(
-//       box(stroke: 1pt, image("/resources/jedit-active-markup-sledgehammer-after.png")),
-//       caption: [State after clicking on active markup\ with proof inserted into theory.],
-//       kind: image,
-//     ) <active-markup-sledgehammer-jedit-after>],
-//   )
-// }
-// // )
 
 Unlike other features discussed in this work, Active Markups are a concept that has no comparable feature within typical code editors. Clicking on parts of code may exist in the form of _Goto Definition_ actions or clicking on hyperlinks, but inserting things from some output panel into the code unique. Hence, there is also no existing precedent on how to handle this type of interaction within the LSP specification. Because of this, the first question that needed to be answered is how we want to tackle this problem on a user experience level. That is, do we intend for #vscode(suffix: ['s]) implementation to work the same way as it does in #jedit() (i.e. by clicking with the mouse), or should the interaction work completely differently.
 
@@ -124,8 +101,8 @@ The intended use case of Code Actions is to support more complicated IDE feature
   table(
     columns: 2,
     stroke: none,
-    box(stroke: 1pt, image("/resources/sublime-rust-match-fill-before.png")),
-    box(stroke: 1pt, image("/resources/sublime-rust-match-fill-after.png")),
+    box(stroke: 1pt, image("/resources/sublime-action-rust-light-before.png")),
+    box(stroke: 1pt, image("/resources/sublime-action-rust-light-after.png")),
   ),
   kind: image,
   caption: [`rust-analyzer`'s "Fill match arms" code action in Sublime Text.],
@@ -141,8 +118,8 @@ To initiate a Code Action, the language client sends a `textDocument/codeAction`
   table(
     columns: 2,
     stroke: none,
-    box(stroke: 1pt, image("/resources/vscode-active-markup-sledgehammer-before.png")),
-    box(stroke: 1pt, image("/resources/vscode-active-markup-sledgehammer-after.png")),
+    box(stroke: 1pt, image("/resources/vscode-action-active-sledgehammer-light-before.png")),
+    box(stroke: 1pt, image("/resources/vscode-action-active-sledgehammer-light-after.png")),
   ),
   kind: image,
   caption: [Active Markup in #vscode() when using sledgehammer.\ Code Action initiated with "`Ctrl+.`". Before and after accepting Code Action.],
