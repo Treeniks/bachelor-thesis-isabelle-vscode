@@ -8,28 +8,26 @@
 Previously, when switching theories within #vscode[], the dynamic syntax highlighting would not persist. It was possible to get the highlighting to work again by changing the buffer's content; however, until this was done, it never recovered by itself. This was a problem when working on multiple theory files.
 
 #figure(
-  [
-    ```json
-    "jsonrpc": "2.0",
-    "method": "PIDE/decoration",
-    "params": {
-      "uri": "file:///home/user/Documents/Example.thy",
-      "entries": [
-        {
-          "type": "text_main",
-          "content": [
-            { "range": [1, 23, 1, 41] },
-            { "range": [5, 10, 5, 11] }
-          ]
-        },
-        {
-          "type": "text_operator",
-          "content": [ { "range": [7, 6, 7, 7] } ]
-        }
-      ]
-    }
-    ```
-  ],
+  ```json
+  "jsonrpc": "2.0",
+  "method": "PIDE/decoration",
+  "params": {
+    "uri": "file:///home/user/Documents/Example.thy",
+    "entries": [
+      {
+        "type": "text_main",
+        "content": [
+          { "range": [1, 23, 1, 41] },
+          { "range": [5, 10, 5, 11] }
+        ]
+      },
+      {
+        "type": "text_operator",
+        "content": [ { "range": [7, 6, 7, 7] } ]
+      }
+    ]
+  }
+  ```,
   caption: [Example `PIDE/decoration` notification sent by the language server.],
   kind: raw,
   placement: auto,

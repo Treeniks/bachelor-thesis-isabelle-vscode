@@ -204,16 +204,14 @@ However, the language server must still obtain the contents of the file.
 The LSP specification defines multiple notifications for text document synchronization, like the `textDocument/didOpen` and `textDocument/didChange` notifications, both of which contain data that informs the language server about the contents of a file. We will look at the `textDocument/didChange` notification in more detail in @didchange, so we will focus on `textDocument/didOpen` for now. This notification's `params` field contains a "`TextDocumentItem`" instance, whose interface definition is seen in @text-document-item.
 
 #figure(
-  [
-    ```typescript
-    interface TextDocumentItem {
-      uri: DocumentUri;
-      languageId: string;
-      version: integer;
-      text: string;
-    }
-    ```
-  ],
+  ```typescript
+  interface TextDocumentItem {
+    uri: DocumentUri;
+    languageId: string;
+    version: integer;
+    text: string;
+  }
+  ```,
   caption: [`TextDocumentItem` interface definition @lsp-spec.],
   kind: raw,
   // placement: auto,
