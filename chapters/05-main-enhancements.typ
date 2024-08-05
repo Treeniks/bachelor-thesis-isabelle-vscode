@@ -193,7 +193,7 @@ An example of the resulting implementation for #vscode[] can be seen in @active-
 
 == Isabelle preferences as VSCode settings
 
-Isabelle has many options that can be set to adjust different aspects of the interactive sessions. For example, the option `editor_output_state` defined whether or not state output should be printed within the output panel.
+Isabelle has many options that can be set to adjust different aspects of the interactive sessions. For example, the option `editor_output_state` defines whether state output should be printed within the output panel.
 
 The default options are generally defined within `etc/options` files scattered throughout the codebase. The user is then expected to overwrite these options within `~/.isabelle/etc/preferences`. With #jedit[], these options are simply listed within the jEdit settings or throughout the UI, which then in turn add the appropriate entries into the user's preferences.
 
