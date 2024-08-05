@@ -20,3 +20,7 @@
 #let isar(..suffix) = {
   box([Isabelle/Isar#suffix.pos().join()])
 }
+
+#let utf8isa(..suffix) = {
+  box([UTF-8-Isabelle#suffix.pos().join()])
+}
