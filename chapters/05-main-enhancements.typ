@@ -89,17 +89,20 @@ Later we found that client-side caching was already implemented for the Isabelle
 
 == Code Actions for Active Markup
 
-One feature of #jedit[] that was missing entirely in #vscode[] is Isabelle's _active markup_. Active markup, generally speaking, describes parts of the theory, state or output content that is clickable. The action taken when the user clicks on an active markup can vary, as there is many different kinds of active markup, but the type of active markup most users will probably come across most frequently is the so called _sendback_ markup. This type of markup appears primarily in the output panel and clicking on it inserts its text into the source theory. It appears, for example, when issuing a `sledgehammer` command which finds a proof. This example can be seen in @active-markup-sledgehammer-jedit. As mentioned, there are other types of active markup as well, but we will focus exclusively on these sendback markups.
+One feature of #jedit[] that was missing entirely in #vscode[] is Isabelle's _active markup_. Active markup, generally speaking, describes parts of the theory, state or output content that is clickable. The action taken when the user clicks on an active markup can vary, as there is many different kinds of active markup. One type of active markup the user will probably come across frequently is the so called _sendback_ markup. This type of markup appears primarily in the output panel and clicking on it inserts its text into the source theory. It appears, for example, when issuing a `sledgehammer` command.
+#footnote[The `sledgehammer` command is an Isabelle command that calls different external automatic theorem provers in hopes of one of them finding a proof. Isabelle then translates the found proof back into an Isabelle proof.]
+When this command finds a proof, it is displayed in the output panel with a gray background. The user can then click on it and Isabelle inserts the proof into the document. This example can be seen in @active-markup-sledgehammer-jedit. As mentioned, there are other types of active markup as well, but we will focus exclusively on these sendback markups.
 
 #figure(
   table(
     columns: 2,
     stroke: none,
+    table.header([*Before*], [*After*]),
     box(stroke: 1pt, image("/resources/jedit-active-sledgehammer-before.png")),
     box(stroke: 1pt, image("/resources/jedit-active-sledgehammer-after.png")),
   ),
   kind: image,
-  caption: [Active markup in #jedit[] when using sledgehammer.\ Before and after clicking on the area with gray background.],
+  caption: [Active markup in #jedit[] when using sledgehammer.\ Before and after clicking on sendback markup.],
 ) <active-markup-sledgehammer-jedit>
 
 Unlike other features discussed in this work, active markups are a concept that has no comparable feature within typical code editors. Clicking on parts of code may exist in the form of _Goto Definition_ actions or clicking on hyperlinks, but inserting things from some output panel into the code unique. Hence, there is also no existing precedent on how to handle this type of interaction within the LSP specification. Because of this, the first question that needed to be answered is how we want to tackle this problem on a user experience level. That is, do we intend for #vscode['s] implementation to work the same way as it does in #jedit[] (i.e. by clicking with the mouse), or should the interaction work completely differently.
@@ -117,6 +120,7 @@ The intended use case of code actions is to support more complicated IDE feature
   table(
     columns: 2,
     stroke: none,
+    table.header([*Before*], [*After*]),
     box(stroke: 1pt, image("/resources/sublime-action-rust-light-before.png")),
     box(stroke: 1pt, image("/resources/sublime-action-rust-light-after.png")),
   ),
@@ -124,16 +128,40 @@ The intended use case of code actions is to support more complicated IDE feature
   caption: [`rust-analyzer`'s "Fill match arms" code action in Sublime Text.],
 ) <rust-match-action>
 
-The big advantage to using code actions, is that code actions are a part of the normal LSP specification, meaning most language client support them out of the box. If the Isabelle language server support interaction with active markup through code actions, there is no extra work necessary for the client.
+The big advantage to using code actions, is that code actions are a part of the normal LSP specification, meaning most language clients support them out of the box. If the Isabelle language server supports interaction with active markup through code actions, there is no extra work necessary for the client.
 
-To initiate a code cction, the language client sends a `textDocument/codeAction` request to the server. The request's response then contains a list of possible code actions. Each code action may be either an _edit_, a _command_ or both. For our use case of supporting _sendback_ active markup, which only inserts text, the _edit_ type suffices, although to support other types of active markup, the _command_ type may become necessary. When the client sends this `textDocument/codeAction` request, it also sends the relevant text area whose code actions it wants to see.
+To initiate a code action, the language client sends a `textDocument/codeAction` request to the server whose content can be seen in @action-request-interface. The request's response then contains a list of possible code actions. Each code action may be either an _edit_, a _command_ or both. For our use case of supporting _sendback_ active markup, which only inserts text, the _edit_ type suffices, although to support other types of active markup, the _command_ type may become necessary.
+
+The `range` data sent in the code action request is the text range from which the client wants to get code actions from. Code actions are quite dependent on caret position. Different parts of the document may exhibit different code actions. Most of the time, the `range` just includes the current position of the caret, however most clients will also allow the user to do a selection or even create multiple carets and request code actions for the selected range.
+
+#figure(
+  ```typescript
+  interface CodeActionParams {
+    textDocument: TextDocumentIdentifier;
+    range: Range;
+    context: CodeActionContext;
+  }
+  ```,
+  caption: [`CodeActionParams` interface definition @lsp-spec.],
+  kind: raw,
+) <action-request-interface>
 
 === Implementation for the Isabelle Language Server
+
+When the Isabelle language server receives a code action request, the generation of the code actions list for its response is roughly done in these four steps:
+1. Find all #isar[] commands within the given `range`.
+
+2. Get the command results of all these commands.
+
+3. Extract all sendback markup out of these command results.
+
+4. Create LSP text edit JSON objects, inserting the sendback markup's content at the respective command's position.
 
 #figure(
   table(
     columns: 2,
     stroke: none,
+    table.header([*Before*], [*After*]),
     box(stroke: 1pt, image("/resources/vscode-action-active-sledgehammer-light-before.png")),
     box(stroke: 1pt, image("/resources/vscode-action-active-sledgehammer-light-after.png")),
   ),
@@ -141,15 +169,6 @@ To initiate a code cction, the language client sends a `textDocument/codeAction`
   caption: [Active markup in #vscode[] when using sledgehammer.\ Code action initiated with "`Ctrl+.`". Before and after accepting code action.],
   placement: auto,
 ) <active-markup-sledgehammer-vscode>
-
-When the Isabelle language server receives a code action request, the generation of the code actions list for its response is roughly done in these four steps:
-1. Find all #isar[] commands within the given range.
-
-2. Get the command results of all these commands.
-
-3. Extract all sendback markup out of these command results.
-
-4. Create LSP text edit JSON objects, inserting the sendback markup's content at the respective command's position.
 
 Once the list of these code actions is sent to the language client, the server's work is done. The LSP text edit objects exist in a format standardized in the LSP, so the actual execution of the text edit can be done entirely in the client.
 
