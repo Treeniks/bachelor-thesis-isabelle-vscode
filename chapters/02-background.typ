@@ -13,7 +13,7 @@ From proving the prime number theorem @prime-number-theorem, over a verified mic
 
 === Isabelle/Isar
 
-When one wants to write an Isabelle theory, i.e. a document containing a number of theorems, lemmas, function definitions and more, Isabelle offers its own proof language called #isar[], allowing its users to write human-readable structured proofs @manual-isar-ref.
+When one wants to write an Isabelle theory, i.e. a document containing a number of theorems, lemmas, function definitions and more, Isabelle offers its own proof language called _#isar[]_, allowing its users to write human-readable structured proofs @manual-isar-ref.
 
 The #isar[] syntax consists of three main syntactic concepts: _Commands_, _Methods_ and _Attributes_. Particularly relevant for us are the _Commands_, which includes keywords like `theorem` with which one can state a proposition followed by a proof, or `apply` with which one can apply a proof _Method_.
 
