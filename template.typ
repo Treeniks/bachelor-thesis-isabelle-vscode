@@ -25,6 +25,7 @@
   show heading.where(level: 2): set text(size: 1.2em)
   show heading.where(level: 3): set text(size: 1.1em)
   show heading.where(level: 4): set text(size: 1.05em)
+
   // Put chapters on new page and add extra spacing
   show heading.where(level: 1): it => {
     // reset footnote counter
@@ -159,6 +160,7 @@
         text(size: 1.4em, weight: "bold", "Contents")
         v(2em)
       },
+      depth: 4,
       indent: auto,
     )
 

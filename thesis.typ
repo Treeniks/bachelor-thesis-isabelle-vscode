@@ -33,7 +33,6 @@
   stroke: 2pt + luma(230),
   lang-stroke: none,
 )
-#show: gentle-clues.with(headless: true)
 
 // Sei $x in (a, b)$ und $h in RR without {0}$ mit $x + h in [a, b]$. Es gilt:
 // $ (F(x + h) - F(x))/h &= 1/h (integral^(x + h)_a f(t) d t - integral^x_a f(t) d t) = 1/h integral^(x + h)_x f(t) d t\
@@ -42,8 +41,7 @@
 #include "/chapters/01-introduction.typ"
 #include "/chapters/02-background.typ"
 #include "/chapters/03-related-work.typ"
-#include "/chapters/04-main-both.typ"
-#include "/chapters/05-main-server.typ"
-#include "/chapters/06-main-client.typ"
+#include "/chapters/04-main-refinements.typ"
+#include "/chapters/05-main-enhancements.typ"
 // #include "/chapters/07-evaluation.typ"
 #include "/chapters/08-summary.typ"
