@@ -184,6 +184,11 @@
     target: figure.where(kind: table),
   )
 
+  outline(
+    title: "List of Listings",
+    target: figure.where(kind: raw),
+  )
+
   bibliography("/biblio.bib", style: "association-for-computing-machinery")
 
   // Appendix
