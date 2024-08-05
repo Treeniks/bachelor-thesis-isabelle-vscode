@@ -34,6 +34,10 @@
   lang-stroke: none,
 )
 
+#show raw.where(block: true): it => {
+  box(width: 90%, it)
+}
+
 // Sei $x in (a, b)$ und $h in RR without {0}$ mit $x + h in [a, b]$. Es gilt:
 // $ (F(x + h) - F(x))/h &= 1/h (integral^(x + h)_a f(t) d t - integral^x_a f(t) d t) = 1/h integral^(x + h)_x f(t) d t\
 //                       &= 1/h f(xi_h) dot h = f(xi_h), quad xi_h in [x, x + h] $
