@@ -13,21 +13,21 @@ From proving the prime number theorem @prime-number-theorem, over a verified mic
 
 === Isabelle/Isar
 
-When one wants to write an Isabelle theory, i.e. a document containing a number of theorems, lemmas, function definitions and more, Isabelle offers its own proof language called #isar(), allowing its users to write human-readable structured proofs @manual-isar-ref.
+When one wants to write an Isabelle theory, i.e. a document containing a number of theorems, lemmas, function definitions and more, Isabelle offers its own proof language called #isar[], allowing its users to write human-readable structured proofs @manual-isar-ref.
 
-The #isar() syntax consists of three main syntactic concepts: _Commands_, _Methods_ and _Attributes_. Particularly relevant for us are the _Commands_, which includes keywords like `theorem` with which one can state a proposition followed by a proof, or `apply` with which one can apply a proof _Method_.
+The #isar[] syntax consists of three main syntactic concepts: _Commands_, _Methods_ and _Attributes_. Particularly relevant for us are the _Commands_, which includes keywords like `theorem` with which one can state a proposition followed by a proof, or `apply` with which one can apply a proof _Method_.
 
 === Implementation Design
 
 Isabelle's core implementation languages are _ML_ and _Scala_. Generally, the ML code is responsible for Isabelle's purely functional and mathematical domain, e.g. its LCF-style kernel @paulson-next-700 @lcf-to-isabelle, while Scala is responsible for Isabelle's physical domain, e.g. everything to do with the UI and IO @manual-system[Chapter~5]. Many modules within the Isabelle code base exist in both Scala and ML, thus creating an almost seamless transition between the two.
 
-Isabelle employs a monolithic architecture. While logic is split between modules, there is no limitation on how they can be accessed within the Isabelle system. Moreover, Scala, being a JVM based programming language, effortlessly integrates into jEdit's Java code base. Due to these two facts, when using #jedit(), Isabelle is able to offer an interactive session where the entire Isabelle system has direct access to any data jEdit may hold, and the same is true the other way around. For example, #jedit() has a feature to automatically indent an Isabelle theory. Internally, this automatic indentation uses both access to the Isabelle system and the jEdit buffer at the same time.
+Isabelle employs a monolithic architecture. While logic is split between modules, there is no limitation on how they can be accessed within the Isabelle system. Moreover, Scala, being a JVM based programming language, effortlessly integrates into jEdit's Java code base. Due to these two facts, when using #jedit[], Isabelle is able to offer an interactive session where the entire Isabelle system has direct access to any data jEdit may hold, and the same is true the other way around. For example, #jedit[] has a feature to automatically indent an Isabelle theory. Internally, this automatic indentation uses both access to the Isabelle system and the jEdit buffer at the same time.
 
-Isabelle, being a proof assistant, also does not follow conventional programming language design practices. For the sake of keeping correctness, the actual Isabelle kernel is kept small (albeit with performance related additions). Many of Isabelle's systems are built within Isabelle itself, including a majority of the #isar() syntax.
+Isabelle, being a proof assistant, also does not follow conventional programming language design practices. For the sake of keeping correctness, the actual Isabelle kernel is kept small (albeit with performance related additions). Many of Isabelle's systems are built within Isabelle itself, including a majority of the #isar[] syntax.
 
 #quote(block: true, attribution: <markarius-isabelle-vscode-2017>)[Note that static grammar and language definitions are not ideal: Isabelle syntax depends on theory imports: new commands may be defined in user libraries.]
 
-Even quite fundamental keywords such as `theorem` do not exist statically, but are instead defined in user space. When editing a theory in #jedit(), the syntax highlighting is mostly done dynamically.
+Even quite fundamental keywords such as `theorem` do not exist statically, but are instead defined in user space. When editing a theory in #jedit[], the syntax highlighting is mostly done dynamically.
 
 === Output and State Panels
 
@@ -71,7 +71,7 @@ As an example, let's say you write the implication $A ==> B$ in Isabelle. Within
   // placement: auto,
 ) <symbol-data-example>
 
-To deal with these symbols, #jedit() uses a custom encoding called #box(emph["UTF-8-Isabelle"]). This encoding ensures that the user sees #isabelle("A ⟹ B") while the actual content of the underlying file is "`A \<Longrightarrow> B`". However, Isabelle has no trouble dealing with cases where the actual #isabelle("⟹") Unicode symbol is used within a file.
+To deal with these symbols, #jedit[] uses a custom encoding called #box(emph["UTF-8-Isabelle"]). This encoding ensures that the user sees #isabelle("A ⟹ B") while the actual content of the underlying file is "`A \<Longrightarrow> B`". However, Isabelle has no trouble dealing with cases where the actual #isabelle("⟹") Unicode symbol is used within a file.
 
 // #TODO[
 //   Add explanation why this custom encoding is used instead of just unicode:
@@ -88,13 +88,13 @@ To deal with these symbols, #jedit() uses a custom encoding called #box(emph["UT
   placement: auto,
 ) <vscode1>
 
-Isabelle consists of multiple different components. #jedit() is one such component. When we refer to #vscode(), we are actually referring to three different Isabelle components: The Isabelle _language server_, Isabelle's own patched _VSCodium_ #footnote[https://vscodium.com/] and the VSCode _extension_ binding the two together. Note in particular that when running #vscode(), Isabelle does not actually use a standard distribution of VSCode. Instead, it is a custom VSCodium package. VSCodium is a fully open-source distribution of Microsoft's VSCode with some patches to disable telemetry as well as replacing the VSCode branding with that of VSCodium.
+Isabelle consists of multiple different components. #jedit[] is one such component. When we refer to #vscode[], we are actually referring to three different Isabelle components: The Isabelle _language server_, Isabelle's own patched _VSCodium_ #footnote[https://vscodium.com/] and the VSCode _extension_ binding the two together. Note in particular that when running #vscode[], Isabelle does not actually use a standard distribution of VSCode. Instead, it is a custom VSCodium package. VSCodium is a fully open-source distribution of Microsoft's VSCode with some patches to disable telemetry as well as replacing the VSCode branding with that of VSCodium.
 
-Isabelle adds its own patches on top of VSCodium, in order to add a custom encoding mimicking the functionality of #jedit() described in @isabelle-symbols, as well as integrating custom Isabelle-specific fonts. Since neither adding custom encodings nor including custom fonts is possible from within a VSCode extension, these patches exist instead.
+Isabelle adds its own patches on top of VSCodium, in order to add a custom encoding mimicking the functionality of #jedit[] described in @isabelle-symbols, as well as integrating custom Isabelle-specific fonts. Since neither adding custom encodings nor including custom fonts is possible from within a VSCode extension, these patches exist instead.
 
-The concept of _Output_ and _State_ panels exist equivalently within #vscode() as seen in @vscode1, although it is currently not possible to create multiple _State_ panels for reasons outlined in @state-init.
+The concept of _Output_ and _State_ panels exist equivalently within #vscode[] as seen in @vscode1, although it is currently not possible to create multiple _State_ panels for reasons outlined in @state-init.
 
-Generally speaking, the goal of #vscode() is to mimic the functionality of #jedit() as closely as possible. As such, many issues described and solved within this work stem from a discrepancy between the two, and #jedit() will often serve as the reference implementation.
+Generally speaking, the goal of #vscode[] is to mimic the functionality of #jedit[] as closely as possible. As such, many issues described and solved within this work stem from a discrepancy between the two, and #jedit[] will often serve as the reference implementation.
 
 == Language Server Protocol (LSP)
 

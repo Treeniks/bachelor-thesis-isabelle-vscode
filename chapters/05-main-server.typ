@@ -74,7 +74,7 @@ Thus, all that needed to be done to fix the common desyncs was to remove said no
 
 == Code Actions for Active Markup
 
-One feature of #jedit() that was missing entirely in #vscode() is Isabelle's _Active Markup_. Active Markup, generally speaking, describes parts of the theory, state or output content that is clickable. The action taken when the user clicks on an active markup can vary, as there is many different kinds of active markup, but the type of active markup most users will probably come across most frequently is the so called _sendback_ markup. This type of markup appears primarily in the output panel and clicking on it inserts its text into the source theory. It appears, for example, when issuing a `sledgehammer` command which finds a proof. This example can be seen in @active-markup-sledgehammer-jedit. As mentioned, there are other types of Active Markup as well, but we will focus exclusively on these sendback markups.
+One feature of #jedit[] that was missing entirely in #vscode[] is Isabelle's _Active Markup_. Active Markup, generally speaking, describes parts of the theory, state or output content that is clickable. The action taken when the user clicks on an active markup can vary, as there is many different kinds of active markup, but the type of active markup most users will probably come across most frequently is the so called _sendback_ markup. This type of markup appears primarily in the output panel and clicking on it inserts its text into the source theory. It appears, for example, when issuing a `sledgehammer` command which finds a proof. This example can be seen in @active-markup-sledgehammer-jedit. As mentioned, there are other types of Active Markup as well, but we will focus exclusively on these sendback markups.
 
 #figure(
   table(
@@ -84,12 +84,12 @@ One feature of #jedit() that was missing entirely in #vscode() is Isabelle's _Ac
     box(stroke: 1pt, image("/resources/jedit-active-sledgehammer-after.png")),
   ),
   kind: image,
-  caption: [Active Markup in #jedit() when using sledgehammer.\ Before and after clicking on the area with gray background.],
+  caption: [Active Markup in #jedit[] when using sledgehammer.\ Before and after clicking on the area with gray background.],
 ) <active-markup-sledgehammer-jedit>
 
-Unlike other features discussed in this work, Active Markups are a concept that has no comparable feature within typical code editors. Clicking on parts of code may exist in the form of _Goto Definition_ actions or clicking on hyperlinks, but inserting things from some output panel into the code unique. Hence, there is also no existing precedent on how to handle this type of interaction within the LSP specification. Because of this, the first question that needed to be answered is how we want to tackle this problem on a user experience level. That is, do we intend for #vscode(suffix: ['s]) implementation to work the same way as it does in #jedit() (i.e. by clicking with the mouse), or should the interaction work completely differently.
+Unlike other features discussed in this work, Active Markups are a concept that has no comparable feature within typical code editors. Clicking on parts of code may exist in the form of _Goto Definition_ actions or clicking on hyperlinks, but inserting things from some output panel into the code unique. Hence, there is also no existing precedent on how to handle this type of interaction within the LSP specification. Because of this, the first question that needed to be answered is how we want to tackle this problem on a user experience level. That is, do we intend for #vscode['s] implementation to work the same way as it does in #jedit[] (i.e. by clicking with the mouse), or should the interaction work completely differently.
 
-There exist two major problems when trying to replicate the user experience of #jedit():
+There exist two major problems when trying to replicate the user experience of #jedit[]:
 1. For the sake of accessibility, it is usually possible to control VSCode completely with the Keyboard. To keep this up, we decided it should also be possible to interact with Active Markup entirely with the keyboard.
 2. It would need a completely custom solution for both the language server and language client, increasing complexity and reducing the barrier of entry for new potential Isabelle IDEs. We would potentially need to reimagine the way that output panel content is sent to the client, and if so, it would be very difficult expanding the functionality to other types of Active Markup that live within the theory.
 
@@ -122,21 +122,21 @@ To initiate a Code Action, the language client sends a `textDocument/codeAction`
     box(stroke: 1pt, image("/resources/vscode-action-active-sledgehammer-light-after.png")),
   ),
   kind: image,
-  caption: [Active Markup in #vscode() when using sledgehammer.\ Code Action initiated with "`Ctrl+.`". Before and after accepting Code Action.],
+  caption: [Active Markup in #vscode[] when using sledgehammer.\ Code Action initiated with "`Ctrl+.`". Before and after accepting Code Action.],
   placement: auto,
 ) <active-markup-sledgehammer-vscode>
 
 When the Isabelle language server receives a Code Action request, the generation of the Code Actions list for its response is roughly done in these four steps:
-1. Find all #isar() commands within the given range.
+1. Find all #isar[] commands within the given range.
 2. Get the command results of all these commands.
 3. Extract all sendback markup out of these command results.
 4. Create LSP text edit JSON objects, inserting the sendback markup's content at the respective command's position.
 
 Once the list of these Code Actions is sent to the language client, the server's work is done. The LSP text edit objects exist in a format standardized in the LSP, so the actual execution of the text edit can be done entirely in the client.
 
-We also considered how to deal with correct indentation for the inserted text. In #jedit(), when a sendback markup gets inserted, the general indentation function that exists in #jedit() is called right after to correctly indent the newly inserted text. Since this internal indentation function uses direct access to the underlying jEdit buffer, we could not easily use this function from the language server. However, simply ignoring the indentation completely results in a subpar user experience. A proper solution would reimplement #jedit(suffix: ['s]) indentation logic for the language server, however this would require additional work. For our contribution, the language server instead just copies the source command's indentation to the inserted text. This will potentially give slightly different indentations compared to #jedit(), however the result is acceptable in practice.
+We also considered how to deal with correct indentation for the inserted text. In #jedit[], when a sendback markup gets inserted, the general indentation function that exists in #jedit[] is called right after to correctly indent the newly inserted text. Since this internal indentation function uses direct access to the underlying jEdit buffer, we could not easily use this function from the language server. However, simply ignoring the indentation completely results in a subpar user experience. A proper solution would reimplement #jedit['s] indentation logic for the language server, however this would require additional work. For our contribution, the language server instead just copies the source command's indentation to the inserted text. This will potentially give slightly different indentations compared to #jedit[], however the result is acceptable in practice.
 
-An example of the resulting implementation for #vscode() can be seen in @active-markup-sledgehammer-vscode.
+An example of the resulting implementation for #vscode[] can be seen in @active-markup-sledgehammer-vscode.
 
 // #TODO[
 //   - explanation of active markup

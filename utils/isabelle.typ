@@ -9,14 +9,14 @@
   )
 }
 
-#let vscode(suffix: []) = {
-  box(emph[Isabelle/VSCode#suffix])
+#let vscode(..suffix) = {
+  box(emph[Isabelle/VSCode#suffix.pos().join()])
 }
 
-#let jedit(suffix: []) = {
-  box(emph[Isabelle/jEdit#suffix])
+#let jedit(..suffix) = {
+  box(emph[Isabelle/jEdit#suffix.pos().join()])
 }
 
-#let isar(suffix: []) = {
-  box(emph[Isabelle/Isar#suffix])
+#let isar(..suffix) = {
+  box(emph[Isabelle/Isar#suffix.pos().join()])
 }
