@@ -7,7 +7,7 @@
 
 == Isabelle
 
-From proving the prime number theorem @prime-number-theorem, over a verified microkernel @verified-microkernel, all the way to a formalization of a sequential Java-like programming language @jinja, Isabelle has been used for various and numerous formalizations and proofs since its initial release in 1986. Additionally, the Archive of Formal Proofs #footnote[https://www.isa-afp.org/] hosts a journal-style collection of many more of such proofs.
+From proving the prime number theorem @prime-number-theorem, over a verified microkernel @verified-microkernel, all the way to a formalization of a sequential Java-like programming language @jinja, Isabelle has been used for various and numerous formalizations and proofs since its initial release in 1986. Additionally, the Archive of Formal Proofs #footnote[https://www.isa-afp.org/] hosts a journal-style collection of many more of such proofs constructed in Isabelle.
 
 // #quote(attribution: <paulson-next-700>, block: true)[Isabelle was not designed; it evolved. Not everyone likes this idea.]
 
@@ -19,15 +19,15 @@ The #isar() syntax consists of three main syntactic concepts: _Commands_, _Metho
 
 === Implementation Design
 
-Isabelle's core implementation languages are _ML_ and _Scala_. Generally speaking, the ML code is responsible for Isabelle's purely functional and mathematical domain, e.g. its LCF-style kernel @paulson-next-700 @lcf-to-isabelle, while Scala is responsible for Isabelle's physical domain, e.g. everything to do with the UI and IO @manual-system[Chapter~5]. Many modules within the Isabelle code base exist in both Scala and ML, thus creating an almost seamless transition between the two.
+Isabelle's core implementation languages are _ML_ and _Scala_. Generally, the ML code is responsible for Isabelle's purely functional and mathematical domain, e.g. its LCF-style kernel @paulson-next-700 @lcf-to-isabelle, while Scala is responsible for Isabelle's physical domain, e.g. everything to do with the UI and IO @manual-system[Chapter~5]. Many modules within the Isabelle code base exist in both Scala and ML, thus creating an almost seamless transition between the two.
 
-Isabelle employs a monolithic architecture, so while logic is split between modules, there is no limitation on how they can be accessed within the Isabelle system. Moreover, Scala, being a JVM based programming language, effortlessly integrates into jEdit's Java code base. Due to these two facts, when using #jedit(), Isabelle is able to offer an interactive session where the entire Isabelle system has direct access to any data jEdit may hold, and the same is true the other way around. For example, #jedit() has a feature to automatically indent an Isabelle theory. Internally, this automatic indentation uses both access to the Isabelle system and the jEdit buffer at the same time.
+Isabelle employs a monolithic architecture. While logic is split between modules, there is no limitation on how they can be accessed within the Isabelle system. Moreover, Scala, being a JVM based programming language, effortlessly integrates into jEdit's Java code base. Due to these two facts, when using #jedit(), Isabelle is able to offer an interactive session where the entire Isabelle system has direct access to any data jEdit may hold, and the same is true the other way around. For example, #jedit() has a feature to automatically indent an Isabelle theory. Internally, this automatic indentation uses both access to the Isabelle system and the jEdit buffer at the same time.
 
 Isabelle, being a proof assistant, also does not follow conventional programming language design practices. For the sake of keeping correctness, the actual Isabelle kernel is kept small (albeit with performance related additions). Many of Isabelle's systems are built within Isabelle itself, including a majority of the #isar() syntax.
 
 #quote(block: true, attribution: <markarius-isabelle-vscode-2017>)[Note that static grammar and language definitions are not ideal: Isabelle syntax depends on theory imports: new commands may be defined in user libraries.]
 
-Even quite fundamental keywords such as `theorem` do not exist statically, but are instead defined in user space. When editing a theory in #jedit(), the actual syntax highlighting is done mostly dynamically.
+Even quite fundamental keywords such as `theorem` do not exist statically, but are instead defined in user space. When editing a theory in #jedit(), the syntax highlighting is mostly done dynamically.
 
 === Output and State Panels
 
@@ -46,7 +46,7 @@ _State_ panels on the other hand display the current internal proof state within
 
 Isabelle uses a lot of custom symbols to allow logical terms to be written in a syntax close to that of mathematics. The concept of what an _Isabelle symbol_ is exactly is rather broad, so for simplicity we will focus primarily on a certain group of symbols typically used in mathematical formulas.
 
-Each Isabelle symbol roughly consists of four points of data: An ASCII representation of the symbol, a name, an optional UTF-16 code point and a list of abbreviations for this symbol. These four points are not the whole story, however for the sake of simplicity, we will skip some details.
+Each Isabelle symbol roughly consists of four components: An ASCII representation of the symbol, a name, an optional UTF-16 code point and a list of abbreviations for this symbol. These four are not the whole story, however for the sake of simplicity, we will skip some details.
 
 As an example, let's say you write the implication $A ==> B$ in Isabelle. Within jEdit, you will see it written out as #isabelle("A ⟹ B"), however internally the #isabelle("⟹") is an Isabelle symbol. Its corresponding data is outlined in @symbol-data-example.
 
@@ -88,7 +88,7 @@ To deal with these symbols, #jedit() uses a custom encoding called #box(emph["UT
   placement: auto,
 ) <vscode1>
 
-Isabelle consists of many different components. #jedit() is one such component. When we refer to #vscode(), we are actually referring to three different Isabelle components: The Isabelle _language server_, Isabelle's own patched _VSCodium_ #footnote[https://vscodium.com/] and the VSCode _extension_ binding the two together. Note in particular that when running #vscode(), Isabelle does not actually use a standard distribution of VSCode. Instead, it is a custom VSCodium package. VSCodium is a fully open-source distribution of Microsoft's VSCode with some patches to disable telemetry as well as replacing the VSCode branding with that of VSCodium.
+Isabelle consists of multiple different components. #jedit() is one such component. When we refer to #vscode(), we are actually referring to three different Isabelle components: The Isabelle _language server_, Isabelle's own patched _VSCodium_ #footnote[https://vscodium.com/] and the VSCode _extension_ binding the two together. Note in particular that when running #vscode(), Isabelle does not actually use a standard distribution of VSCode. Instead, it is a custom VSCodium package. VSCodium is a fully open-source distribution of Microsoft's VSCode with some patches to disable telemetry as well as replacing the VSCode branding with that of VSCodium.
 
 Isabelle adds its own patches on top of VSCodium, in order to add a custom encoding mimicking the functionality of #jedit() described in @isabelle-symbols, as well as integrating custom Isabelle-specific fonts. Since neither adding custom encodings nor including custom fonts is possible from within a VSCode extension, these patches exist instead.
 
@@ -98,7 +98,7 @@ Generally speaking, the goal of #vscode() is to mimic the functionality of #jedi
 
 == Language Server Protocol (LSP)
 
-Before the introduction of the Language Server Protocol, it was common for code editors to either only support syntax highlighting for its supported languages with very basic auto-completion and semantic understanding, or implement a full-fledged IDE environment for the language. The idea of a truly polyglot IDE was virtually impossible.
+Before the introduction of the Language Server Protocol, it was common for code editors to either only support syntax highlighting for its supported languages with very basic auto-completion and semantic understanding, or implement a full-fledged IDE environment for the language.
 
 Now, the responsibility of semantic understanding of the language has moved entirely to the language server, while the language client is responsible only for handling user interaction.
 
@@ -109,7 +109,7 @@ The goal is a system in which a new programming language only needs to implement
 - _Request Messages_
 - _Response Messages_
 
-_Notification Messages_ are messages that, as the name suggests, only exist to notify the other party. They must not send a response back. _Request Messages_ are requests sent to the other party and require a _Response Message_ to be sent back once the request has been processed. The structure of these message types is also defined within the LSP Specification and can be seen in @lsp-message-structure.
+As the name suggests, _Notification Messages_ are messages that only exist to notify the other party. They must not send a response back. _Request Messages_ are requests sent to the other party and require a _Response Message_ to be sent back once the request has been processed. The structure of these message types is also defined within the LSP Specification and can be seen in @lsp-message-structure.
 
 #figure(
   {
@@ -136,7 +136,7 @@ _Notification Messages_ are messages that, as the name suggests, only exist to n
   // placement: auto,
 ) <lsp-message-structure>
 
-The `jsonrpc` entry of every message is, at the time of writing, always set to "`2.0`". The `id` of the request is sent in order to identify the associated response, thus the `id` in a response message must also be set appropriately. The `method` entry is an identifier for the _kind_ of message at hand and dictates the shape of the `params`, `result` and `error` entries, which in turn contain the primary data of the message.
+At the time of writing, The `jsonrpc` entry of every message is always set to "`2.0`". The `id` of the request is sent in order to identify the associated response, thus the `id` in a response message must also be set appropriately. The `method` entry is an identifier for the _kind_ of message at hand and dictates the shape of the `params`, `result` and `error` entries, which in turn contain the primary data of the message.
 
 There are many different _methods_. For example, messages dealing with text documents are sent under the #box["`textDocument/`"] method prefix, like the #box["`textDocument/hover`"] request which requests for hover information, or the #box["`textDocument/didChange`"] notification, sent by the client to keep the server informed about changes made to the document's text.
 
@@ -144,7 +144,7 @@ There are many different _methods_. For example, messages dealing with text docu
 
 Because of the LSP's server/client system, it is technically possible to use an externally running language server. Even so, in practice the server is typically started by the IDE in question.
 
-The first message exchanged between client and server is an #box["`initialize`"] request sent by the client. The client has to wait for the server to respond to this request before sending any other messages, and finally sends an #box["`initialized`"] notification to mark the initialization complete once the server's response has arrived. This back and forth is illustrated in @lsp-init.
+The first message exchanged between client and server is an #box["`initialize`"] request sent by the client. The client has to wait for the server to respond to this request before sending any other messages, and finally sends an #box["`initialized`"] notification to mark the initialization complete. This back and forth is illustrated in @lsp-init.
 
 #figure(
   cetz.canvas({
@@ -172,19 +172,19 @@ The first message exchanged between client and server is an #box["`initialize`"]
   // placement: auto,
 ) <lsp-init>
 
-What's important for us is that during this back and forth, within the `initialize` request and response, the client and server send each other their capabilities. These capabilities describe which features of the LSP the client or server actually supports. For example, not every server supports completions, and even if it does, there is further information needed, like which characters should automatically request completions. By exchanging the capabilities this early on, the client and server can exclude certain parts of messages or even skip sending some entirely, preventing expensive JSON Serialization and Deserialization for messages that the other party cannot deal with anyway.
+What's important for us is that during this stage, within the `initialize` request and response, the client and server send each other their capabilities. These capabilities describe which features of the LSP the client or server actually supports. For example, not every server supports completions, and even if it does, there is further information needed, like which characters should automatically request completions. By exchanging the capabilities this early on, the client and server can exclude certain parts of messages or even skip sending some entirely, preventing expensive JSON Serialization and Deserialization for messages that the other party cannot handle anyway.
 
 === Isabelle Language Server
 
 While the LSP defines most methods required for typical language server use cases, specific language servers may also extend the basic protocol by their own methods. In such cases, the corresponding client will need to define extra handlers for these new methods.
 
-Since the standard Language Server Protocol is designed for normal programming languages in mind, it defines little for other types of languages, particularly theorem provers @lsp-spec-extension, and is thus insufficient for Isabelle's needs. For example, in order to keep the _Output_ and _State_ panels updated, the server needs to know the current location of the caret at all times. This is not a typical need for language servers of normal programming languages and is thus not build into the protocol by default.
+Since the standard Language Server Protocol is designed for normal programming languages in mind, it defines little for other types of languages, particularly theorem provers @lsp-spec-extension, and is thus insufficient for Isabelle's needs. For example, in order to keep the _Output_ and _State_ panels updated, the server needs to know the current location of the caret at all times. This is not a typical need for language servers of normal programming languages and is thus not built into the protocol by default.
 
-Isabelle thus extends the LSP with its own methods under the #box["`PIDE/`"] prefix, which have to be enabled with the #box["`vscode_pide_extensions`"] Isabelle option. For example, here are 3 such methods:
+Isabelle therefore extends the LSP with its own methods under the #box["`PIDE/`"] prefix, which have to be enabled with the #box["`vscode_pide_extensions`"] Isabelle option. For example, here are 3 such methods:
 1. "`PIDE/caret_update`": A bidirectional notification for telling the other party that the caret has been moved. Mostly sent from the client to the server.
 
 2. "`PIDE/dynamic_output`": A notification sent from the server to the client containing the current content of the _Output_ panel.
 
 3. "`PIDE/decoration`": A notification sent from the server to the client containing information on the dynamic syntax highlighting within the current theory.
 
-There are many more of the sort. As a result, unlike most language servers, one cannot simply start the Isabelle language server from within an existing language client and expect everything to work. There is an unusual amount of extra work that needs to be done on the client side before an IDE can utilize the Isabelle language server.
+There several more of these methods. As a result, unlike most language servers, the Isabelle language server cannot be started from within an existing language client with the expectation that it will function correctly. There is significant additional work that needs to be done on the client side before an IDE can utilize the Isabelle language server.
