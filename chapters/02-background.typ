@@ -29,7 +29,7 @@ Isabelle, being a proof assistant, also does not follow conventional programming
 
 Even quite fundamental keywords such as `theorem` do not exist statically, but are instead defined in user space. When editing a theory in #jedit[], the syntax highlighting is mostly done dynamically.
 
-=== Output and State Panels
+=== Output and State Panels <background:output-and-state-panels>
 
 #figure(
   box(stroke: 1pt, image("/resources/jedit1.png", width: 80%)),

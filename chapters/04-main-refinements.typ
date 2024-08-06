@@ -3,26 +3,30 @@
 
 = Refinements to Existing Functionality
 
+The work presented in this thesis on #vscode[] can be roughly categorized into two areas: The refinement of existing features and the introduction of new ones. This chapter focuses on the former. In both categories, #jedit[] serves as the primary reference implementation. Whether addressing a problem or filling a gap in functionality, the aim has been to replicate the behavior of #jedit[] closely. While it could be argued that certain features in #jedit[] also warrant improvements, this thesis does not engage with those considerations.
+
 == Desync on File Changes <didchange>
 
-#TODO[explanation of the `textDocument/didChange` notification and desync problem]
+While building the Neovim Isabelle client mentioned in @motivation, the language server frequently got out of sync with the actual contents of the file. For example, it might have happened that the user wanted to write `apply auto`, but wrote `apply autt` by accident instead. If the user then corrected their mistake by removing the additional `t` and replacing it with an `o`, it could happen that the language server would think the content of the file was `apply autto`. Somewhat awkwardly, this problem _only_ occurred when using Neovim, it did not happen in VSCode.
 
-The cause of this issue was related to how the changes coming in from the language client were interpreted withing the language server. The specific issue was that the language server first sorted the changes:
-```scala
-@tailrec def norm(chs: List[LSP.TextDocumentChange]): Unit = {
-  if (chs.nonEmpty) {
-    val (full_texts, rest1) = chs.span(_.range.isEmpty)
-    val (edits, rest2) = rest1.span(_.range.nonEmpty)
-    norm_changes ++= full_texts
-    norm_changes ++= edits.sortBy(_.range.get.start)(Line.Position.Ordering).reverse
-    norm(rest2)
+Document synchronization is done primarily through `textDocument/didChange` and `textDocument/didOpen` notifications. We will discuss the `textDocument/didOpen` notification in more detail in @symbol-options, but this desyncing issue results from the handling of the `textDocument/didChange` notifications. Its content is outlined in @did-change-interface.
+
+#figure(
+  ```typescript
+  interface DidChangeTextDocumentParams {
+    textDocument: VersionedTextDocumentIdentifier;
+    contentChanges: TextDocumentContentChangeEvent[];
   }
-}
-```
+  ```,
+  caption: [`DidChangeTextDocumentParams` interface definition @lsp-spec.],
+  kind: raw,
+  // placement: auto,
+) <did-change-interface>
 
-This normalization was not intended according to the LSP specficiation:
-#quote[
-  The actual content changes. The content changes describe single state changes to the document. So if there are two content changes c1 (at array index 0) and c2 (at array index 1) for a document in state S then c1 moves the document from S to S' and c2 from S' to S''. So c1 is computed on the state S and c2 is computed on the state S'.
+The exact details of how these `contentChanges` are structured are not of interest, however what is of interest is that there can be multiple such content changes within a single notification. It is possible for the client to decide to group multiple content changes into a single `textDocument/didChange` notification. The desyncing problem now arises from the fact that such a list of content changes is not commutative. The LSP spec says the following about the order of application of these content changes:
+
+#quote(block: true, attribution: <lsp-spec>)[
+  The content changes describe single state changes to the document. So if there are two content changes $c_1$ (at array index $0$) and $c_2$ (at array index $1$) for a document in state $S$ then $c_1$ moves the document from $S$ to $S'$ and $c_2$ from $S'$ to $S''$. So $c_1$ is computed on the state $S$ and $c_2$ is computed on the state $S'$.
 
   To mirror the content of a document using change events use the following approach:
   - start with the same initial content
@@ -30,15 +34,29 @@ This normalization was not intended according to the LSP specficiation:
   - apply the `TextDocumentContentChangeEvent`s in a single notification in the order you receive them.
 ]
 
-Thus, all that needed to be done to fix the common desyncs was to remove said normalization and instead apply the changes in the order they are received.
+The language server had code that _normalized_ the `contentChanges` list, sorting them by different types of changes, before applying them. Simply removing this normalization was enough to fix the original desyncing issue. We are still unsure why the issue did not occur in VSCode, however most likely VSCode simply groups together document changes far less frequently than Neovim does.
 
-== State Init Rework <state-init>
+== State Panel IDs <state-init>
 
-#TODO[
-  - originally State Init would expect the client to know what ID it is
-  - VSCode implmentation never used the ID for anything itself
-  - now is a request instead of a notification which returns the newly created ID
-]
+As mentioned in @background:output-and-state-panels, it is possible to open multiple state panels in #jedit[]. While users typically want to see the proof state at the position of their caret, there may be cases where one wants to permanently see the proof state of a different position.
+
+The language server already had support for multiple state panels. Internally, the language server stored a `Map` from IDs to state panels. Additionally, all state related messages had to include the ID of the panel that they are referring to. For example, to disable the _Auto update_ property
+#footnote[The _Auto update_ property enables automatic updating of the panel's content to the caret position. If disabled, moving the caret will not change the panel's content and will only update if the user issues a manual _Update_ command.]
+of a state panel, the client needs to send a `PIDE/state_auto_update` notification, with an `id` and `enabled` field.
+
+In particular, when starting the Isabelle language server, it did not automatically initialize a state panel. The client had to send a `PIDE/state_init` notification to create a state panel. However, the client could not define the state panel's ID within this notification. Instead, the server used the Isabelle internal `Counter` module to create a unique state panel ID.
+
+In order to keep these IDs separate between Isabelle's ML and Scala processes, this module counts forwards in ML and backwards in Scala. Since the language server is part of the Scala part of Isabelle's codebase, this meant that the state panel's IDs would start at $-1$ and count downwards with each new created state panel. This in and of itself is not a problem, the problem was that the language server did not communicate the created IDs with the language client. Thus, the language client had to know the internal Isabelle language server ID creation logic. And if that logic ever changes in the future, the client would need to be updated with it.
+
+To eliminate this issue, we changed the `PIDE/state_init` message from a notification to a request. Now, when a `PIDE/state_init` request is sent by the client, the server send a response back that includes the state ID of the newly created state panel. That way, we were able to decouple and future proof the internal language server logic from the language client implementation.
+
+An important thing to note is that #vscode[] does not actually support multiple state panels. The underlying language server does, but the Isabelle VSCode language client only has support for a single state panel. Therefore there is further work that needs to be done in this area.
+
+// #TODO[
+//   - originally State Init would expect the client to know what ID it is
+//   - VSCode implmentation never used the ID for anything itself
+//   - now is a request instead of a notification which returns the newly created ID
+// ]
 
 // == Decoration Notification Send All Decorations
 
@@ -47,6 +65,11 @@ Thus, all that needed to be done to fix the common desyncs was to remove said no
 // ]
 
 == State and Output Panels
+
+A comparison of #vscode['s] previous panel output against #jedit['s] panel output can be seen in @state-comparison. There are two main issues that needed to be tackled:
+1. The lack of formatting, in particular with regards to line breaks.
+
+2. The use of an incorrect font.
 
 #figure(
   {
@@ -99,11 +122,6 @@ Thus, all that needed to be done to fix the common desyncs was to remove said no
   kind: table,
   placement: auto,
 ) <state-comparison>
-
-A comparison of #vscode['s] previous panel output against #jedit['s] panel output can be seen in @state-comparison. There are two main issues that needed to be tackled:
-1. The lack of formatting, in particular with regards to line breaks.
-
-2. The use of an incorrect font.
 
 === Correct Formatting
 
@@ -174,7 +192,7 @@ The Isabelle VSCode extension is built with the `isabelle components_vscode_exte
 //   - add headroom
 // ]
 
-== Symbol Options
+== Symbol Options <symbol-options>
 
 As described in @isabelle-symbols, Isabelle utilizes its own #utf8isa[] encoding to deal with Isabelle Symbols. It is important to distinguish between 3 different domains:
 
@@ -201,7 +219,7 @@ However, the language server must still obtain the contents of the file.
 
 // #info[One particular difference between #vscode['s] and #jedit['s] implementation of the #utf8isa[] encoding is that the set of Isabelle Symbols that #vscode[] understands is static. It is possible to extend this set and #jedit[] can deal with newly defined symbols while #vscode[] can not, although this is rarely a problem in practice.]
 
-The LSP specification defines multiple notifications for text document synchronization, like the `textDocument/didOpen` and `textDocument/didChange` notifications, both of which contain data that informs the language server about the contents of a file. We will look at the `textDocument/didChange` notification in more detail in @didchange, so we will focus on `textDocument/didOpen` for now. This notification's `params` field contains a "`TextDocumentItem`" instance, whose interface definition is seen in @text-document-item.
+Recall from @didchange that the LSP specification defines multiple notifications for text document synchronization, like the `textDocument/didOpen` and `textDocument/didChange` notifications, both of which contain data that informs the language server about the contents of a file. We will focus on `textDocument/didOpen` for now. This notification's `params` field contains a "`TextDocumentItem`" instance, whose interface definition is seen in @text-document-item.
 
 #figure(
   ```typescript
@@ -217,7 +235,7 @@ The LSP specification defines multiple notifications for text document synchroni
   // placement: auto,
 ) <text-document-item>
 
-The most relevant data is the `text` field which contains the content of the entire text document that was opened. Aside from the header which is plain ASCII, the json data sent between client and server is interpreted as UTF-8, thus the `text` string is also interpreted as UTF-8 content. The exact content of this string depends on the text editor. In #vscode[], thanks to the custom #utf8isa[] encoding, the language server will receive the full UTF-8 encoded content of the file (i.e. #isabelle("⟹") instead of #isabelle("\<Longrightarrow>")), however this may not be the case for another editor.
+The most relevant data is the `text` field which contains the content of the entire text document that was opened. Aside from the header which is plain ASCII, the JSON data sent between client and server is interpreted as UTF-8, thus the `text` string is also interpreted as UTF-8 content. The exact content of this string depends on the text editor. In #vscode[], thanks to the custom #utf8isa[] encoding, the language server will receive the full UTF-8 encoded content of the file (i.e. #isabelle("⟹") instead of #isabelle("\<Longrightarrow>")), however this may not be the case for another editor.
 
 Thankfully, the Isabelle system internally deals with all types of Isabelle Symbol representations equally, so the editor is free to mix and match whichever representation is most convenient for it. As for the other direction, there are many messages sent from the server to the client containing different types of content potentially containing Isabelle Symbols. `window/showMessage` notifications sent by the server to ask the client to display a particular message, text edits sent for completions, text inserts sent for code actions, content sent for output and state panels, and many more.
 
