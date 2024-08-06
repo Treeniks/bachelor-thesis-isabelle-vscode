@@ -7,7 +7,19 @@
 #show math.equation: set text(font: "STIX Two Math")
 #show raw: set text(font: "JetBrains Mono", size: 1.1em)
 
-#let acknowledgements = [#lorem(150)]
+#let acknowledgements = [
+  There are several people I would like to thank:
+
+  *Prof. Dr. Tobias Nipkow* for giving me the opportunity to work on a tool as big and prominent as Isabelle.
+
+  *My advisor Fabian Huch* for meeting with me weekly, helping me understand the inner workings of Isabelle, discussing design and implementation details and lending me his time for other silly questions.
+
+  *My father Andreas Lindae* for doing his best rubber duck impression and letting me waste his time by explaining the contents of this thesis to him to sort out my thoughts.
+
+  *My friends Adrian Stein and Alexander Treml* for their valuable feedback on various sections of this thesis and helping me with its overall structure.
+
+  *Many more of my fellow student friends* for joining me in my visits to the cafeteria and providing mental and emotional respite during lunch.
+]
 #let abstract = [#lorem(150)]
 
 #let appendix = none
