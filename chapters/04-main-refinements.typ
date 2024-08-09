@@ -196,20 +196,11 @@ The Isabelle VSCode extension is built with the `isabelle components_vscode_exte
 
 As described in @isabelle-symbols, Isabelle utilizes its own #utf8isa[] encoding to deal with Isabelle Symbols. It is important to distinguish between 3 different domains:
 
-#{
-  set par(hanging-indent: 1em)
+/ Physical: This is the contents of the file. It's essentially a list of bytes, which need to be interpreted. Certainly, a theory file contains text, meaning the bytes represent some list of symbols. However, even then the exact interpretation of the bytes can vary depending on the encoding used. For example, the two subsequent bytes `0xC2` and `0xA5` can mean different symbols depending on the encoding used. If the encoding is #box[_UTF-8_], those two bytes stand for the symbol for Japanese Yen #isabelle("¥"). If, however, the encoding is #box[_ISO-8859-1 (Western Europe)_], the bytes are interpreted as #isabelle("Â¥"). The file itself does not note the supposed encoding, meaning without knowing the encoding, the meaning of a file's contents may be lost.
 
-  [
-    *Physical.*
-      This is the contents of the file. It's essentially a list of bytes, which need to be interpreted. Certainly, a theory file contains text, meaning the bytes represent some list of symbols. However, even then the exact interpretation of the bytes can vary depending on the encoding used. For example, the two subsequent bytes `0xC2` and `0xA5` can mean different symbols depending on the encoding used. If the encoding is #box[_UTF-8_], those two bytes stand for the symbol for Japanese Yen #isabelle("¥"). If, however, the encoding is #box[_ISO-8859-1 (Western Europe)_], the bytes are interpreted as #isabelle("Â¥"). The file itself does not note the supposed encoding, meaning without knowing the encoding, the meaning of a file's contents may be lost.
+/ Isabelle System: This is where the language server lives. Here, an Isabelle Symbol is simply an instance of an interal struct whose layout is outlined in @symbol-data-example.
 
-    *Isabelle System.*
-      This is where the language server lives. Here, an Isabelle Symbol is simply an instance of an interal struct whose layout is outlined in @symbol-data-example.
-
-    *Editor.*
-      This is where the language client lives. When opening a file in a code editor, it gets loaded into some internal structure the editor uses for its text buffers. During this loading, the editor will need to know the encoding to use, which will also affect what bytes the editor will write back to disk.
-  ]
-}
+/ Editor: This is where the language client lives. When opening a file in a code editor, it gets loaded into some internal structure the editor uses for its text buffers. During this loading, the editor will need to know the encoding to use, which will also affect what bytes the editor will write back to disk.
 
 When using #jedit[] and loading a theory with the #utf8isa[] encoding, the bytes of the file will be interpreted as UTF-8, and additionally ASCII representations of symbols will be interpreted as their UTF-8 counterparts. When writing back to disk, this conversion is done in reverse. Thus, as long as all symbols within a theory are valid Isabelle symbols, which all have ASCII representations, a file saved with the #utf8isa[] encoding can be viewed as plain ASCII.
 
