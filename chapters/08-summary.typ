@@ -39,4 +39,6 @@
   - indentation as LSP format provider
     - in general, extract indentation logic from jEdit
     - then also ability to use that logic for Code Actions
+
+  idea: ability to update isabelle options through language server, making synchronization of VSCode settings and preferences potentially doable
 ]

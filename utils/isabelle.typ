@@ -21,6 +21,10 @@
   box([Isabelle/Isar#suffix.pos().join()])
 }
 
+#let scala(..suffix) = {
+  box([Isabelle/Scala#suffix.pos().join()])
+}
+
 #let utf8isa(..suffix) = {
   box([UTF-8-Isabelle#suffix.pos().join()])
 }
