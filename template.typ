@@ -40,6 +40,8 @@
   set list(indent: 1em)
   set enum(indent: 1em)
 
+  show cite.where(form: "prose"): set cite(style: "/association-for-computing-machinery-prose.csl")
+
   set page(margin: (left: 30mm, right: 30mm, top: 40mm, bottom: 40mm))
 
   let cit = upper(text(size: 24pt, [School of Computation,\ Information and Technology\ -- Informatics --]))
