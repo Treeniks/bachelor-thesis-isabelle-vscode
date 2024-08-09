@@ -48,9 +48,9 @@ In particular, when starting the Isabelle language server, it did not automatica
 
 In order to keep these IDs separate between Isabelle's ML and Scala processes, this module counts forwards in ML and backwards in Scala. Since the language server is part of the Scala part of Isabelle's codebase, this meant that the state panel's IDs would start at $-1$ and count downwards with each new created state panel. This in and of itself is not a problem, the problem was that the language server did not communicate the created IDs with the language client. Thus, the language client had to know the internal Isabelle language server ID creation logic. And if that logic ever changes in the future, the client would need to be updated with it.
 
-To eliminate this issue, we changed the `PIDE/state_init` message from a notification to a request. Now, when a `PIDE/state_init` request is sent by the client, the server send a response back that includes the state ID of the newly created state panel. That way, we were able to decouple and future proof the internal language server logic from the language client implementation.
+To eliminate this issue, we changed the `PIDE/state_init` message from a notification to a request. Now, when a `PIDE/state_init` request is sent by the client, the server sends a response back that includes the state ID of the newly created state panel. That way, we were able to decouple and future-proof the internal language server logic from the language client implementation.
 
-An important thing to note is that #vscode[] does not actually support multiple state panels. The underlying language server does, but the Isabelle VSCode language client only has support for a single state panel. Therefore there is further work that needs to be done in this area.
+An important thing to note is that #vscode[] does not actually support multiple state panels. While the underlying language server supports them, the Isabelle VSCode language client only has support for a single state panel. Therefore, there is further work that needs to be done in this area.
 
 // #TODO[
 //   - originally State Init would expect the client to know what ID it is
@@ -67,7 +67,7 @@ An important thing to note is that #vscode[] does not actually support multiple 
 == State and Output Panels
 
 A comparison of #vscode['s] previous panel output against #jedit['s] panel output can be seen in @state-comparison. There are two main issues that needed to be tackled:
-1. The lack of formatting, in particular with regards to line breaks.
+1. The lack of formatting, in particular with regard to line breaks.
 
 2. The use of an incorrect font.
 
