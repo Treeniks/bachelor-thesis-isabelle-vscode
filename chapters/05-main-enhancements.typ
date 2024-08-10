@@ -227,15 +227,15 @@ The `isabelle vscode` command optionally takes option overwrites as CLI argument
   diagram(
     edge-stroke: 1pt, // make lines thicker
 
-    edge((-1, -1.5), (-1, -0.7), "-|>", [CLI arguments], label-side: left),
+    edge((-1, -1.5), (-1, -0.7), "-}>", [CLI arguments], label-side: left),
     node((-1, -0.7), [Isabelle System], height: 40pt, stroke: 1pt),
 
     edge((-1, -0.7), (-1, 0)),
     node((-1, 0), [`ISABELLE_VSCODIUM_ARGS`]),
-    edge((-1, 0), (0, 0), "-|>"),
+    edge((-1, 0), (0, 0), "-}>"),
 
     node((0, 0), [VSCodium\ Extension], height: 40pt, stroke: 1pt),
-    edge((0, 0), (2, 0), "-|>", align(center, [CLI\ arguments]), label-anchor: "center", label-sep: 0pt),
+    edge((0, 0), (2, 0), "-}>", align(center, [CLI\ arguments]), label-anchor: "center", label-sep: 0pt),
     node((2, 0), [Language Server], height: 40pt, stroke: 1pt),
   ),
   kind: image,
@@ -244,7 +244,7 @@ The `isabelle vscode` command optionally takes option overwrites as CLI argument
 
 The language server gets its option values by first taking the Isabelle default, overwriting those with whatever the user specified in their `preferences` file, and overwriting those again with whatever was given as CLI arguments.
 
-In order to additionally consider VSCode settings, we must add them from within the extension, as we do not have access to the VSCode settings from within the language server nor the original Isabelle process that starts VSCodium. Therefore, the only part we can actually affect with VSCode settings is the CLI arguments sent to the server by the extension. This limits the possible order of priority to two different possibilities, seen in @priority-order-options.
+In order to additionally consider VSCode settings, we must add them from within the extension, as we do not have access to the VSCode settings from within the language server nor the original Isabelle process that starts VSCodium. Therefore, the only part we can actually affect with VSCode settings is the CLI arguments sent to the server by the extension. Here, we must decide whether the user's CLI arguments or VSCode settings have priority. This limits the possible order of priority to two different possibilities, seen in @priority-order-options.
 
 #figure(
   table(
@@ -260,7 +260,7 @@ In order to additionally consider VSCode settings, we must add them from within 
     enum(indent: 0pt, [CLI], [VSCode Settings], [Preferences], [Defaults]),
     enum(indent: 0pt, [VSCode Settings], [CLI], [Preferences], [Defaults]),
   ),
-  caption: [Different options for Isabelle system option priority order.],
+  caption: [Different possibilities for Isabelle system option priority order.],
   kind: table,
 ) <priority-order-options>
 
@@ -270,18 +270,18 @@ Of these, we chose to proceed with option 1, as CLI option overwrites are more e
   diagram(
     edge-stroke: 1pt, // make lines thicker
 
-    edge((-1, -1.65), (-1, -0.85), "-|>", [CLI arguments], label-side: left),
+    edge((-1, -1.65), (-1, -0.85), "-}>", [CLI arguments], label-side: left),
     node((-1, -0.85), [Isabelle System], height: 40pt, stroke: 1pt),
 
     edge((-1, -0.85), (-1, -0.15)),
     node((-1, -0.15), [`ISABELLE_VSCODIUM_ARGS`]),
-    edge((-1, -0.15), (0, -0.15), "-|>"),
+    edge((-1, -0.15), (0, -0.15), "-}>"),
 
     node((-1, 0.15), [VSCode settings]),
-    edge((-1, 0.15), "r", "-|>"),
+    edge((-1, 0.15), "r", "-}>"),
 
-    node((0, 0), [#vscode[]], height: 40pt, stroke: 1pt),
-    edge((0, 0), (2, 0), "-|>", align(center, [CLI\ arguments]), label-anchor: "center", label-sep: 0pt),
+    node((0, 0), [VSCodium\ Extension], height: 40pt, stroke: 1pt),
+    edge((0, 0), (2, 0), "-}>", align(center, [CLI\ arguments]), label-anchor: "center", label-sep: 0pt),
     node((2, 0), [Language Server], height: 40pt, stroke: 1pt),
   ),
   kind: image,
