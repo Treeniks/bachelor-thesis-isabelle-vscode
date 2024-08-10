@@ -42,7 +42,7 @@ Isabelle has a few different types of panels which give crucial information to t
 
 State panels on the other hand display the current internal proof state within a proof. While there can only be one output panel, it is possible to have multiple state panels open, which may show states at different positions within the document. Whether moving the caret updates the currently displayed output or state depends on the _Auto update_ setting of the respective panel.
 
-=== Symbols <isabelle-symbols>
+=== Symbols <background:isabelle-symbols>
 
 Isabelle uses a lot of custom symbols to allow logical terms to be written in a syntax close to that of mathematics. The concept of what an _Isabelle symbol_ is exactly is rather broad, so for simplicity we will focus primarily on a certain group of symbols typically used in mathematical formulas.
 
@@ -79,7 +79,7 @@ To deal with these symbols, #jedit[] uses a custom encoding called _#utf8isa[]_.
 //   - not dependent on font Unicode support, file can be viewed with virtually any font if needed
 // ]
 
-=== Isabelle/VSCode <isabelle-vscode>
+=== Isabelle/VSCode <background:isabelle-vscode>
 
 #figure(
   box(stroke: 1pt, image("/resources/vscode1-light.png", width: 80%)),
@@ -90,7 +90,7 @@ To deal with these symbols, #jedit[] uses a custom encoding called _#utf8isa[]_.
 
 Isabelle consists of multiple different components. #jedit[] is one such component. When we refer to #vscode[], we are actually referring to three different Isabelle components: The Isabelle _language server_, Isabelle's own patched _VSCodium_ #footnote[https://vscodium.com/] and the VSCode _extension_ binding the two together. Note in particular that when running #vscode[], Isabelle does not actually use a standard distribution of VSCode. Instead, it is a custom VSCodium package. VSCodium is a fully open-source distribution of Microsoft's VSCode with some patches to disable telemetry as well as replacing the VSCode branding with that of VSCodium.
 
-Isabelle adds its own patches on top of VSCodium, in order to add a custom encoding mimicking the functionality of #jedit[] described in @isabelle-symbols, as well as integrating custom Isabelle-specific fonts. Since neither adding custom encodings nor including custom fonts is possible from within a VSCode extension, these patches exist instead.
+Isabelle adds its own patches on top of VSCodium, in order to add a custom encoding mimicking the functionality of #jedit[] described in @background:isabelle-symbols, as well as integrating custom Isabelle-specific fonts. Since neither adding custom encodings nor including custom fonts is possible from within a VSCode extension, these patches exist instead.
 
 The concept of output and state panels exist equivalently within #vscode[] as seen in @vscode1, although it is currently not possible to create multiple state panels for reasons outlined in @state-init.
 

@@ -17,7 +17,7 @@ We will consider two primary metrics for these solutions: How closely they resem
 
 The primary contribution of this thesis is the implementation of several such solutions to create a more flexible language server, reducing Isabelle's reliance on jEdit and VSCode. Moreover, the VSCode extension was extended and modified to accommodate these new changes, as well as bring its user experience closer to that of #jedit[].
 
-== Motivation <motivation>
+== Motivation <intro:motivation>
 
 Prior to this work, I attempted to build an Isabelle language client for the terminal-based code and text editor _Neovim_ #footnote[https://neovim.io/]. However, it quickly became apparent that the existing language server was not sufficient. For example, the language server only sent the content of certain panels in an HTML format. This makes it easy for an Electron-based editor like VSCode, which runs on the Chromium browser engine, allowing the editor to effortlessly and natively display HTML. It is, however, not reasonably possible to display HTML content from within a terminal-based editor like Neovim, meaning an option to get non-HTML output was required.
 

@@ -5,7 +5,7 @@
 
 = Enhancements and New Features
 
-== Decorations on File Switch
+== Decorations on File Switch <enhance:decorations>
 
 Previously, when switching theories within #vscode[], the dynamic syntax highlighting would not persist. It was possible to get the highlighting to work again by changing the buffer's content; however, until this was done, it never recovered by itself. This was a problem when working on multiple theory files.
 

@@ -7,7 +7,7 @@ The work presented in this thesis on #vscode[] can be roughly categorized into t
 
 == Desync on File Changes <didchange>
 
-While building the Neovim Isabelle client mentioned in @motivation, the language server frequently got out of sync with the actual contents of the file. For example, it might have happened that the user wanted to write `apply auto`, but wrote `apply autt` by accident instead. If the user then corrected their mistake by removing the additional `t` and replacing it with an `o`, it could happen that the language server would think the content of the file was `apply autto`. Somewhat awkwardly, this problem _only_ occurred when using Neovim, it did not happen in VSCode.
+While building the Neovim Isabelle client mentioned in @intro:motivation, the language server frequently got out of sync with the actual contents of the file. For example, it might have happened that the user wanted to write `apply auto`, but wrote `apply autt` by accident instead. If the user then corrected their mistake by removing the additional `t` and replacing it with an `o`, it could happen that the language server would think the content of the file was `apply autto`. Somewhat awkwardly, this problem _only_ occurred when using Neovim, it did not happen in VSCode.
 
 Document synchronization is done primarily through `textDocument/didChange` and `textDocument/didOpen` notifications. We will discuss the `textDocument/didOpen` notification in more detail in @symbol-options, but this desyncing issue results from the handling of the `textDocument/didChange` notifications. Its content is outlined in @did-change-interface.
 
@@ -169,7 +169,7 @@ While this solution has worked well in practice, note that one has to be careful
 
 === Correct Font
 
-#jedit[] uses a variant of the _DejaVu Sans Mono_ #footnote[https://dejavu-fonts.github.io/] font called _Isabelle DejaVu Sans Mono_. This custom font face can be built using the `isabelle component_fonts` Isabelle tool. It uses the _DejaVu Sans Mono_ fonts as a base and adds special Isabelle symbols, like #isabelle("⟹") and #isabelle("Γ") @font-email. As mentioned in @isabelle-vscode, part of the reason why #vscode[] adds custom patches on top of VSCodium is to add these fonts into the #vscode[] binary. That way, the user can use the _Isabelle DejaVu Sans Mono_ font family within buffers without needing to install these Isabelle fonts system-wide.
+#jedit[] uses a variant of the _DejaVu Sans Mono_ #footnote[https://dejavu-fonts.github.io/] font called _Isabelle DejaVu Sans Mono_. This custom font face can be built using the `isabelle component_fonts` Isabelle tool. It uses the _DejaVu Sans Mono_ fonts as a base and adds special Isabelle symbols, like #isabelle("⟹") and #isabelle("Γ") @font-email. As mentioned in @background:isabelle-vscode, part of the reason why #vscode[] adds custom patches on top of VSCodium is to add these fonts into the #vscode[] binary. That way, the user can use the _Isabelle DejaVu Sans Mono_ font family within buffers without needing to install these Isabelle fonts system-wide.
 
 Unfortunately, these patched in fonts are not available from within VSCode extensions, and the output and state panels in #vscode[] are handled by the Isabelle extension. Therefore, to support the correct fonts for the panels, we needed to additionally include the fonts into the extension.
 
@@ -194,7 +194,7 @@ The Isabelle VSCode extension is built with the `isabelle components_vscode_exte
 
 == Symbol Options <symbol-options>
 
-As described in @isabelle-symbols, Isabelle utilizes its own #utf8isa[] encoding to deal with Isabelle Symbols. It is important to distinguish between 3 different domains:
+As described in @background:isabelle-symbols, Isabelle utilizes its own #utf8isa[] encoding to deal with Isabelle Symbols. It is important to distinguish between 3 different domains:
 
 / Physical: This is the contents of the file. It's essentially a list of bytes, which need to be interpreted. Certainly, a theory file contains text, meaning the bytes represent some list of symbols. However, even then the exact interpretation of the bytes can vary depending on the encoding used. For example, the two subsequent bytes `0xC2` and `0xA5` can mean different symbols depending on the encoding used. If the encoding is #box[_UTF-8_], those two bytes stand for the symbol for Japanese Yen #isabelle("¥"). If, however, the encoding is #box[_ISO-8859-1 (Western Europe)_], the bytes are interpreted as #isabelle("Â¥"). The file itself does not note the supposed encoding, meaning without knowing the encoding, the meaning of a file's contents may be lost.
 
@@ -204,7 +204,7 @@ As described in @isabelle-symbols, Isabelle utilizes its own #utf8isa[] encoding
 
 When using #jedit[] and loading a theory with the #utf8isa[] encoding, the bytes of the file will be interpreted as UTF-8, and additionally ASCII representations of symbols will be interpreted as their UTF-8 counterparts. When writing back to disk, this conversion is done in reverse. Thus, as long as all symbols within a theory are valid Isabelle symbols, which all have ASCII representations, a file saved with the #utf8isa[] encoding can be viewed as plain ASCII.
 
-With #vscode[], we get the additional problem that the *Isabelle System* does not have direct access to our editor's buffer. As mentioned in @isabelle-vscode, Isabelle patches VSCodium to include a new #utf8isa[] encoding, so loading the file works virtually the same as in #jedit[].
+With #vscode[], we get the additional problem that the *Isabelle System* does not have direct access to our editor's buffer. As mentioned in @background:isabelle-vscode, Isabelle patches VSCodium to include a new #utf8isa[] encoding, so loading the file works virtually the same as in #jedit[].
 #footnote[One particular difference between #vscode['s] and #jedit['s] implementation of the #utf8isa[] encoding is that the set of Isabelle Symbols that #vscode[] understands is static. It is possible to extend this set and #jedit[] can deal with newly defined symbols while #vscode[] can not, although this is rarely a problem in practice.]
 However, the language server must still obtain the contents of the file.
 
