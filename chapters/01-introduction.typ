@@ -13,7 +13,9 @@ Unfortunately, the current state of #vscode[] is not on par with the experience 
 
 To combat these deficiencies, we will identify the various aspects in which the current #vscode[] is lacking and evaluate potential solutions to enhance its functionality. Given that Isabelle's design is often fundamentally incompatible with the LSP specification, the primary question throughout this endeavor is, whether the existing LSP spec can be utilized to fit Isabelle's unique requirements, whether a completely custom solution needs to be built for each language client, or whether there is a middle ground, in which the language server can take over much of the work, but custom handlers for the client are still necessary.
 
-The primary contribution of this thesis is the implementation of several such solutions to create a more flexible language server, reducing Isabelle's reliance on jEdit and VSCode, enabling support for other code editors, and increasing its potential for integration into other development environments. Moreover, the VSCode extension was extended and modified to accommodate these new changes, as well as bring its user experience closer to that of #jedit[].
+We will consider two primary metrics for these solutions: How closely they resemble #jedit[] and how universally applicable it is to other language clients. The former serves to ensure consistency within the broader Isabelle system, while the latter facilitates integration with new language clients.
+
+The primary contribution of this thesis is the implementation of several such solutions to create a more flexible language server, reducing Isabelle's reliance on jEdit and VSCode. Moreover, the VSCode extension was extended and modified to accommodate these new changes, as well as bring its user experience closer to that of #jedit[].
 
 == Motivation <motivation>
 
