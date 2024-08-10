@@ -290,7 +290,7 @@ Of these, we chose to proceed with option 1, as CLI option overwrites are more e
 
 @vscode-options-flow-after shows the new flow of Isabelle options when starting #vscode[]. The VSCode Isabelle extension has access to both the CLI arguments given to the `isabelle vscode` command, and whatever settings are set in VSCode.
 
-These two get merged, prioritizing the options within the `ISABELLE_VSCODIUM_ARGS` variable, and this merged set of option overwrites gets sent to the language server.
+These two get merged, prioritizing the options within the `ISABELLE_VSCODIUM_ARGS` variable, and this merged set of option overwrites gets passed to the language server.
 
 === Option Types
 
