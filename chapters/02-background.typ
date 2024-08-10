@@ -19,7 +19,7 @@ The #isar[] syntax consists of three main syntactic concepts: _Commands_, _metho
 
 === Implementation Design
 
-Isabelle's core implementation languages are _ML_ and _Scala_. Generally, the ML code is responsible for Isabelle's purely functional and mathematical domain, e.g. its LCF-style kernel @paulson-next-700 @lcf-to-isabelle, while Scala is responsible for Isabelle's physical domain, e.g. everything to do with the UI and IO @manual-system[Chapter~5]. Many modules within the Isabelle code base exist in both Scala and ML, thus creating an almost seamless transition between the two.
+Isabelle's core implementation languages are _ML_ and _Scala_. Generally, the ML code is responsible for Isabelle's purely functional and mathematical domain, e.g. its LCF-style kernel~@paulson-next-700@lcf-to-isabelle, while Scala is responsible for Isabelle's physical domain, e.g. everything to do with the UI and IO~@manual-system[Chapter~5]. Many modules within the Isabelle code base exist in both Scala and ML, thus creating an almost seamless transition between the two.
 
 Isabelle employs a monolithic architecture. While logic is split between modules, there is no limitation on how they can be accessed within the Isabelle system. Moreover, Scala, being a JVM based programming language, effortlessly integrates into jEdit's Java code base. Due to these two facts, when using #jedit[], Isabelle is able to offer an interactive session where the entire Isabelle system has direct access to any data jEdit may hold, and the same is true the other way around. For example, #jedit[] has a feature to automatically indent an Isabelle theory. Internally, this automatic indentation uses both access to the Isabelle system and the jEdit buffer at the same time.
 
@@ -98,7 +98,7 @@ Generally speaking, the goal of #vscode[] is to mimic the functionality of #jedi
 
 == Language Server Protocol (LSP)
 
-Before the introduction of the Language Server Protocol, it was common for code editors to either only support syntax highlighting for its supported languages with very basic auto-completion and semantic understanding, or implement a full-fledged IDE environment for the language.
+Before the introduction of the Language Server Protocol, it was common for code editors to either only support syntax highlighting for its supported languages with very basic auto-completion and semantic understanding, or implement a full-fledged IDE for the language.
 
 Now, the responsibility of semantic understanding of the language has moved entirely to the language server, while the language client is responsible for handling user interaction.
 
@@ -167,12 +167,12 @@ The first message exchanged between client and server is an #box["`initialize`"]
     line((0, -2.5), (r, -2.5), name: "connection4", mark: (end: m))
     content((rel: (0, .2), to: "connection4.mid"), [`initialized` notification])
   }),
-  caption: [LSP Initialization Handshake],
+  caption: [LSP Initialization Handshake.],
   kind: image,
   // placement: auto,
 ) <lsp-init>
 
-Similarly to exchanging cipher suites in a TCP handshake, within the `initialize` request and response, the client and server send each other their capabilities. These capabilities describe which features of the LSP the client or server actually supports. For example, not every server supports completions, and even if it does, there is further information needed, like which characters should automatically request completions. By exchanging the capabilities this early on, the client and server can exclude certain parts of messages or even skip sending some entirely, preventing expensive JSON Serialization and Deserialization for messages that the other party cannot handle anyway.
+Similarly to exchanging cipher suites in a TLS handshake, within the `initialize` request and response, the client and server send each other their capabilities. These capabilities describe which features of the LSP the client or server actually supports. For example, not every server supports completions, and even if it does, there is further information needed, like which characters should automatically request completions. By exchanging the capabilities this early on, the client and server can exclude certain parts of messages or even skip sending some entirely, preventing expensive JSON Serialization and Deserialization for messages that the other party cannot handle anyway.
 
 === Isabelle Language Server
 

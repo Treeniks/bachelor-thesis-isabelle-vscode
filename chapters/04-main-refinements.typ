@@ -118,7 +118,7 @@ A comparison of #vscode['s] previous panel output against #jedit['s] panel outpu
       )
     )
   },
-  caption: [Comparison of #jedit[] State display and previous #vscode[] State display],
+  caption: [Comparison of #jedit[] State display and previous #vscode[] State display.],
   kind: table,
   placement: auto,
 ) <state-comparison>
