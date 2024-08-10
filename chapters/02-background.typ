@@ -7,7 +7,7 @@
 
 == Isabelle
 
-From proving the prime number theorem @prime-number-theorem, over a verified microkernel @verified-microkernel, all the way to a formalization of a sequential Java-like programming language @jinja, Isabelle has been used for various and numerous formalizations and proofs since its initial release in 1986. Additionally, the Archive of Formal Proofs #footnote[https://www.isa-afp.org/] hosts a journal-style collection of many more of such proofs constructed in Isabelle.
+From proving the prime number theorem @prime-number-theorem, over a verified microkernel @verified-microkernel, to a formalization of a sequential Java-like programming language @jinja; Isabelle has been used for various and numerous formalizations and proofs since its initial release in 1986. Additionally, the Archive of Formal Proofs #footnote[https://www.isa-afp.org/] hosts a journal-style collection of many more of such proofs constructed in Isabelle.
 
 // #quote(attribution: <paulson-next-700>, block: true)[Isabelle was not designed; it evolved. Not everyone likes this idea.]
 
@@ -15,7 +15,7 @@ From proving the prime number theorem @prime-number-theorem, over a verified mic
 
 When one wants to write an Isabelle theory, i.e. a document containing a number of theorems, lemmas, function definitions and more, Isabelle offers its own proof language called _#isar[]_, allowing its users to write human-readable structured proofs @manual-isar-ref.
 
-The #isar[] syntax consists of three main syntactic concepts: _Commands_, _methods_ and _attributes_. Particularly relevant for us are the commands, which includes keywords like `theorem` with which one can state a proposition followed by a proof, or `apply` with which one can apply a proof method.
+The #isar[] syntax consists of three main syntactic concepts: _Commands_, _methods_ and _attributes_. Particularly relevant for us are the commands, which include keywords like `theorem` with which one can state a proposition followed by a proof, or `apply` with which one can apply a proof method.
 
 === Implementation Design
 
@@ -100,11 +100,11 @@ Generally speaking, the goal of #vscode[] is to mimic the functionality of #jedi
 
 Before the introduction of the Language Server Protocol, it was common for code editors to either only support syntax highlighting for its supported languages with very basic auto-completion and semantic understanding, or implement a full-fledged IDE environment for the language.
 
-Now, the responsibility of semantic understanding of the language has moved entirely to the language server, while the language client is responsible only for handling user interaction.
+Now, the responsibility of semantic understanding of the language has moved entirely to the language server, while the language client is responsible for handling user interaction.
 
 The goal is a system in which a new programming language only needs to implement a single language server, while a new code editor only needs to implement a single language client. In the best case scenario, any language server and language client can be used together (although in practice this is still not always the case). If we wanted to support $N$ programming languages for $M$ code editors, without the LSP we would need $N dot M$ implementations of language semantics. With the LSP, this number is reduced drastically to only $N$ language server and $M$ language client implementations.
 
-#cite(form: "prose", <lsp-spec>) describes the general setup: The client and server communicate via `jsonrpc 2.0` messages. These messages are mostly either of 3 types:
+#cite(form: "prose", <lsp-spec>) describes the general setup: The client and server communicate via #box[`jsonrpc 2.0`] messages. The three primary message types are:
 - _Notification Messages_
 - _Request Messages_
 - _Response Messages_
@@ -142,9 +142,9 @@ There are many different _methods_. For example, messages dealing with text docu
 
 === Initialization
 
-Because of the LSP's server/client system, it is technically possible to use an externally running language server. Even so, in practice the server is typically started by the IDE in question.
+Because of the LSP's server/client system, it is technically possible to use an externally running language server. Even so, in practice the server is typically started by an IDE.
 
-The first message exchanged between client and server is an #box["`initialize`"] request sent by the client. The client has to wait for the server to respond to this request before sending any other messages, and finally sends an #box["`initialized`"] notification to mark the initialization complete. This back and forth is illustrated in @lsp-init.
+The first message exchanged between client and server is an #box["`initialize`"] request sent by the client. The client has to wait for the server to respond to this request before sending any other messages, and finally sends an #box["`initialized`"] notification to mark the initialization complete. This handshake is illustrated in @lsp-init.
 
 #figure(
   cetz.canvas({
@@ -167,12 +167,12 @@ The first message exchanged between client and server is an #box["`initialize`"]
     line((0, -2.5), (r, -2.5), name: "connection4", mark: (end: m))
     content((rel: (0, .2), to: "connection4.mid"), [`initialized` notification])
   }),
-  caption: [LSP Initialization],
+  caption: [LSP Initialization Handshake],
   kind: image,
   // placement: auto,
 ) <lsp-init>
 
-What's important for us is that during this stage, within the `initialize` request and response, the client and server send each other their capabilities. These capabilities describe which features of the LSP the client or server actually supports. For example, not every server supports completions, and even if it does, there is further information needed, like which characters should automatically request completions. By exchanging the capabilities this early on, the client and server can exclude certain parts of messages or even skip sending some entirely, preventing expensive JSON Serialization and Deserialization for messages that the other party cannot handle anyway.
+Similarly to exchanging cipher suites in a TCP handshake, within the `initialize` request and response, the client and server send each other their capabilities. These capabilities describe which features of the LSP the client or server actually supports. For example, not every server supports completions, and even if it does, there is further information needed, like which characters should automatically request completions. By exchanging the capabilities this early on, the client and server can exclude certain parts of messages or even skip sending some entirely, preventing expensive JSON Serialization and Deserialization for messages that the other party cannot handle anyway.
 
 === Isabelle Language Server
 
@@ -187,4 +187,4 @@ Isabelle therefore extends the LSP with its own methods under the #box["`PIDE/`"
 
 3. "`PIDE/decoration`": A notification sent from the server to the client containing information on the dynamic syntax highlighting within the current theory.
 
-There several more of these methods. As a result, unlike most language servers, the Isabelle language server cannot be started from within an existing language client with the expectation that it will function correctly. There is significant additional work that needs to be done on the client side before an IDE can utilize the Isabelle language server.
+There are several more of these methods. As a result, unlike most language servers, the Isabelle language server cannot be started from within an existing language client with the expectation that it will function correctly. There is significant additional work that needs to be done on the client side before an IDE can utilize the Isabelle language server.

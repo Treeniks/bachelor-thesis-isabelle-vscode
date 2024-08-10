@@ -107,16 +107,16 @@ When this command finds a proof, it is displayed in the output panel with a gray
   caption: [Active markup in #jedit[] when using sledgehammer.\ Before and after clicking on sendback markup.],
 ) <active-markup-sledgehammer-jedit>
 
-Unlike other features discussed in this work, active markups are a concept that has no comparable feature within typical code editors. Clicking on parts of code may exist in the form of _Goto Definition_ actions or clicking on hyperlinks, but inserting things from some output panel into the code is unique. Hence, there is also no existing precedent on how to handle this type of interaction within the LSP specification. Because of this, the first question that needed to be answered is how we want to tackle this problem on a user experience level. That is, do we intend for #vscode['s] implementation to work the same way as it does in #jedit[] (i.e. by clicking with the mouse), or should the interaction work completely differently.
+Unlike other features discussed in this work, active markups are a concept that has no comparable feature within typical code editors. Clicking on parts of code may exist in the form of _Goto Definition_ actions or clicking on hyperlinks, but inserting things from some output panel into the code is unique. Hence, there is also no existing precedent on how to handle this type of interaction within the LSP specification. Because of this, the first question that needed to be answered is how we intend to tackle this problem in terms of user experience. That is, should the #vscode[] implementation work the same way as it does in #jedit[] (i.e. by clicking with the mouse), or should the interaction work completely differently.
 
 There exist two major problems when trying to replicate the user experience of #jedit[]:
 1. For the sake of accessibility, it is usually possible to control VSCode completely with the Keyboard. To keep this up, we decided it should also be possible to interact with active markup entirely with the keyboard.
 
 2. It would need a completely custom solution for both the language server and language client, increasing complexity and reducing the barrier of entry for new potential Isabelle IDEs. We would potentially need to reimagine the way that output panel content is sent to the client, and if so, it would be very difficult expanding the functionality to other types of active markup that live within the theory.
 
-Instead, we decided to explore completely new interaction methods, utilizing existing LSP features where possible. And luckily, the LSP spec defines a concept called _code actions_ which we could utilize for active markup.
+Instead, we decided to utilize existing LSP features where possible. And luckily, the LSP spec defines a concept called _code actions_ which we could use for active markup.
 
-The intended use case of code actions is to support more complicated IDE features acting on specific ranges of code that may result in beautifications or refactors of said code. For example, when using the `rust-analyzer` language server #footnote[https://rust-analyzer.github.io/] which serves as a server for the Rust programming language #footnote[https://www.rust-lang.org/], it is possible to use a code action to fill out match arms of a match expression, an example of which can be seen in @rust-match-action.
+The intended use case of code actions is to support more complicated IDE features acting on specific ranges of code that may result in beautifications or refactors of said code. For example, when using the `rust-analyzer` language server #footnote[https://rust-analyzer.github.io/] which serves as a server for the Rust programming language #footnote[https://www.rust-lang.org/], it is possible to use a code action to fill out the arms of a match expression, an example of which can be seen in @rust-match-action.
 
 #figure(
   table(
@@ -130,7 +130,7 @@ The intended use case of code actions is to support more complicated IDE feature
   caption: [`rust-analyzer`'s "Fill match arms" code action in Sublime Text.],
 ) <rust-match-action>
 
-The big advantage to using code actions, is that code actions are a part of the normal LSP specification, meaning most language clients support them out of the box. If the Isabelle language server supports interaction with active markup through code actions, there is no extra work necessary for the client.
+The big advantage of using code actions, is that code actions are a part of the normal LSP specification, meaning most language clients support them out of the box. If the Isabelle language server supports interaction with active markup through code actions, there is no extra work necessary for the client.
 
 To initiate a code action, the language client sends a `textDocument/codeAction` request to the server whose content can be seen in @action-request-interface. The request's response then contains a list of possible code actions. Each code action may be either an _edit_, a _command_ or both. For our use case of supporting _sendback_ active markup, which only inserts text, the _edit_ type suffices, although to support other types of active markup, the _command_ type may become necessary.
 
@@ -172,7 +172,7 @@ When the Isabelle language server receives a code action request, the generation
   placement: auto,
 ) <active-markup-sledgehammer-vscode>
 
-Once the list of these code actions is sent to the language client, the server's work is done. The LSP text edit objects exist in a format standardized in the LSP, so the actual execution of the text edit can be done entirely in the client.
+Once the list of these code actions is sent to the language client, the server's work is done. The LSP text edit objects exist in a format standardized in the LSP, so the actual execution of the text edit can be done entirely by the client.
 
 We also considered how to deal with correct indentation for the inserted text. In #jedit[], when a sendback markup gets inserted, the general indentation function that exists in #jedit[] is called right after to correctly indent the newly inserted text. Since this internal indentation function uses direct access to the underlying jEdit buffer, we could not easily use this function from the language server. However, simply ignoring the indentation completely results in a subpar user experience. A proper solution would reimplement #jedit['s] indentation logic for the language server, which is discussed in @future-work and exceeds the scope of this thesis. For our contribution, the language server instead just copies the source command's indentation to the inserted text. This will potentially give slightly different indentations compared to #jedit[], however the result is acceptable in practice.
 
