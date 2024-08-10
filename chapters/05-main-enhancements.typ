@@ -64,7 +64,7 @@ Later we found that client-side caching was already implemented for the Isabelle
 //   - decoration request kept in, in case a different client needs it (Foreshadowing to Sublime Text implementation which used it)
 // ]
 
-== Disable HTML Output for Panels <enhance:html-panel-output>
+== Non-HTML Content for Panels <enhance:non-html>
 
 The output and state panels in #vscode[] were previously always sent as HTML content by the language server. The server sends #box[`PIDE/dynamic_output`] and #box[`PIDE/state_output`] notifications with output and state content respectively. We will focus on content for the output panel in this section, however everything is almost equivalently done for state panel content.
 
