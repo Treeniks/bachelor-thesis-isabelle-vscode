@@ -252,7 +252,7 @@ The `isabelle vscode` command optionally takes option overwrites as CLI argument
 
 #figure(
   diagram(
-    edge-stroke: 1pt, // make lines thicker
+    edge-stroke: 1pt,
 
     edge((-1, -1.5), (-1, -0.7), "-}>", [CLI arguments], label-side: left),
     node((-1, -0.7), [Isabelle System], height: 40pt, stroke: 1pt),
@@ -295,7 +295,7 @@ Of these, we chose to proceed with option 1, as CLI option overwrites are more e
 
 #figure(
   diagram(
-    edge-stroke: 1pt, // make lines thicker
+    edge-stroke: 1pt,
 
     edge((-1, -1.65), (-1, -0.85), "-}>", [CLI arguments], label-side: left),
     node((-1, -0.85), [Isabelle System], height: 40pt, stroke: 1pt),
