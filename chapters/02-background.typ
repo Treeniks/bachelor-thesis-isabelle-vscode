@@ -79,7 +79,7 @@ To deal with these symbols, #jedit[] uses a custom encoding called _#utf8isa[]_.
 //   - not dependent on font Unicode support, file can be viewed with virtually any font if needed
 // ]
 
-=== Isabelle/VSCode <background:isabelle-vscode>
+=== #vscode[] <background:isabelle-vscode>
 
 #figure(
   box(stroke: 1pt, image("/resources/vscode1-light.png", width: 80%)),
@@ -88,7 +88,7 @@ To deal with these symbols, #jedit[] uses a custom encoding called _#utf8isa[]_.
   placement: auto,
 ) <vscode1>
 
-Isabelle consists of multiple different components. #jedit[] is one such component. When we refer to #vscode[], we are actually referring to three different Isabelle components: The Isabelle _language server_, Isabelle's own patched _VSCodium_ #footnote[https://vscodium.com/] and the VSCode _extension_ binding the two together. Note in particular that when running #vscode[], Isabelle does not actually use a standard distribution of VSCode. Instead, it is a custom VSCodium package. VSCodium is a fully open-source distribution of Microsoft's VSCode with some patches to disable telemetry as well as replacing the VSCode branding with that of VSCodium.
+Isabelle consists of multiple different components. #jedit[] is one such component. When we refer to #vscode[], we are actually referring to three different Isabelle components: The Isabelle _language server_ which is a part of #scala[], Isabelle's own patched _VSCodium_ #footnote[https://vscodium.com/], and the VSCode _extension_ written in TypeScript. #footnote[https://www.typescriptlang.org/] Note in particular that when running #vscode[], Isabelle does not actually use a standard distribution of VSCode. Instead, it is a custom VSCodium package. VSCodium is a fully open-source distribution of Microsoft's VSCode with some patches to disable telemetry as well as replacing the VSCode branding with that of VSCodium.
 
 Isabelle adds its own patches on top of VSCodium, in order to add a custom encoding mimicking the functionality of #jedit[] described in @background:isabelle-symbols, as well as integrating custom Isabelle-specific fonts. Since neither adding custom encodings nor including custom fonts is possible from within a VSCode extension, these patches exist instead.
 
