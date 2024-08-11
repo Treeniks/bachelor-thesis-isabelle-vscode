@@ -3,7 +3,7 @@
 
 == State and Output Panels
 
-A comparison of #vscode['s] previous panel output against #jedit['s] panel output can be seen in @state-comparison. There are two main issues that needed to be tackled:
+A comparison of #vscode's previous panel output against #jedit's panel output can be seen in @state-comparison. There are two main issues that needed to be tackled:
 1. The lack of formatting, in particular with regard to line breaks.
 
 2. The use of an incorrect font.
@@ -55,14 +55,14 @@ A comparison of #vscode['s] previous panel output against #jedit['s] panel outpu
       )
     )
   },
-  caption: [Comparison of #jedit[] State display and previous #vscode[] State display.],
+  caption: [Comparison of #jedit State display and previous #vscode State display.],
   kind: table,
   placement: auto,
 ) <state-comparison>
 
 === Correct Formatting
 
-Isabelle uses an internal module called `Pretty` to manage the formatting of content in state and output panels. Specifically, this module is responsible for adding line breaks and indentation to these outputs if the panels are not wide enough to display something in a single line. The language server did not use the `Pretty` module at all, meaning that it was the responsibility of the client to add correct line breaks, which #vscode[] did not do. Instead, it used its default word wrap line breaks.
+Isabelle uses an internal module called `Pretty` to manage the formatting of content in state and output panels. Specifically, this module is responsible for adding line breaks and indentation to these outputs if the panels are not wide enough to display something in a single line. The language server did not use the `Pretty` module at all, meaning that it was the responsibility of the client to add correct line breaks, which #vscode did not do. Instead, it used its default word wrap line breaks.
 
 ==== Isabelle's Internal XML
 
@@ -76,7 +76,7 @@ Lastly, Isabelle's `XML` module includes a "`content`" function, which reduces a
 
 ==== Using `Pretty` for Isabelle/VSCode
 
-The problem with adding support for correct formatting of these panels to #vscode[] is that, for `Pretty` to be able to correctly format some output, it needs to know the margin of the panel in question. In #jedit[] this is not an issue, since the #jedit[] UI and the `Pretty` module all exist within the same Scala codebase. With #vscode[], a different solution is necessary.
+The problem with adding support for correct formatting of these panels to #vscode is that, for `Pretty` to be able to correctly format some output, it needs to know the margin of the panel in question. In #jedit this is not an issue, since the #jedit UI and the `Pretty` module all exist within the same Scala codebase. With #vscode, a different solution is necessary.
 
 Once again, there are several possibilities that we considered:
 1. Rebuild the `Pretty` module within the VSCode extension.
@@ -87,7 +87,7 @@ Once again, there are several possibilities that we considered:
 
 Option 1 would've required fundamentally changing the format in which the language client receives state and output content. Previously, the language client would get HTML code that it could just display inside a WebView. While generating this HTML code, information stored within the XML body's markup was used to create highlighting as well as hyperlinks, such that the user can click on some elements and be transported to its definition (e.g. for functions). In order for the language client to correctly format this content, it would instead need access to Isabelle's underlying XML. Such a change would've also required significantly more work for every Isabelle language client implementation, and was thus not pursued.
 
-Option 2 is promising in that it allows a language client to use the `Pretty` module the same way #jedit[] would. However, the problem of requiring Isabelle's underlying XML content remains. Whenever the content of a panel were to change, the following would need to happen:
+Option 2 is promising in that it allows a language client to use the `Pretty` module the same way #jedit would. However, the problem of requiring Isabelle's underlying XML content remains. Whenever the content of a panel were to change, the following would need to happen:
 1. The language server sends the panel's XML body to the client.
 
 2. The client then proceeds to send a `Pretty/separate` request to call the `Pretty` module's `separate` function on the XML body. The server calls said function and sends the resulting XML body back to the client.
@@ -100,17 +100,17 @@ In step 3 the client can easily send over the current panel's margin in its requ
 
 Option 3 requires the least amount of work for the language client. For this option, the client only needs to inform the server about the current panel margin and the server can decide completely on its own whether a re-send of the panel's content is necessary. From the perspective of a language client, it is thus the simplest solution, because all the actual output logic is done by the language server. Additionally, a client that does not notify the server about the correct margins may not have correct formatting, but can still easily display the content, keeping the barrier of entry for a new Isabelle client prototype low.
 
-Due to its simplicity, Option 3 is the option we chose to implement. To this end, a new "`Pretty_Text_Panel`" module was added to #vscode[], which implements the output logic, as well as two new notifications: "`PIDE/output_set_margin`" and "`PIDE/state_set_margin`". Both output and state internally save one such `Pretty_Text_Panel` and simply tell it to refresh whenever the margin or content has changed. The `Pretty_Text_Panel` can then decide for itself if the actual content has changed and only send the appropriate notification to the client if it did.
+Due to its simplicity, Option 3 is the option we chose to implement. To this end, a new "`Pretty_Text_Panel`" module was added to #vscode, which implements the output logic, as well as two new notifications: "`PIDE/output_set_margin`" and "`PIDE/state_set_margin`". Both output and state internally save one such `Pretty_Text_Panel` and simply tell it to refresh whenever the margin or content has changed. The `Pretty_Text_Panel` can then decide for itself if the actual content has changed and only send the appropriate notification to the client if it did.
 
-While this solution has worked well in practice, note that one has to be careful how to send these margin updates. In VSCode for example, panel width can only be polled in pixels. The Isabelle language server however requires the margin to be in symbols, i.e. how many symbols currently fit horizontally into the panel. Since Isabelle symbols are not necessarily all monospaced, this instigates a unique problem: How do we measure symbol width? In #jedit[], this is solved by using the test string "mix", measuring its width and dividing that width by 3, thus we did the same in #vscode[]. Additionally, we added a limit on how often the margin update notifications are sent. If we were to send this notification for every single change in panel width, we would send a notification for every single pixel, which is extremely wasteful. In Neovim, by its terminal based nature, neither of these problems exist, because all characters have the same width and the width of a Neovim window only exists within discrete character counts.
+While this solution has worked well in practice, note that one has to be careful how to send these margin updates. In VSCode for example, panel width can only be polled in pixels. The Isabelle language server however requires the margin to be in symbols, i.e. how many symbols currently fit horizontally into the panel. Since Isabelle symbols are not necessarily all monospaced, this instigates a unique problem: How do we measure symbol width? In #jedit, this is solved by using the test string "mix", measuring its width and dividing that width by 3, thus we did the same in #vscode. Additionally, we added a limit on how often the margin update notifications are sent. If we were to send this notification for every single change in panel width, we would send a notification for every single pixel, which is extremely wasteful. In Neovim, by its terminal based nature, neither of these problems exist, because all characters have the same width and the width of a Neovim window only exists within discrete character counts.
 
 === Correct Font
 
-#jedit[] uses a variant of the _DejaVu Sans Mono_ #footnote[https://dejavu-fonts.github.io/] font called _Isabelle DejaVu Sans Mono_. This custom font face can be built using the `isabelle component_fonts` Isabelle tool. It uses the _DejaVu Sans Mono_ fonts as a base and adds special Isabelle symbols, like #isabelle("⟹") and #isabelle("Γ") @font-email. As mentioned in @background:isabelle-vscode, part of the reason why #vscode[] adds custom patches on top of VSCodium is to add these fonts into the #vscode[] binary. That way, the user can use the _Isabelle DejaVu Sans Mono_ font family within buffers without needing to install these Isabelle fonts system-wide.
+#jedit uses a variant of the _DejaVu Sans Mono_ #footnote[https://dejavu-fonts.github.io/] font called _Isabelle DejaVu Sans Mono_. This custom font face can be built using the `isabelle component_fonts` Isabelle tool. It uses the _DejaVu Sans Mono_ fonts as a base and adds special Isabelle symbols, like #isabelle("⟹") and #isabelle("Γ") @font-email. As mentioned in @background:isabelle-vscode, part of the reason why #vscode adds custom patches on top of VSCodium is to add these fonts into the #vscode binary. That way, the user can use the _Isabelle DejaVu Sans Mono_ font family within buffers without needing to install these Isabelle fonts system-wide.
 
-Unfortunately, these patched in fonts are not available from within VSCode extensions, and the output and state panels in #vscode[] are handled by the Isabelle extension. Therefore, to support the correct fonts for the panels, we needed to additionally include the fonts into the extension.
+Unfortunately, these patched in fonts are not available from within VSCode extensions, and the output and state panels in #vscode are handled by the Isabelle extension. Therefore, to support the correct fonts for the panels, we needed to additionally include the fonts into the extension.
 
-The Isabelle VSCode extension is built with the `isabelle components_vscode_extension` tool. Aside from calling the relevant build systems to build the extension, this tool also generates some static syntax definition to support static syntax highlighting for the most common keywords in #isar[]. We extended this tool to additionally copy the _Isabelle DejaVu Sans Mono_ font family into the extension build directory and add them to the extension's manifest file so that they are included in the extension's build. With this newly augmented extension in place, we could refer to these fonts from within the appropriate panels, the result of which can be seen in @vscode1.
+The Isabelle VSCode extension is built with the `isabelle components_vscode_extension` tool. Aside from calling the relevant build systems to build the extension, this tool also generates some static syntax definition to support static syntax highlighting for the most common keywords in #isar. We extended this tool to additionally copy the _Isabelle DejaVu Sans Mono_ font family into the extension build directory and add them to the extension's manifest file so that they are included in the extension's build. With this newly augmented extension in place, we could refer to these fonts from within the appropriate panels, the result of which can be seen in @vscode1.
 
 // === Server
 //

@@ -3,7 +3,7 @@
 
 = Related Work
 
-#vscode[] was originally created in 2017 by #cite(<markarius-isabelle-vscode-2017>, form: "prose"). Lacking features like highlighting in output and state panels, #cite(<denis-paluca>, form: "prose") continued the work on #vscode[] in 2021. Since then, further improvements were made to #vscode[], including the introduction of a custom #utf8isa[] encoding for VSCode to improve performance.
+#vscode was originally created in 2017 by #cite(<markarius-isabelle-vscode-2017>, form: "prose"). Lacking features like highlighting in output and state panels, #cite(<denis-paluca>, form: "prose") continued the work on #vscode in 2021. Since then, further improvements were made to #vscode, including the introduction of a custom #utf8isa encoding for VSCode to improve performance.
 
 As mentioned in @intro:motivation, Mathias Fleury introduced the unofficial Isabelle fork `isabelle-emacs` #footnote[https://github.com/m-fleury/isabelle-emacs] to support the Emacs text editor, already introducing some of the features we will discuss in this thesis. While Fleury's work focuses primarily on building enough support in the language server for Emacs, this thesis's goal is to get the language server flexible enough to be usable for virtually any code editor that supports the LSP, as well as improving more fundamental usability issues. If the changes introduced in this thesis get merged upstream into the official Isabelle distribution, the changes to the language server introduced by `isabelle-emacs` should become redundant (although the work done for the Emacs language client will not).
 

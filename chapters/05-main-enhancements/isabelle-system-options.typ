@@ -7,12 +7,12 @@
 
 Isabelle has many options that can be set to adjust different aspects of the interactive sessions. For example, the option `editor_output_state` defines whether the current state should additionally be printed within the output panel.
 
-The options, including their default values, are generally defined within `etc/options` files scattered throughout the codebase. The user can overwrite these options by adding respective entries into a `$ISABELLE_HOME_USER/etc/preferences` file. When using #jedit[], the user will also find many of these options within #jedit['s] settings, as seen in @jedit-settings. These settings and the content of the `preferences` file are kept in sync @manual-jedit.
+The options, including their default values, are generally defined within `etc/options` files scattered throughout the codebase. The user can overwrite these options by adding respective entries into a `$ISABELLE_HOME_USER/etc/preferences` file. When using #jedit, the user will also find many of these options within #jedit's settings, as seen in @jedit-settings. These settings and the content of the `preferences` file are kept in sync @manual-jedit.
 
 #figure(
   image("/resources/jedit-settings.png", width: 80%),
   kind: image,
-  caption: [Isabelle options inside of #jedit[].],
+  caption: [Isabelle options inside of #jedit.],
   // placement: auto,
 ) <jedit-settings>
 
@@ -21,17 +21,17 @@ The Isabelle language server offers one additional way of overwriting Isabelle s
 2. User preferences defined in the `preferences` file.
 3. Isabelle defaults.
 
-The same is true for #vscode[]. When starting #vscode[] with `isabelle vscode`, the user can add option overwrites as CLI arguments. However, previously there was no method to set Isabelle options through #vscode['s] UI. We wanted to alleviate this discrepancy between #vscode[] and #jedit[] by adding options that are relevant to #vscode[] to its settings.
+The same is true for #vscode. When starting #vscode with `isabelle vscode`, the user can add option overwrites as CLI arguments. However, previously there was no method to set Isabelle options through #vscode's UI. We wanted to alleviate this discrepancy between #vscode and #jedit by adding options that are relevant to #vscode to its settings.
 
-Ideally, the settings in #vscode[] would be kept in-sync with the user's `preferences` file, like #jedit[] does. However, to do so, we would need be able to parse and understand the `preferences` file from within the VSCode extension, yet this file is supposed to be managed by #scala[] exclusively. Therefore, we instead chose to use the #vscode[] settings as pure overwrites.
+Ideally, the settings in #vscode would be kept in-sync with the user's `preferences` file, like #jedit does. However, to do so, we would need be able to parse and understand the `preferences` file from within the VSCode extension, yet this file is supposed to be managed by #scala exclusively. Therefore, we instead chose to use the #vscode settings as pure overwrites.
 
 === Passing Options from VSCode to the Language Server
 
-#vscode[] itself has no use for Isabelle system options. These options are used by Isabelle internally, not by the code editor. That means that only the language server needs to know the options set by the user.
+#vscode itself has no use for Isabelle system options. These options are used by Isabelle internally, not by the code editor. That means that only the language server needs to know the options set by the user.
 
-When using #vscode[], the user does not manually start the language server. Instead, they start `isabelle vscode`, which starts an instance of Isabelle's patched VSCodium with an Isabelle extension installed, which then starts the language server once the user opens an Isabelle theory.
+When using #vscode, the user does not manually start the language server. Instead, they start `isabelle vscode`, which starts an instance of Isabelle's patched VSCodium with an Isabelle extension installed, which then starts the language server once the user opens an Isabelle theory.
 
-The `isabelle vscode` command optionally takes option overwrites as CLI arguments and converts these into an environment variable called "`ISABELLE_VSCODIUM_ARGS`", such that the extension can read this environment variable later. On top of that, the extension used to add a few hard-coded options that are needed for #vscode[] to function properly. This set of options is finally given to the language server as CLI arguments. @vscode-options-flow-previous shows this process.
+The `isabelle vscode` command optionally takes option overwrites as CLI arguments and converts these into an environment variable called "`ISABELLE_VSCODIUM_ARGS`", such that the extension can read this environment variable later. On top of that, the extension used to add a few hard-coded options that are needed for #vscode to function properly. This set of options is finally given to the language server as CLI arguments. @vscode-options-flow-previous shows this process.
 
 #figure(
   diagram(
@@ -98,7 +98,7 @@ Of these, we chose to proceed with option 1, as CLI option overwrites are more e
   caption: [Passing of option overwrites with VSCode settings.],
 ) <vscode-options-flow-after>
 
-@vscode-options-flow-after shows the new flow of Isabelle options when starting #vscode[]. The VSCode Isabelle extension has access to both the CLI arguments given to the `isabelle vscode` command, and whatever settings are set in VSCode.
+@vscode-options-flow-after shows the new flow of Isabelle options when starting #vscode. The VSCode Isabelle extension has access to both the CLI arguments given to the `isabelle vscode` command, and whatever settings are set in VSCode.
 
 These two get merged, prioritizing the options within the `ISABELLE_VSCODIUM_ARGS` variable, and this merged set of option overwrites gets passed to the language server.
 
@@ -106,21 +106,21 @@ These two get merged, prioritizing the options within the `ISABELLE_VSCODIUM_ARG
 
 Isabelle system options all have a type, which can be `string`, `int`, `real` or `bool`. It might be tempting to use the same type for the VSCode extension's settings. However, since we ultimately want the user to be able to _overwrite_ these options, this is not optimal. Taking the `editor_output_state` as an example, which is of type `bool`, the respective VSCode setting would be of type `boolean`. In the UI, this would make it a checkbox, giving it two states. However, we actually need three states: Don't overwrite, `off` and `on`. If the type of the VSCode setting were `boolean` with a default value of `off`, there would be no difference between the user not wanting VSCode to overwrite their user preferences and wanting to overwrite it with `off`.
 
-Instead, we made all #vscode[] settings of type `string`. For Isabelle options of type `bool`, the respective VSCode setting will have possible values `""`, `"off"` and `"on"`, meaning dont-override, overwrite with `off` and overwrite with `on` respectively. For Isabelle options of any other type, the empty string `""` means don't overwrite and any other value is the value the option should be overwritten with.
+Instead, we made all #vscode settings of type `string`. For Isabelle options of type `bool`, the respective VSCode setting will have possible values `""`, `"off"` and `"on"`, meaning dont-override, overwrite with `off` and overwrite with `on` respectively. For Isabelle options of any other type, the empty string `""` means don't overwrite and any other value is the value the option should be overwritten with.
 
 This system has another advantage for numerical options: The types of VSCode settings are just JavaScript types. Isabelle makes a difference between `real` and `int` options, but JavaScript only has a singular `numeric` type. If the VSCode option were to take such `numeric` values, the extension would need to convert this value to a string to pass it to the language server as a CLI argument. By keeping it a string from the start, we skip potential conversion errors that may occur otherwise.
 
-=== Extending #vscode['s] Settings
+=== Extending #vscode's Settings
 
 Many Isabelle options are annotated with a tag, thus creating grouping of similar options. For example, the `content` tag includes options such as `names_long`, `names_short` and `names_unique` which affect how names (like function names) are printed within output and state panels.
 
-Many of the options Isabelle exposes are not relevant for #vscode[]. For example, one of the option tags available is the `jedit` tag which, as the name suggests, includes options relevant specifically for #jedit[].
+Many of the options Isabelle exposes are not relevant for #vscode. For example, one of the option tags available is the `jedit` tag which, as the name suggests, includes options relevant specifically for #jedit.
 
 The first options that we deemed relevant are the options specifically designed for VSCode and the language server. These options are defined within `src/Tools/VSCode/etc/options`. To easily access these options, we added and assigned a new `vscode` option tag to these options.
 
 The second set of relevant options are options tagged with the aforementioned `content` tag.
 
-The third set are manually chosen options helpful for #vscode[], but not included in either of the previous two tags. The list of options we chose is:
+The third set are manually chosen options helpful for #vscode, but not included in either of the previous two tags. The list of options we chose is:
 #columns(2)[
   - `editor_output_state`
   - `auto_time_start`
