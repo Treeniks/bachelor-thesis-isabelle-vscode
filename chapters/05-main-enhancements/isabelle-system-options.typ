@@ -29,7 +29,7 @@ Ideally, the settings in #vscode would be kept in-sync with the user's `preferen
 
 #vscode itself has no use for Isabelle system options. These options are used by Isabelle internally, not by the code editor. That means that only the language server needs to know the options set by the user.
 
-When using #vscode, the user does not manually start the language server. Instead, they start `isabelle vscode`, which starts an instance of Isabelle's patched VSCodium with an Isabelle extension installed, which then starts the language server once the user opens an Isabelle theory.
+When using #vscode, the user does not manually start the language server. Instead, they start `isabelle vscode`, which starts an instance of Isabelle's patched VSCodium with an Isabelle extension installed, which starts the language server once the user opens an Isabelle theory.
 
 The `isabelle vscode` command optionally takes option overwrites as CLI arguments and converts these into an environment variable called "`ISABELLE_VSCODIUM_ARGS`", such that the extension can read this environment variable later. On top of that, the extension used to add a few hard-coded options that are needed for #vscode to function properly. This set of options is finally given to the language server as CLI arguments. @vscode-options-flow-previous shows this process.
 
@@ -54,7 +54,7 @@ The `isabelle vscode` command optionally takes option overwrites as CLI argument
 
 The language server gets its option values by first taking the Isabelle default, overwriting those with whatever the user specified in their `preferences` file, and overwriting those again with whatever was given as CLI arguments.
 
-In order to additionally consider VSCode settings, we must add them from within the extension, as we do not have access to the VSCode settings from within the language server nor the original Isabelle process that starts VSCodium. Therefore, the only part we can actually affect with VSCode settings is the CLI arguments sent to the server by the extension. Here, we must decide whether the user's CLI arguments or VSCode settings have priority. This limits the possible order of priority to two different possibilities, seen in @priority-order-options.
+In order to additionally consider VSCode settings, we must add them from within the extension, as we do not have access to the VSCode settings from within the language server nor the original Isabelle process that starts VSCodium. Therefore, the only part we can actively influence with VSCode settings is the CLI arguments sent to the server by the extension. Here, we must decide whether the user's CLI arguments or VSCode settings take precedence. This limits the possible order of priority to two different possibilities, seen in @priority-order-options.
 
 #figure(
   table(
@@ -106,7 +106,7 @@ These two get merged, prioritizing the options within the `ISABELLE_VSCODIUM_ARG
 
 Isabelle system options all have a type, which can be `string`, `int`, `real` or `bool`. It might be tempting to use the same type for the VSCode extension's settings. However, since we ultimately want the user to be able to _overwrite_ these options, this is not optimal. Taking the `editor_output_state` as an example, which is of type `bool`, the respective VSCode setting would be of type `boolean`. In the UI, this would make it a checkbox, giving it two states. However, we actually need three states: Don't overwrite, `off` and `on`. If the type of the VSCode setting were `boolean` with a default value of `off`, there would be no difference between the user not wanting VSCode to overwrite their user preferences and wanting to overwrite it with `off`.
 
-Instead, we made all #vscode settings of type `string`. For Isabelle options of type `bool`, the respective VSCode setting will have possible values `""`, `"off"` and `"on"`, meaning dont-override, overwrite with `off` and overwrite with `on` respectively. For Isabelle options of any other type, the empty string `""` means don't overwrite and any other value is the value the option should be overwritten with.
+Instead, we made all #vscode settings of type `string`. For Isabelle options of type `bool`, the respective VSCode setting will have possible values `""`, `"off"`, and `"on"`, meaning dont-overwrite, overwrite with `off`, and overwrite with `on` respectively. For Isabelle options of any other type, the empty string `""` means don't overwrite and any other value is the value the option should be overwritten with.
 
 This system has another advantage for numerical options: The types of VSCode settings are just JavaScript types. Isabelle makes a difference between `real` and `int` options, but JavaScript only has a singular `numeric` type. If the VSCode option were to take such `numeric` values, the extension would need to convert this value to a string to pass it to the language server as a CLI argument. By keeping it a string from the start, we skip potential conversion errors that may occur otherwise.
 
