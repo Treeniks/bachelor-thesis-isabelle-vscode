@@ -12,12 +12,14 @@ While building the Neovim Isabelle client mentioned in @intro:motivation, the la
 Document synchronization is done primarily through `textDocument/didChange` and `textDocument/didOpen` notifications. We will discuss the `textDocument/didOpen` notification in more detail in @symbol-options, but this desyncing issue results from the handling of the `textDocument/didChange` notifications. Its content is outlined in @did-change-interface.
 
 #figure(
-  ```typescript
-  interface DidChangeTextDocumentParams {
-    textDocument: VersionedTextDocumentIdentifier;
-    contentChanges: TextDocumentContentChangeEvent[];
-  }
-  ```,
+  box(width: 90%)[
+    ```typescript
+    interface DidChangeTextDocumentParams {
+        textDocument: VersionedTextDocumentIdentifier;
+        contentChanges: TextDocumentContentChangeEvent[];
+    }
+    ```
+  ],
   caption: [`DidChangeTextDocumentParams` interface definition @lsp-spec.],
   kind: raw,
   // placement: auto,
@@ -213,14 +215,16 @@ However, the language server must still obtain the contents of the file.
 Recall from @didchange that the LSP specification defines multiple notifications for text document synchronization, like the `textDocument/didOpen` and `textDocument/didChange` notifications, both of which contain data that informs the language server about the contents of a file. We will focus on `textDocument/didOpen` for now. This notification's `params` field contains a "`TextDocumentItem`" instance, whose interface definition is seen in @text-document-item.
 
 #figure(
-  ```typescript
-  interface TextDocumentItem {
-    uri: DocumentUri;
-    languageId: string;
-    version: integer;
-    text: string;
-  }
-  ```,
+  box(width: 90%)[
+    ```typescript
+    interface TextDocumentItem {
+        uri: DocumentUri;
+        languageId: string;
+        version: integer;
+        text: string;
+    }
+    ```
+  ],
   caption: [`TextDocumentItem` interface definition @lsp-spec.],
   kind: raw,
   // placement: auto,
@@ -232,7 +236,7 @@ Thankfully, the Isabelle system internally deals with all types of Isabelle Symb
 
 Previously, there was a single Isabelle option called `vscode_unicode_symbols` which was supposed to control whether these messages sent by the server should send Isabelle Symbols in their Unicode or ASCII representations, however this option only affected a few messages (like hover information and diagnostics). Things like completions were hard-coded to always use Unicode, as that is what VSCode requires.
 
-When viewing #vscode[] in its entirety, this is not a problem. If the VSCode Isabelle client expects Unicode symbols in certain scenarios and the language server is hard-coded to do so, then it works for #vscode[]. However, once you move to a different client, this is a problematic limitation. For example, in the Neovim code editor, it is possible to programmatically change how certain symbol sequences are displayed to the user using a feature called conceal. #footnote[https://neovim.io/doc/user/options.html#'conceallevel'] Through this feature, Neovim is able to have the ASCII representation (#isabelle("\<Longrightarrow>")) within the file and buffer, and still display the Unicode representation (#isabelle("⟹")) to the user, without the need of a custom encoding. In this case, it would be desirable to have messages sent by the server also use ASCII for consistency.
+When viewing #vscode[] in its entirety, this is not a problem. If the VSCode Isabelle client expects Unicode symbols in certain scenarios and the language server is hard-coded to do so, then it works for #vscode[]. However, once you move to a different client, this is a problematic limitation. For example, in the Neovim code editor, it is possible to programmatically change how certain symbol sequences are displayed to the user using a feature called _"conceal"_. #footnote[https://neovim.io/doc/user/options.html#'conceallevel'] Through this feature, Neovim is able to have the ASCII representation (#isabelle("\<Longrightarrow>")) within the file and buffer, and still display the Unicode representation (#isabelle("⟹")) to the user, without the need of a custom encoding. In this case, it would be desirable to have messages sent by the server also use ASCII for consistency.
 
 Another important consideration is that, even if Neovim may want ASCII representations of symbols within the theory file, this may not necessarily be the case for output and state panels. While there are many different types of content sent by the server, it can generally be grouped into two categories: Content that is only supposed to get _displayed_ and content that is supposed to be _placed_ within the theory file.
 

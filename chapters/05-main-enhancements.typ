@@ -9,35 +9,39 @@
 
 Previously, when switching theories within #vscode[], the dynamic syntax highlighting would not persist. It was possible to get the highlighting to work again by changing the buffer's content; however, until this was done, it never recovered by itself. This was a problem when working on multiple theory files.
 
+To understand how #vscode[] does dynamic syntax highlighting, we will first take a look at the structure of the `PIDE/decoration` notifications. Recall that the primary data of notifications is sent within a `params` field. In this case, this field contains two components: A `uri` field with the relevant theory file's URI, and a list of decorations called `entries`. Each of these entries then consists of a `type` and a list of ranges called `content`. The `type` is a string identifier for an Isabelle decoration type. This includes things like `text_skolem` for Skolem variables and `dotted_warning` for things that should have a dotted underline. Each entry in the `content` list is another list of 4 integers describing the line start, line end, column start, and column end of the range the specified decoration type should be applied to. @pide-decoration-json shows an example of what a `PIDE/decoration` message may look like.
+
+Since this is not part of the standard LSP specification, a language client must implement a special handler for such decoration notifications. Additionally, it was not possible to explicitly request these decorations from the language server. Instead, the language server would send new decorations whenever it deemed necessary, e.g., because the caret moved into areas of the text that haven't been decorated yet or because the document's content has changed.
+
 #figure(
-  ```json
-  "jsonrpc": "2.0",
-  "method": "PIDE/decoration",
-  "params": {
-    "uri": "file:///home/user/Documents/Example.thy",
-    "entries": [
-      {
-        "type": "text_main",
-        "content": [
-          { "range": [1, 23, 1, 41] },
-          { "range": [5, 10, 5, 11] }
+  box(width: 90%)[
+    ```json
+    "jsonrpc": "2.0",
+    "method": "PIDE/decoration",
+    "params": {
+        "uri": "file:///home/user/Documents/Example.thy",
+        "entries": [
+            {
+                "type": "text_main",
+                "content": [
+                    { "range": [1, 23, 1, 41] },
+                    { "range": [5, 10, 5, 11] }
+                ]
+            },
+            {
+                "type": "text_operator",
+                "content": [
+                    { "range": [7, 6, 7, 7] }
+                ]
+            }
         ]
-      },
-      {
-        "type": "text_operator",
-        "content": [ { "range": [7, 6, 7, 7] } ]
-      }
-    ]
-  }
-  ```,
+    }
+    ```
+  ],
   caption: [Example `PIDE/decoration` notification sent by the language server.],
   kind: raw,
   placement: auto,
 ) <pide-decoration-json>
-
-To understand how #vscode[] does dynamic syntax highlighting, we will first take a look at the structure of the `PIDE/decoration` notifications. Recall that the primary data of notifications is sent within a `params` field. In this case, this field contains two components: A `uri` field with the relevant theory file's URI, and a list of decorations called `entries`. Each of these entries then consists of a `type` and a list of ranges called `content`. The `type` is a string identifier for an Isabelle decoration type. This includes things like `text_skolem` for Skolem variables and `dotted_warning` for things that should have a dotted underline. Each entry in the `content` list is another list of 4 integers describing the line start, line end, column start, and column end of the range the specified decoration type should be applied to. @pide-decoration-json shows an example of what a `PIDE/decoration` message may look like.
-
-Since this is not part of the standard LSP specification, a language client must implement a special handler for such decoration notifications. Additionally, it was not possible to explicitly request these decorations from the language server. Instead, the language server would send new decorations whenever it deemed necessary, e.g., because the caret moved into areas of the text that haven't been decorated yet or because the document's content has changed.
 
 On the VSCode side, these decorations were applied via the `TextEditor.setDecoration` API function #footnote[https://code.visualstudio.com/api/references/vscode-api#TextEditor.setDecorations], which does not inherently cache these decorations on file switch. Thus, when switching theories, VSCode did not cache the previously set decorations, nor did the language server send them again, causing the highlighting to disappear.
 
@@ -103,18 +107,77 @@ To fix this, we added an optional additional `decorations` value to #box[`PIDE/d
 
 == Symbols Request and Conversions
 
-#TODO[
-  - currently client was expected to just know what symbols are available, but this is dynamic
-  - now client can request a list of all symbols from server
-    - gives the same list used by VSCode during compilation, meaning dynamic symbol additions still don't work (Future Work)
-]
+While #vscode[] deals with Isabelle symbols by adding a custom #box[_UTF-8-Isabelle_] encoding, this is not generally doable within code editors. Even for VSCode, patches were needed as custom encodings can not be added through an extension. Additionally, the list of existing Isabelle symbols is not static, a user may augment this list in a #box[`$ISABELLE_HOME_USER/etc/symbols`] file~@manual-jedit[§2.2]. So even if it is possible to hard-code the default set of Isabelle symbols into an Isabelle language extension, that will not be correct in light of such user additions.
 
-#TODO[
-  - flush_edits used to automatically convert symbols based on `vscode_unicode_symbols`
-  - but now the code for it was just unused, so it was removed
-  - now symbol conversion is a request
-    - client can easily convert whole document to unicode with that
-]
+Every code editor may handle Isabelle symbols differently. Some editors may have the ability to add custom encodings, others may not. The Neovim code editor has a feature called _"conceal"_ that we mentioned in @symbol-options. This feature allows Neovim to visually replace certain regex matches with a single character, and is rather unique to Neovim.
+
+This means that the language server should not make assumptions about the implementation details of Isabelle symbols in the language client. We already added more granular control over the usage of ASCII or Unicode representations of symbols in messages sent by the server in @symbol-options, however previously there was no way for the client to get information about which symbols even _exist_.
+
+#vscode[] uses a hard-coded list of symbols. This list is added into the custom #box[UTF-8-Isabelle] encoding while building the patched VSCodium. It also only includes the default set of symbols Isabelle offers out of the box, it does not include custom user additions. As this list is hard-coded, any change in the list of symbols would also require recompiling #vscode[].
+
+However, for other language client, it may be useful get a list of symbols from the language server. To this end, we added a #box[`PIDE/symbols_request`] request. When this request is sent, the language server responds with a list of all defined symbols. Note that, at the time of writing, this list _also_ only includes the default set without user additions in order to be in line with the set that is used by #vscode[]. This may be worth changing in the future, which we will discuss in @future-work.
+
+#figure(
+  {
+    import "@preview/codly:1.0.0": *
+    show raw: set text(size: 10pt, font: "Isabelle DejaVu Sans Mono")
+    show raw: it => block(width: 100%, it)
+    table(
+      columns: (1.8fr, 1fr),
+      stroke: none,
+      inset: (x: 0pt, y: 5pt),
+      table.header([*Request*], [*Response*]),
+      local(
+        lang-format: none,
+        ```json
+        "jsonrpc": "2.0",
+        "id": 58,
+        "method": "PIDE/symbols_convert_request",
+        "params": {
+            "text": "A \<Longrightarrow> B",
+            "unicode": true
+        }
+        ```
+      ),
+      local(
+        number-format: none,
+        ```json
+        "jsonrpc": "2.0",
+        "id": 58,
+        "result": {
+            "text": "A ⟹ B"
+        }
+
+
+        ```
+      ),
+    )
+  },
+  kind: raw,
+  caption: [`PIDE/symbols_convert_request` example request and response.],
+  placement: auto,
+) <list:symbols-convert-request>
+
+Another issue is that different language clients may want different symbol representations within files. While the typical way of handling symbols in Isabelle is to have symbols in their ASCII representation within files, some editors may want Unicode representations instead. In order for the client to freely choose which of the two it wants to use, it would be useful if there was some way for it to convert the symbols from one representation into the other. Within #scala[], this is easily done with the help of the interal `Symbol` module, and to pass this functionality to the language client, we added a new #box[`PIDE/symbols_convert_request`] request.
+
+This request gets a string it should convert, as well as whether symbols in it should be converted into Unicode or ASCII representations. The language server then converts the symbols and sends the converted string back as its response. An example conversion request and response can be seen in @list:symbols-convert-request.
+
+By allowing the client to request the conversion for any string, it allows a client implementation to offer more flexible functionality. For example, an Isabelle language extension may allow the user to select an area of the text and only convert the selected area, instead of the whole file.
+
+Both of these new requests are not currently used by #vscode[]. They are only offered by the language server for use in other language clients, and have already seen use in them. For example, our current Neovim Isabelle client prototype supports a `SymbolsConvert` command to convert the symbols in the current buffer.
+
+// #TODO[
+//   - currently client was expected to just know what symbols are available, but this is dynamic
+//   - now client can request a list of all symbols from server
+//     - gives the same list used by VSCode during compilation, meaning dynamic symbol additions still don't work (Future Work)
+// ]
+//
+// #TODO[
+//   - flush_edits used to automatically convert symbols based on `vscode_unicode_symbols`
+//   - but now the code for it was just unused, so it was removed
+//   - now symbol conversion is a request
+//     - client can easily convert whole document to unicode with that
+// ]
 
 == Code Actions for Active Markup
 
@@ -132,6 +195,7 @@ When this command finds a proof, it is displayed in the output panel with a gray
   ),
   kind: image,
   caption: [Active markup in #jedit[] when using sledgehammer.\ Before and after clicking on sendback markup.],
+  placement: auto,
 ) <active-markup-sledgehammer-jedit>
 
 Unlike other features discussed in this work, active markups are a concept that has no comparable feature within typical code editors. Clicking on parts of code may exist in the form of _Goto Definition_ actions or clicking on hyperlinks, but inserting things from some output panel into the code is unique. Hence, there is also no existing precedent on how to handle this type of interaction within the LSP specification. Because of this, the first question that needed to be answered is how we intend to tackle this problem in terms of user experience. That is, should the #vscode[] implementation work the same way as it does in #jedit[] (i.e. by clicking with the mouse), or should the interaction work completely differently.
@@ -155,6 +219,7 @@ The intended use case of code actions is to support more complicated IDE feature
   ),
   kind: image,
   caption: [`rust-analyzer`'s "Fill match arms" code action in Sublime Text.],
+  placement: auto,
 ) <rust-match-action>
 
 The big advantage of using code actions, is that code actions are a part of the normal LSP specification, meaning most language clients support them out of the box. If the Isabelle language server supports interaction with active markup through code actions, there is no extra work necessary for the client.
@@ -164,13 +229,15 @@ To initiate a code action, the language client sends a `textDocument/codeAction`
 The `range` data sent in the code action request is the text range from which the client wants to get code actions from. Code actions are quite dependent on caret position. Different parts of the document may exhibit different code actions. Most of the time, the `range` just includes the current position of the caret, however most clients will also allow the user to do a selection or even create multiple carets and request code actions for the selected range.
 
 #figure(
-  ```typescript
-  interface CodeActionParams {
-    textDocument: TextDocumentIdentifier;
-    range: Range;
-    context: CodeActionContext;
-  }
-  ```,
+  box(width: 90%)[
+    ```typescript
+    interface CodeActionParams {
+        textDocument: TextDocumentIdentifier;
+        range: Range;
+        context: CodeActionContext;
+    }
+    ```
+  ],
   caption: [`CodeActionParams` interface definition @lsp-spec.],
   kind: raw,
 ) <action-request-interface>
@@ -196,7 +263,7 @@ When the Isabelle language server receives a code action request, the generation
   ),
   kind: image,
   caption: [Active markup in #vscode[] when using sledgehammer.\ Code action initiated with "`Ctrl+.`". Before and after accepting code action.],
-  placement: auto,
+  // placement: auto,
 ) <active-markup-sledgehammer-vscode>
 
 Once the list of these code actions is sent to the language client, the server's work is done. The LSP text edit objects exist in a format standardized in the LSP, so the actual execution of the text edit can be done entirely by the client.
