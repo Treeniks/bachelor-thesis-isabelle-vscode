@@ -106,7 +106,7 @@ While this solution has worked well in practice, note that one has to be careful
 
 === Correct Font
 
-#jedit uses a variant of the _DejaVu Sans Mono_ #footnote[https://dejavu-fonts.github.io/] font called _Isabelle DejaVu Sans Mono_. This custom font face can be built using the `isabelle component_fonts` Isabelle tool. It uses the _DejaVu Sans Mono_ fonts as a base and adds special Isabelle symbols, like #isabelle("⟹") and #isabelle("Γ") @font-email. As mentioned in @background:isabelle-vscode, part of the reason why #vscode adds custom patches on top of VSCodium is to add these fonts into the #vscode binary. That way, the user can use the _Isabelle DejaVu Sans Mono_ font family within buffers without needing to install these Isabelle fonts system-wide.
+#jedit uses a variant of the _DejaVu Sans Mono_ #footnote[https://dejavu-fonts.github.io/] font called _Isabelle DejaVu Sans Mono_. This custom font face can be built using the `isabelle component_fonts` Isabelle tool. It uses the _DejaVu Sans Mono_ fonts as a base and adds special Isabelle symbols, like #isabelle(`⟹`) and #isabelle(`Γ`) @font-email. As mentioned in @background:isabelle-vscode, part of the reason why #vscode adds custom patches on top of VSCodium is to add these fonts into the #vscode binary. That way, the user can use the _Isabelle DejaVu Sans Mono_ font family within buffers without needing to install these Isabelle fonts system-wide.
 
 Unfortunately, these patched in fonts are not available from within VSCode extensions, and the output and state panels in #vscode are handled by the Isabelle extension. Therefore, to support the correct fonts for the panels, we needed to additionally include the fonts into the extension.
 

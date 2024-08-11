@@ -44,7 +44,7 @@ Isabelle uses a lot of custom symbols to allow logical terms to be written in a 
 
 Each Isabelle symbol roughly consists of four components: An ASCII representation of the symbol, a name, an optional #box[UTF-16] code point and a list of abbreviations for this symbol. These four are not the whole story, however for the sake of simplicity, we will skip some details.
 
-As an example, let's say you write the implication $A ==> B$ in Isabelle. Within jEdit, you will see it written out as #isabelle("A ⟹ B"), however internally the #isabelle("⟹") is an Isabelle symbol. Its corresponding data is outlined in @symbol-data-example.
+As an example, let's say you write the implication $A ==> B$ in Isabelle. Within jEdit, you will see it written out as #isabelle(`A ⟹ B`), however internally the #isabelle(`⟹`) is an Isabelle symbol. Its corresponding data is outlined in @symbol-data-example.
 
 #figure(
   table(
@@ -60,14 +60,14 @@ As an example, let's say you write the implication $A ==> B$ in Isabelle. Within
     [*ASCII Representation*], [`\<Longrightarrow>`],
     [*Name*], [`Longrightarrow`],
     [*UTF-16 Codepoint*], [`0x27F9`],
-    [*Abbreviations*], [#isabelle(".>"), #isabelle("==>")],
+    [*Abbreviations*], [#isabelle(`.>`), #isabelle(`==>`)],
   ),
-  caption: [Symbol data of #isabelle("⟹").],
+  caption: [Symbol data of #isabelle(`⟹`).],
   kind: table,
   // placement: auto,
 ) <symbol-data-example>
 
-To deal with these symbols, #jedit uses a custom encoding called #emph(utf8isa). This encoding ensures that the user sees #isabelle("A ⟹ B") while the actual content of the underlying file is "`A \<Longrightarrow> B`". However, Isabelle has no trouble dealing with cases where the actual #isabelle("⟹") Unicode symbol is used within a file.
+To deal with these symbols, #jedit uses a custom encoding called #emph(utf8isa). This encoding ensures that the user sees #isabelle(`A ⟹ B`) while the actual content of the underlying file is "`A \<Longrightarrow> B`". However, Isabelle has no trouble dealing with cases where the actual #isabelle(`⟹`) Unicode symbol is used within a file.
 
 // #TODO[
 //   Add explanation why this custom encoding is used instead of just unicode:

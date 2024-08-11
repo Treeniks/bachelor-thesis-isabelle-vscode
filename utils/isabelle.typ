@@ -1,4 +1,4 @@
-#let isabellebox(body) = {
+#let isabelle(body) = {
   show raw: set text(font: "Isabelle DejaVu Sans Mono", size: 10pt)
   set text(font: "Isabelle DejaVu Sans Mono", size: 10pt)
   box(
@@ -8,10 +8,6 @@
     fill: luma(235),
     body,
   )
-}
-
-#let isabelle(body, color: black) = {
-  isabellebox(raw(body))
 }
 
 #let vscode = box[Isabelle/VSCode]
