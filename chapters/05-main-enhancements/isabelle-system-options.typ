@@ -138,15 +138,3 @@ The third set are manually chosen options helpful for #vscode, but not included 
 To add custom settings to VSCode with a VSCode extension, one can add a `contributes.configuration` entry into the extensions `package.json` file @extension-api. Since the options available in the given tags may change in the future, simply adding them manually to the `package.json` file was unsatisfactory. Instead, the options are dynamically added while building the extension with `isabelle component_vscode_extension`. To do so, the `package.json` file includes a `"ISABELLE_OPTIONS": {},` marker which is replaced with the appropriate JSON format of the given options by the Isabelle system during build.
 
 Additionally, we gave the options that were previously hard-coded into the extension a respective default value during this build process instead. That way, the user is able to change these settings if they want to, which was not possible before.
-
-// == New Default Settings and Word Pattern
-
-// #TODO[
-//   - completions don't work properly if word pattern is not set the way it is now
-// ]
-
-// #TODO[
-//   - renderWhitespace to none because the space render is not monospaced in the font
-//   - quickSuggestions strings to on, because everything in quotes is set to be a string by the static syntax
-//   - wordBasedSuggestions to off
-// ]

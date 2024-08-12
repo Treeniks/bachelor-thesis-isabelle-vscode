@@ -9,3 +9,9 @@ The work presented in this thesis on #vscode can be roughly categorized into two
 #include "/chapters/04-main-refinements/state-ids.typ"
 #include "/chapters/04-main-refinements/state-and-output-panels.typ"
 #include "/chapters/04-main-refinements/completions.typ"
+
+// == Decoration Notification Send All Decorations
+
+// #TODO[
+//   - currently only send some decorations, now send all
+// ]

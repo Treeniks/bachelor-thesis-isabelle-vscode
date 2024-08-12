@@ -22,9 +22,3 @@ An important thing to note is that #vscode does not actually support multiple st
 //   - VSCode implmentation never used the ID for anything itself
 //   - now is a request instead of a notification which returns the newly created ID
 // ]
-
-// == Decoration Notification Send All Decorations
-
-// #TODO[
-//   - currently only send some decorations, now send all
-// ]
