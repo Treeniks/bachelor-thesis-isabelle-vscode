@@ -25,9 +25,9 @@ Unlike other features discussed in this work, active markup is a concept that ha
 There exist two major problems when trying to replicate the user experience of #jedit:
 1. For the sake of accessibility, it is usually possible to control VSCode completely with the keyboard. In order to retain this property, we decided it should also be possible to interact with active markup entirely with the keyboard.
 
-2. It would need a completely custom solution for both the language server and language client, increasing complexity and reducing the barrier of entry for new Isabelle IDEs. We would potentially need to reimagine the way that output panel content is sent to the client, and if so, it would be very difficult expanding the functionality to other types of active markup that live within the theory.
+2. It would need a completely custom solution for both the language server and language client, increasing complexity and the barrier of entry for new Isabelle IDEs. We would potentially need to reimagine the way that output panel content is sent to the client and it would be very difficult expanding the functionality to other types of active markup that live within the theory instead.
 
-Instead, we decided to utilize existing LSP features where possible. And luckily, the LSP spec defines a concept called _code actions_ which are suitable for active markup.
+Instead, we decided to deviate from #jedit and utilize existing LSP features where possible. And luckily, the LSP spec defines a concept called _code actions_ which are suitable for active markup.
 
 The intended use case of code actions is to support more complicated IDE features acting on specific ranges of code that may result in beautifications or refactors of said code. For example, when using the `rust-analyzer` language server #footnote[https://rust-analyzer.github.io/] which serves as a server for the Rust programming language #footnote[https://www.rust-lang.org/], it is possible to use a code action to fill out the arms of a match expression, an example of which can be seen in @rust-match-action.
 
