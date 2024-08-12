@@ -60,7 +60,7 @@ A comparison of #vscode's previous panel output against #jedit's panel output ca
   placement: auto,
 ) <state-comparison>
 
-=== Correct Formatting
+=== Correct Formatting <correct-formatting>
 
 Isabelle uses an internal module called `Pretty` to manage the formatting of content in state and output panels. Specifically, this module is responsible for adding line breaks and indentation to these outputs if the panels are not wide enough to display something in a single line. The language server did not use the `Pretty` module at all, meaning that it was the responsibility of the client to add correct line breaks, which #vscode did not do. Instead, it used its default word wrap line breaks.
 

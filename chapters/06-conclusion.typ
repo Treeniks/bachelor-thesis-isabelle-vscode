@@ -30,17 +30,31 @@ All in all, Isabelle is a uniquely monolithic system. This is both its greatest 
 
 == Future Work <future-work>
 
-#TODO[
-  - more clients (Zed, the Atom fork, better Sublime Text)
-  - update State ID handling in VSCode
-  - update VSCode version
-  - dynamic Symbol additions should be handleable
-    - refer to previous section that SymbolsRequest only gives compile-time symbols, not all actually current symbols
-    - in VSCode difficult, but in neovim possible to add these dynamically as new symbols
-  - code actions for other types of active markup
-  - indentation as LSP format provider
-    - in general, extract indentation logic from jEdit
-    - then also ability to use that logic for Code Actions
+#vscode is still far from perfect and there are many things can future projects may improve upon. To name just a few:
 
-  idea: ability to update isabelle options through language server, making synchronization of VSCode settings and preferences potentially doable
-]
+/ More Clients: Now that the language server offers enough flexibility for other clients, it would be interesting to build Isabelle support for many more editors.
+  / Sublime Text: We already mentioned a working prototype for Sublime Text, however this prototype needs a lot more work before it can be reliably used. It does not retain decorations when switching files, in fact it often completely breaks when switching files. There is also no way to open state panels.
+  / Zed #footnote[https://zed.dev/]: Developed by the creators of Atom #footnote[https://atom-editor.cc/] and Tree-sitter #footnote[https://tree-sitter.github.io/tree-sitter/], Zed is a new editor that aims to disrupt the IDE space with its high speed. At the time or writing, the capabilities of extensions are still fairly limited, although language extensions in particular are now possible~@zed-lsp. It could be interesting to investigate a possible Isabelle language extension for Zed.
+  / Pulsar #footnote[https://pulsar-edit.dev/]: While the once popular code editor Atom has been abandoned, a community-led fork called Pulsar has emerged. While the user-base is fairly small, it is a very extensible code editor for which an Isabelle client is certainly conceivable.
+  / Helix #footnote[https://helix-editor.com/]: A modern terminal-based text editor with support for the LSP out of the box. Its plugin-system is still in the works #footnote[https://github.com/helix-editor/helix/pull/8675], so an Isabelle client is still not realistically doable. However, once it is, it may be a nice candidate.
+/ Multiple State Panels for VSCode: We already mentioned in @state-init that #vscode does not currently have support for the use of multiple state panels. This would require some work in the Isabelle VSCode extension, but should not be too difficult a task. However, since most users tend to use only one auto-updated state panel, this feature is not of particularly high priority.
+/ Update VSCode Version: #vscode is based off of a rather old version of VSCode: `1.70.1` released on the 11th of August, 2022. Because Isabelle adds its own patches, it is not completely trivial to upgrade #vscode to a newer version. Users may run into compatibility issues with newer extensions in the meantime.
+/ Custom Symbols: The `PIDE/symbols_request` notification currently does not relay custom symbols defined by the user. Instead, it only sends the default set of symbols defined in the Isabelle distribution. This makes it virtually impossible for a language client to support such custom symbols and should be changed. Ideally, #vscode would also support user symbols, however that is much more difficult to achieve due to the use of the #utf8isa encoding. In this context, it may be worth exploring other ideas for symbol handling in #vscode that don't rely on a custom encoding.
+/ More Active Markup: Currently, the only active markup supported with code actions is sendback active markup. There is other kinds of active markup however: `browser`, `theory_exports`, and `simp_trace_panel` to name a few. The latter for example is supposed to open a window that shows Isabelle's simplifier trace. Some of these other active markup types may also be possible to support with the language sever, but further work is needed.
+/ Indentation Support: As mentioned in @correct-formatting, #jedit has an internal function to automatically indent a theory document. This function uses jEdit buffer and other internal data to function and is not usable outside of jEdit. However, the actual indentation logic could be extracted, and the feature could be added to the language server. The LSP specifies a `textDocument/formatting` client request for formatting source files, which could be used here. Once such an indentation function is available within the language server, correct indentation for sendback active markup would also be possible.
+/ Updating Options Through Language Server: One potentially useful API to offer a client is the permanent changing of Isabelle system options. That way, the client could send notifications to the server, which then writes the appropriate entries into the users `preferences` file. It could also offer a request to get the value of certain options. That way, synchronization of #vscode settings and Isabelle preferences would become feasible.
+
+// #TODO[
+//   - more clients (Zed, the Atom fork, better Sublime Text)
+//   - update State ID handling in VSCode
+//   - update VSCode version
+//   - dynamic Symbol additions should be handleable
+//     - refer to previous section that SymbolsRequest only gives compile-time symbols, not all actually current symbols
+//     - in VSCode difficult, but in neovim possible to add these dynamically as new symbols
+//   - code actions for other types of active markup
+//   - indentation as LSP format provider
+//     - in general, extract indentation logic from jEdit
+//     - then also ability to use that logic for Code Actions
+//
+//   idea: ability to update isabelle options through language server, making synchronization of VSCode settings and preferences potentially doable
+// ]
