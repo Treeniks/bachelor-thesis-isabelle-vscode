@@ -55,5 +55,4 @@
 #include "/chapters/03-related-work.typ"
 #include "/chapters/04-main-refinements.typ"
 #include "/chapters/05-main-enhancements.typ"
-// #include "/chapters/07-evaluation.typ"
-#include "/chapters/08-summary.typ"
+#include "/chapters/06-conclusion.typ"
