@@ -9,21 +9,25 @@ The #box[`PIDE/dynamic_output`] notification only contained a single `content` v
 
 We added a new Isabelle system option called #box[`vscode_html_output`]. If disabled, the language server skips the conversion to HTML and sends text content instead. However, this poses a new problem: The conversion to HTML added highlighting to the panel content. It takes the source XML body, extracts the relevant decoration markup and uses it to generate equivalent HTML markup. Skipping this conversion and sending pure text instead also meant the language client got no highlighting within these panels. The Neovim language client prototype mentioned in @intro:motivation had this problem, as seen in @fig:neovim-no-decs.
 
-#columns(2)[
-  #figure(
-    box(stroke: 1pt, image("/resources/neovim-no-decs-light.png", width: 100%)),
-    kind: image,
-    caption: [Neovim Isabelle client\ without decorations in output panel.],
-    // placement: bottom,
-  ) <fig:neovim-no-decs>
-  #colbreak()
-  #figure(
-    box(stroke: 1pt, image("/resources/neovim-with-decs-light.png", width: 100%)),
-    kind: image,
-    caption: [Neovim Isabelle client\ with decorations in output panel.],
-    // placement: bottom,
-  ) <fig:neovim-with-decs>
-]
+#{
+  show figure.caption: it => box(width: 71%, it)
+
+  columns(2)[
+    #figure(
+      box(stroke: 1pt, image("/resources/neovim-no-decs-light.png", width: 100%)),
+      kind: image,
+      caption: [Neovim Isabelle client without decorations in output panel.],
+      // placement: bottom,
+    ) <fig:neovim-no-decs>
+    #colbreak()
+    #figure(
+      box(stroke: 1pt, image("/resources/neovim-with-decs-light.png", width: 100%)),
+      kind: image,
+      caption: [Neovim Isabelle client with decorations in output panel.],
+      // placement: bottom,
+    ) <fig:neovim-with-decs>
+  ]
+}
 
 Decorations within state and output panels are quite important, as they provide more than just superficial visuals. There are many cases when writing Isabelle proofs where a single name is used for two or more individual variables. Isabelle also often generates its own names within proofs, and that generation may introduce further overlaps of identifiers. This may create goals like #isabelle[#text(blue)[`x`]` = `#text(green)[`x`]] that are not provable because the left #isabelle[#text(blue)[`x`]] is a different variable than the right #isabelle[#text(green)[`x`]]. The only way to differentiate these variables in these cases is by their color. If the colors are missing, the goal will look like #isabelle(`x = x`).
 

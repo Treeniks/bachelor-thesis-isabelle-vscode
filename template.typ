@@ -36,6 +36,7 @@
   }
 
   show figure.caption: set text(size: 0.85em)
+  show figure.caption: set par(justify: false)
 
   set list(indent: 1em)
   set enum(indent: 1em)

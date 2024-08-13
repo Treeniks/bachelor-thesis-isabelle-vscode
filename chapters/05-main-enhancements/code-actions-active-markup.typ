@@ -5,20 +5,26 @@
 
 One feature of #jedit that was missing entirely in #vscode is Isabelle's _active markup_. Active markup, generally speaking, describes parts of the theory, state or output content that is clickable. The action taken when the user clicks on an active markup can vary, as many different kinds of active markup exist. One type of active markup the user will probably come across frequently is the so called _sendback_ markup. This type of markup appears primarily in the output panel and clicking on it inserts its text into the source theory. It appears, for example, when issuing a `sledgehammer` command.
 #footnote[The `sledgehammer` command is an Isabelle command that calls different external automatic theorem provers in hopes of one of them finding a proof. Isabelle then translates the found proof back into an Isabelle proof.]
-When this command finds a proof, it is displayed in the output panel with a gray background. The user can then click on the suggested proof and Isabelle inserts it into the document. This example can be seen in @active-markup-sledgehammer-jedit. As mentioned, there are other types of active markup as well, but those are out of the scope of this thesis.
+When this command finds a proof, it is displayed in the output panel with a gray background (green when hovered with the mouse). The user can then click on the suggested proof and Isabelle inserts it into the document. This example can be seen in @active-markup-sledgehammer-jedit. As mentioned, there are other types of active markup as well, but those are out of the scope of this thesis.
 
-#figure(
-  table(
-    columns: 2,
-    stroke: none,
-    table.header([*Before*], [*After*]),
-    box(stroke: 1pt, image("/resources/jedit-active-sledgehammer-before.png")),
-    box(stroke: 1pt, image("/resources/jedit-active-sledgehammer-after.png")),
-  ),
-  kind: image,
-  caption: [Active markup in #jedit when using sledgehammer,\ before and after clicking on sendback markup.],
-  placement: auto,
-) <active-markup-sledgehammer-jedit>
+#{
+  show figure.caption: it => box(width: 69%, it)
+
+  [
+    #figure(
+      table(
+        columns: 2,
+        stroke: none,
+        table.header([*Before*], [*After*]),
+        box(stroke: 1pt, image("/resources/jedit-active-sledgehammer-before.png")),
+        box(stroke: 1pt, image("/resources/jedit-active-sledgehammer-after.png")),
+      ),
+      kind: image,
+      caption: [Active markup in #jedit when using sledgehammer, before and after clicking on sendback markup.],
+      placement: auto,
+    ) <active-markup-sledgehammer-jedit>
+  ]
+}
 
 Unlike other features discussed in this work, active markup is a concept that has no comparable feature within typical code editors. Clicking on parts of code may exist in the form of _Goto Definition_ actions or clicking on hyperlinks, but inserting things from some output panel into the code is unique. Hence, there is also no existing precedent on how to handle this type of interaction within the LSP specification. Because of this, the first question that needed to be answered is how we intend to tackle this problem in terms of user experience. That is, whether the #vscode implementation should work the same way as it does in #jedit (i.e. by clicking with the mouse), or the interaction should work completely differently?
 
@@ -75,18 +81,24 @@ When the Isabelle language server receives a code action request, the generation
 
 4. Create LSP text edit JSON objects, inserting the sendback markup's content at the respective command's position.
 
-#figure(
-  table(
-    columns: 2,
-    stroke: none,
-    table.header([*Before*], [*After*]),
-    box(stroke: 1pt, image("/resources/vscode-action-active-sledgehammer-light-before.png")),
-    box(stroke: 1pt, image("/resources/vscode-action-active-sledgehammer-light-after.png")),
-  ),
-  kind: image,
-  caption: [Active markup in #vscode when using sledgehammer.\ Code action initiated with "`Ctrl+.`". Before and after accepting code action.],
-  // placement: auto,
-) <active-markup-sledgehammer-vscode>
+#{
+  show figure.caption: it => box(width: 71%, it)
+
+  [
+    #figure(
+      table(
+        columns: 2,
+        stroke: none,
+        table.header([*Before*], [*After*]),
+        box(stroke: 1pt, image("/resources/vscode-action-active-sledgehammer-light-before.png")),
+        box(stroke: 1pt, image("/resources/vscode-action-active-sledgehammer-light-after.png")),
+      ),
+      kind: image,
+      caption: [Active markup in #vscode when using sledgehammer, before and after accepting code action. Code action initiated with "`Ctrl+.`". ],
+      // placement: auto,
+    ) <active-markup-sledgehammer-vscode>
+  ]
+}
 
 Once the list of these code actions is sent to the language client, the server's work is done. The LSP text edit objects exist in a format standardized in the LSP, so the actual execution of the text edit can be done entirely by the client.
 
