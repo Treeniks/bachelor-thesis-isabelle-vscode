@@ -9,9 +9,65 @@ From proving the prime number theorem @prime-number-theorem, over a verified mic
 
 === #isar
 
-When one wants to write an Isabelle theory, i.e. a document containing a number of theorems, lemmas, function definitions and more, Isabelle offers its own proof language called #emph(isar), allowing its users to write human-readable structured proofs @manual-isar-ref.
+When one wants to write an Isabelle theory, i.e. a document containing a number of theorems, lemmas, function definitions and more, Isabelle offers its own proof language called #emph(isar), allowing its users to write human-readable structured proofs @manual-isar-ref. An example theory and #isar proof can be seen in @list:example-theory.
 
 The #isar syntax consists of three main syntactic concepts: _Commands_, _methods_ and _attributes_. Particularly relevant for us are the commands, which include keywords like `theorem` to state a proposition followed by a proof, or `apply` to apply a proof method.
+
+#figure(
+
+  align(left, rect(
+    fill: luma(235),
+    radius: 5%,
+  )[
+    #let blue = rgb(42, 100, 149)
+    #let green = rgb(67, 151, 106) // used for imports, begin, where etc.
+    #let green2 = rgb(58, 126, 38) // used for f, A, a, x etc.
+    #let lightblue = rgb(67, 151, 247)
+    #let purple = rgb(145, 51, 221) // used for 'a
+    #let lightpurple = rgb(146, 104, 247) // used for add
+    #let orange = rgb(196, 111, 51)
+
+    #show raw: set text(font: "Isabelle DejaVu Sans Mono")
+    #show "from": set text(blue, weight: "semibold")
+    #show "then": set text(blue, weight: "semibold")
+    #show "have": set text(blue, weight: "semibold")
+    #show "by": set text(blue, weight: "semibold")
+    #show "theory": set text(blue, weight: "semibold")
+    #show "proof": set text(blue, weight: "semibold")
+    #show "qed": set text(blue, weight: "semibold")
+    #show "theorem": set text(blue, weight: "semibold")
+
+    #show "imports": set text(green, weight: "semibold")
+    #show "begin": set text(green, weight: "semibold")
+    #show "end": set text(green, weight: "semibold")
+    #show "where": set text(green, weight: "semibold")
+
+    #show "obtain": set text(lightblue, weight: "semibold")
+    #show "assume": set text(lightblue, weight: "semibold")
+    #show "show": set text(lightblue, weight: "semibold")
+
+    #show "'a": set text(purple)
+    #show "add": set text(lightpurple)
+
+    `theory Example
+  imports Main
+begin
+
+theorem "∄`#text(green2)[`f`]` :: 'a ⇒ 'a set. surj(`#text(green2)[`f`]`)"
+proof
+  assume "∃`#text(green2)[`f`]` :: 'a ⇒ 'a set. surj(`#text(green2)[`f`]`)"
+  then obtain `#text(orange)[`f`]` :: "'a ⇒ 'a set" where a: "surj(`#text(orange)[`f`]`)" by blast
+  from a have b: "∀`#text(green2)[`A`]`. ∃`#text(green2)[`a`]`. `#text(green2)[`A`]` = `#text(orange)[`f`]` `#text(green2)[`a`]`" by (simp add: surj_def)
+  from b have c: "∃`#text(green2)[`a`]`. {(`#text(green2)[`x`]` :: 'a). `#text(green2)[`x`]` ∉ `#text(orange)[`f`]` `#text(green2)[`x`]`} = `#text(orange)[`f`]` `#text(green2)[`a`]`" by blast
+  from c show False by blast
+qed
+
+end`
+  ]),
+  caption: [Example Isabelle theory with #isar proof.],
+  kind: raw,
+  placement: auto,
+) <list:example-theory>
 
 === Implementation Design
 
