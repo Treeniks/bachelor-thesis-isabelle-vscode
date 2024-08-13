@@ -9,18 +9,19 @@ In the process, we discovered that, by migrating away from #jedit's exact functi
 
 We also found existing issues in the language server, like frequent desyncs of theory contents or strongly limited options regarding symbol handling, and implemented improvements to those areas in order to make the language server more robust. That way, we found that usage of the language server outside of #vscode became viable, like with our Neovim language client prototype.
 
-In order to further assess the server's new flexibility, we built another prototype language client for the Sublime Text #footnote[https://www.sublimetext.com/] code editor. Utilizing the Sublime LSP package #footnote[https://lsp.sublimetext.io/], we found that a working Sublime Text Isabelle language package was doable in only $~200$ lines of python code, the result of which can be seen in @fig:sublime-isabelle. This package gave support for dynamic highlighting, a working output panel with highlighting, active markup via code actions, completions for symbols, and conversion of symbols from ASCII representations to Unicode. All that on top of more typical LSP features like diagnostics.
+In order to further assess the server's new flexibility, we built another prototype language client for the Sublime Text #footnote[https://www.sublimetext.com/] code editor. Utilizing the Sublime LSP package #footnote[https://lsp.sublimetext.io/], we found that a working Sublime Text Isabelle language package was doable in only $~200$ lines of python code. This package gave support for dynamic highlighting, a working output panel with highlighting, active markup via code actions, completions for symbols, and conversion of symbols from ASCII representations to Unicode. All that on top of more typical LSP features like diagnostics.
 
 Lastly, it became apparent that great care must be taken in the handling of Isabelle symbols, as it consistently proved challenging to deal with. We extended the language server to allow for more granular control over how symbols are sent, making it more flexible. Thus, a language client now has more freedom when choosing how it wants to deal with these symbols.
 
 All in all, Isabelle is a uniquely monolithic system. This is both its greatest strength and its greatest weakness. It gives it the power to build a large set of tools, which are all consistent with one another, and do things that seem magical. However, once you want to venture outside its system, it becomes all the more difficult to integrate. Yet the language server shows it is not impossible.
 
-#figure(
-  box(stroke: 1pt, image("/resources/sublime-isabelle-light.png", width: 80%)),
-  kind: image,
-  caption: [Sublime Text with prototype Isabelle language client.],
-  placement: auto,
-) <fig:sublime-isabelle>
+// in Adrian's words: "kinda useless"
+// #figure(
+//   box(stroke: 1pt, image("/resources/sublime-isabelle-light.png", width: 80%)),
+//   kind: image,
+//   caption: [Sublime Text with prototype Isabelle language client.],
+//   placement: auto,
+// ) <fig:sublime-isabelle>
 
 // #TODO[
 //   Recap shortly which problem you solved in your thesis and discuss your *contributions* here.
