@@ -47,7 +47,7 @@ At the time of writing, The `jsonrpc` entry of every message is always set to "`
 
 There are many different _methods_. For example, messages dealing with text documents are sent under the #box["`textDocument/`"] method prefix, like the #box["`textDocument/hover`"] request which requests for hover information, or the #box["`textDocument/didChange`"] notification, sent by the client to keep the server informed about changes made to the document's text.
 
-=== Initialization
+=== Initialization <back:lsp-initialization>
 
 Because of the LSP's server/client system, it is technically possible to use an externally running language server. Even so, in practice the server is typically started by an IDE.
 

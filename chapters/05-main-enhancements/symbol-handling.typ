@@ -1,7 +1,7 @@
 #import "/utils/todo.typ": TODO
 #import "/utils/isabelle.typ": *
 
-== Symbol Handling <symbol-options>
+== Symbol Handling <symbol-handling>
 
 As described in @background:isabelle-symbols, Isabelle utilizes its own #utf8isa encoding to deal with Isabelle Symbols. It is important to distinguish between 3 different domains:
 
@@ -41,7 +41,7 @@ The most relevant data is the `text` field which contains the content of the ent
 
 Every code editor may handle Isabelle symbols differently. Some editors may have the ability to add custom encodings, others may not. For example, in the Neovim code editor, it is possible to programmatically change how certain symbol sequences are displayed to the user using a feature called _conceal_. #footnote[https://neovim.io/doc/user/options.html#'conceallevel'] Through this feature, Neovim is able to have the ASCII representation (#isabelle(`\<Longrightarrow>`)) within the file and buffer, and still display the Unicode representation (#isabelle(`⟹`)) to the user, without the need of a custom encoding. All in all, the language server should not make assumptions about the implementation details of Isabelle symbols in the language client.
 
-=== Symbol Options
+=== Symbol Options <symbol-options>
 
 There are many messages sent from the server to the client containing different types of content potentially containing Isabelle symbols. #box[`window/showMessage`] notifications sent by the server asking the client to display a particular message, text edits sent for completions, text inserts sent for code actions, content sent for output and state panels, and many more.
 
