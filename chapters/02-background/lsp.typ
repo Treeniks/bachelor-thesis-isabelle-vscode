@@ -9,15 +9,6 @@ Before the introduction of the Language Server Protocol, it was common for code 
 
 Now, the responsibility of semantic understanding of the language has moved entirely to the language server, while the language client is responsible for handling user interaction.
 
-The goal is a system in which a new programming language only needs to implement a single language server, while a new code editor only needs to implement a single language client. In the best case scenario, any language server and language client can be used together (although in practice this is still not always the case). If we wanted to support $N$ programming languages for $M$ code editors, without the LSP we would need $N dot M$ implementations of language semantics. With the LSP, this number is reduced drastically to only $N$ language server and $M$ language client implementations.
-
-#cite(form: "prose", <lsp-spec>) describes the general setup: The client and server communicate via #box[`jsonrpc 2.0`] messages. The three primary message types are:
-- _Notification Messages_
-- _Request Messages_
-- _Response Messages_
-
-As the name suggests, notification messages are messages that only exist to notify the other party. They must not send a response back. Requests are sent to the other party and require a response message to be sent back once the request has been processed. The structure of these message types is also defined within the LSP specification and can be seen in @lsp-message-structure.
-
 #figure(
   {
     set raw(lang: "ts")
@@ -40,8 +31,17 @@ As the name suggests, notification messages are messages that only exist to noti
   },
   caption: [General LSP message structure.],
   kind: table,
-  // placement: auto,
+  placement: auto,
 ) <lsp-message-structure>
+
+The goal is a system in which a new programming language only needs to implement a language server, while a new code editor only needs to implement a language client. In the best case scenario, any language server and language client can be used together (although in practice this is still not always the case). If we wanted to support $N$ programming languages for $M$ code editors, without the LSP we would need $N dot M$ implementations of language semantics. With the LSP, this number is reduced drastically to only $N$ language server and $M$ language client implementations.
+
+#cite(form: "prose", <lsp-spec>) describes the general setup: The client and server communicate via #box[`jsonrpc 2.0`] messages. The three primary message types are:
+- _Notification Messages_
+- _Request Messages_
+- _Response Messages_
+
+As the name suggests, notification messages are messages that only exist to notify the other party. They must not send a response back. Requests are sent to the other party and require a response message to be sent back once the request has been processed. The structure of these message types is also defined within the LSP specification and can be seen in @lsp-message-structure.
 
 At the time of writing, The `jsonrpc` entry of every message is always set to "`2.0`". The `id` of the request is sent in order to identify the associated response, thus the `id` in a response message must also be set appropriately. The `method` entry is an identifier for the _kind_ of message at hand and dictates the shape of the `params`, `result` and `error` entries, which in turn contain the primary data of the message.
 
@@ -76,7 +76,7 @@ The first message exchanged between client and server is an #box["`initialize`"]
   }),
   caption: [Visualization of the LSP initialization handshake.],
   kind: image,
-  // placement: auto,
+  placement: auto,
 ) <lsp-init>
 
 Similarly to exchanging cipher suites in a TLS handshake, within the `initialize` request and response, the client and server send each other their capabilities. These capabilities describe which features of the LSP the client or server actually supports. For example, not every server supports completions, and even if it does, there is further information needed, like which characters should automatically request completions. By exchanging the capabilities this early on, the client and server can exclude certain parts of messages or even skip sending some entirely, preventing expensive JSON Serialization and Deserialization for messages that the other party cannot handle anyway.

@@ -21,7 +21,7 @@ When this command finds a proof, it is displayed in the output panel with a gray
       ),
       kind: image,
       caption: [Active markup in #jedit when using sledgehammer, before and after clicking on sendback markup.],
-      placement: auto,
+      // placement: auto,
     ) <active-markup-sledgehammer-jedit>
   ]
 }
@@ -47,7 +47,7 @@ The intended use case of code actions is to support more complicated IDE feature
   ),
   kind: image,
   caption: [`rust-analyzer`'s "Fill match arms" code action in Sublime Text.],
-  placement: auto,
+  // placement: auto,
 ) <rust-match-action>
 
 The main advantage of using code actions is that they are a part of the standard LSP specification, meaning most language clients support them out of the box. If the Isabelle language server supports interacting with active markup through code actions, there is no extra work necessary for the client.
@@ -95,7 +95,7 @@ When the Isabelle language server receives a code action request, the generation
       ),
       kind: image,
       caption: [Active markup in #vscode when using sledgehammer, before and after accepting code action. Code action initiated with "`Ctrl+.`". ],
-      // placement: auto,
+      placement: auto,
     ) <active-markup-sledgehammer-vscode>
   ]
 }

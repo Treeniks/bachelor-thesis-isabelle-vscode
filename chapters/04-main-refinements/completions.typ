@@ -7,12 +7,12 @@ The LSP specification defines how completions are supposed to be handled. For th
 
 Completions were already implemented in the Isabelle language server. The generation of the completions used the same internal system that #jedit uses, meaning the completions sent by the language server are identical to those offerd by #jedit.
 
-=== Completions Items Not Showing
-
 Isabelle completions concern primarily Isabelle symbols, although completions for other things such as keywords are also offered. We will differentiate Isabelle completions by three different categories:
 1. Symbol completions for abbreviations.
 2. Symbol completions for ASCII representations.
 3. Any other types of completions.
+
+=== Completions Items Not Showing
 
 Curiously, in #vscode, only categories 2 and 3 worked, category 1 did not. In Neovim, categories 1 and 3 worked, and 2 did not. Since completions are part of the standard LSP spec, handling of these completions is not done within the Isabelle extensions, but instead the standard language client implementations. Although in Neovim, the standard language client does not offer completions out of the box, so an additional plugin is required, for which we used `nvim-cmp` #footnote[https://github.com/hrsh7th/nvim-cmp].
 

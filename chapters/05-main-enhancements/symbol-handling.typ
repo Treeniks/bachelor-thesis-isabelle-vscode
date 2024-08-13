@@ -113,10 +113,6 @@ Another issue is that different language clients may want different symbol repre
 
 This request gets a string it should convert, as well as whether symbols in it should be converted into Unicode or ASCII representations. The language server then converts the symbols and sends the converted string back as its response. An example conversion request and response can be seen in @list:symbols-convert-request.
 
-By allowing the client to request the conversion for any string, it allows a client implementation to offer more flexible functionality. For example, an Isabelle language extension may allow the user to select an area of the text and only convert the selected area, instead of the whole file.
-
-Both the `PIDE/symbols_request` and `PIDE/symbols_convert_request` requests are not currently used by #vscode. They are only offered by the language server for use in other language clients, and have already seen use in them. For example, our current Neovim Isabelle client prototype supports a `SymbolsConvert` command to convert the symbols in the current buffer.
-
 #figure(
   {
     import "@preview/codly:1.0.0": *
@@ -155,8 +151,13 @@ Both the `PIDE/symbols_request` and `PIDE/symbols_convert_request` requests are 
   },
   kind: raw,
   caption: [`PIDE/symbols_convert_request` example request and response.],
-  placement: auto,
+  // placement: auto,
 ) <list:symbols-convert-request>
+
+By allowing the client to request the conversion for any string, it allows a client implementation to offer more flexible functionality. For example, an Isabelle language extension may allow the user to select an area of the text and only convert the selected area, instead of the whole file.
+
+Both the `PIDE/symbols_request` and `PIDE/symbols_convert_request` requests are not currently used by #vscode. They are only offered by the language server for use in other language clients, and have already seen use in them. For example, our current Neovim Isabelle client prototype supports a `SymbolsConvert` command to convert the symbols in the current buffer.
+
 
 // #TODO[
 //   - currently client was expected to just know what symbols are available, but this is dynamic

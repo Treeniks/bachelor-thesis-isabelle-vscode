@@ -13,7 +13,7 @@ The options, including their default values, are generally defined within `etc/o
   image("/resources/jedit-settings.png", width: 80%),
   kind: image,
   caption: [Isabelle options inside of #jedit.],
-  // placement: auto,
+  placement: auto,
 ) <jedit-settings>
 
 The Isabelle language server offers one additional way of overwriting Isabelle system options: Via CLI arguments. When starting the Isabelle language server with `isabelle vscode_server`, one may add additional option overwrites with `-o NAME=VAL` arguments. The order of priority for Isabelle options for the language server is then as follows:
@@ -96,6 +96,7 @@ Of these, we chose to proceed with option 1, as CLI option overwrites are more e
   ),
   kind: image,
   caption: [Passing of option overwrites with VSCode settings.],
+  placement: auto,
 ) <vscode-options-flow-after>
 
 @vscode-options-flow-after shows the new flow of Isabelle options when starting #vscode. The VSCode Isabelle extension has access to both the CLI arguments given to the `isabelle vscode` command, and whatever settings are set in VSCode.
