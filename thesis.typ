@@ -1,3 +1,5 @@
+#import "/utils/isabelle.typ": *
+
 #import "/template.typ": thesis
 
 #import "@preview/codly:1.0.0": *
@@ -20,7 +22,8 @@
 
   *Many more of my fellow student friends* for joining me in my visits to the cafeteria and providing mental and emotional respite during lunch.
 ]
-#let abstract = [#lorem(150)]
+
+#let abstract = [The primary interface for interacting with the Isabelle proof assistant is the #jedit prover IDE. #vscode was developed as an alternative, implementing a language server for the Language Server Protocol (LSP) and a language client for Visual Studio Code. However, #vscode was insufficient in providing a user experience comparable to #jedit. This thesis explores and implements several improvements to address these shortcomings by refining existing functionality and augmenting #vscode with new features. Key enhancements include improved completions, persistent decorations on file switch, code actions for interacting with active markup, and better formatting for state and output panels. Additionally, we implemented more granular control over symbol handling and an Isabelle system option to disable HTML output, increasing compatibility with potential new language clients. To evaluate the improved language server's versatility, we developed prototype language clients for the Neovim and Sublime Text code editors. While an Isabelle language client for these editors was previously infeasible, our enhancements made them viable. Our work not only brings #vscode closer to feature parity with #jedit, but also paves the way for future integrations with a broader range of development environments.]
 
 #let appendix = none
 
