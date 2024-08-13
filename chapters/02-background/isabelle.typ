@@ -11,7 +11,7 @@ From proving the prime number theorem @prime-number-theorem, over a verified mic
 
 When one wants to write an Isabelle theory, i.e. a document containing a number of theorems, lemmas, function definitions and more, Isabelle offers its own proof language called #emph(isar), allowing its users to write human-readable structured proofs @manual-isar-ref.
 
-The #isar syntax consists of three main syntactic concepts: _Commands_, _methods_ and _attributes_. Particularly relevant for us are the commands, which include keywords like `theorem` with which one can state a proposition followed by a proof, or `apply` with which one can apply a proof method.
+The #isar syntax consists of three main syntactic concepts: _Commands_, _methods_ and _attributes_. Particularly relevant for us are the commands, which include keywords like `theorem` to state a proposition followed by a proof, or `apply` to apply a proof method.
 
 === Implementation Design
 
@@ -36,7 +36,7 @@ Even quite fundamental keywords such as `theorem` do not exist statically, but a
 
 Isabelle has a few different types of panels which give crucial information to the user. The two most relevant to us are the _output_ panel and _state_ panels as seen in @jedit1. The point of the output panel is to show messages that correspond to a given command, which can include general information, warnings or errors. This also means, that the content of the output panel is directly tied to a specific command in the theory. The command is typically determined by the current position of the caret.
 
-State panels on the other hand display the current internal proof state within a proof. While there can only be one output panel, it is possible to have multiple state panels open, which may show states at different positions within the document. Whether moving the caret updates the currently displayed output or state depends on the _Auto update_ setting of the respective panel.
+State panels on the other hand display the current internal proof state within a proof. It is possible to have multiple state panels open, which may show states at different positions within the document. Whether moving the caret updates the currently displayed output or state depends on the _Auto update_ setting of the respective panel.
 
 === Symbols <background:isabelle-symbols>
 
@@ -68,6 +68,8 @@ As an example, let's say you write the implication $A ==> B$ in Isabelle. Within
 ) <symbol-data-example>
 
 To deal with these symbols, #jedit uses a custom encoding called #emph(utf8isa). This encoding ensures that the user sees #isabelle(`A ⟹ B`) while the actual content of the underlying file is "`A \<Longrightarrow> B`". However, Isabelle has no trouble dealing with cases where the actual #isabelle(`⟹`) Unicode symbol is used within a file.
+
+There are a few reasons why this special system exists instead of just encoding the files in UTF-16 or UTF-8. Unicode is somewhat inconsistent when it comes to #sub[subscript] and #super[superscript] support (e.g. while the capital letters A to W exist in superscript, X Y and Z currently do not). Isabelle instead adds #isabelle(`\<^sub>`) and #isabelle(`\<^sup>`) prefixes to letters and numbers, which can also be nested. Additionally, by encoding theories with simple ASCII characters, they can be viewed with almost any font, and don't require more advanced Unicode support.
 
 // #TODO[
 //   Add explanation why this custom encoding is used instead of just unicode:

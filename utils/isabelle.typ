@@ -14,5 +14,6 @@
 #let jedit = box[Isabelle/jEdit]
 #let isar = box[Isabelle/Isar]
 #let scala = box[Isabelle/Scala]
+#let ml = box[Isabelle/ML]
 #let utf8isa = box[UTF-8-Isabelle]
 #let utf8 = box[UTF-8]

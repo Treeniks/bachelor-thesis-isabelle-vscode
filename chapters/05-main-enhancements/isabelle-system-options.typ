@@ -29,7 +29,7 @@ Ideally, the settings in #vscode would be kept in-sync with the user's `preferen
 
 #vscode itself has no use for Isabelle system options. These options are used by Isabelle internally, not by the code editor. That means that only the language server needs to know the options set by the user.
 
-When using #vscode, the user does not manually start the language server. Instead, they start `isabelle vscode`, which starts an instance of Isabelle's patched VSCodium with an Isabelle extension installed, which starts the language server once the user opens an Isabelle theory.
+When using #vscode, the user does not manually start the language server. Instead, they run `isabelle vscode`, which starts an instance of Isabelle's patched VSCodium with an Isabelle extension installed, which starts the language server once the user opens an Isabelle theory.
 
 The `isabelle vscode` command optionally takes option overwrites as CLI arguments and converts these into an environment variable called "`ISABELLE_VSCODIUM_ARGS`", such that the extension can read this environment variable later. On top of that, the extension used to add a few hard-coded options that are needed for #vscode to function properly. This set of options is finally given to the language server as CLI arguments. @vscode-options-flow-previous shows this process.
 

@@ -74,7 +74,7 @@ The first message exchanged between client and server is an #box["`initialize`"]
     line((0, -2.5), (r, -2.5), name: "connection4", mark: (end: m))
     content((rel: (0, .2), to: "connection4.mid"), [`initialized` notification])
   }),
-  caption: [LSP Initialization Handshake.],
+  caption: [Visualization of the LSP initialization handshake.],
   kind: image,
   // placement: auto,
 ) <lsp-init>

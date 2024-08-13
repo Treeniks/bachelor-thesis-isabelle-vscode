@@ -5,7 +5,7 @@
 
 As described in @background:isabelle-symbols, Isabelle utilizes its own #utf8isa encoding to deal with Isabelle Symbols. It is important to distinguish between 3 different domains:
 
-/ Physical: This is the contents of the file. It's essentially a list of bytes, which need to be interpreted. Certainly, a theory file contains text, meaning the bytes represent some list of symbols. However, even then the exact interpretation of the bytes can vary depending on the encoding used. For example, the two subsequent bytes `0xC2` and `0xA5` mean different symbols in different encodings. If the encoding is #emph(utf8), those two bytes stand for the symbol for Japanese Yen #isabelle(`¥`). If, however, the encoding is #box[_ISO-8859-1 (Western Europe)_], the bytes are interpreted as #isabelle(`Â¥`). The file itself does not note the supposed encoding, meaning without knowing the encoding, the meaning of a file's contents may be lost.
+/ Physical: This is the contents of the file. It is essentially a list of bytes, which need to be interpreted. Certainly, a theory file contains text, meaning the bytes represent some list of symbols. However, even then the exact interpretation of the bytes can vary depending on the encoding used. For example, the two subsequent bytes `0xC2` and `0xA5` mean different symbols in different encodings. If the encoding is #emph(utf8), those two bytes stand for the symbol for Japanese Yen #isabelle(`¥`). If, however, the encoding is #box[_ISO-8859-1 (Western Europe)_], the bytes are interpreted as #isabelle(`Â¥`). The file itself does not note the supposed encoding, meaning without knowing the encoding, the meaning of a file's contents may be lost.
 
 / Isabelle System: This is where the language server lives. Here, an Isabelle symbol is simply an instance of an interal struct whose layout is outlined in @symbol-data-example.
 
@@ -13,13 +13,13 @@ As described in @background:isabelle-symbols, Isabelle utilizes its own #utf8isa
 
 When using #jedit and loading a theory with the #utf8isa encoding, the bytes of the file will be interpreted as #utf8, and additionally ASCII representations of symbols will be interpreted as their #utf8 counterparts. When writing back to disk, this conversion is done in reverse. Thus, as long as all symbols within a theory are valid Isabelle symbols, which all have ASCII representations, a file saved with the #utf8isa encoding can be viewed as plain ASCII.
 
-With #vscode, we get the additional problem that the *Isabelle System* does not have direct access to our editor's buffer. As mentioned in @background:isabelle-vscode, Isabelle patches VSCodium to include a new #utf8isa encoding, so loading the file works virtually the same as in #jedit.
+With #vscode, we get the additional problem that the Isabelle system does not have direct access to our editor's buffer. As mentioned in @background:isabelle-vscode, Isabelle patches VSCodium to include a new #utf8isa encoding, so loading the file works virtually the same as in #jedit.
 // #footnote[One particular difference between #vscode['s] and #jedit['s] implementation of the #utf8isa encoding is that the set of Isabelle symbols that #vscode understands is static. It is possible to extend this set and #jedit can deal with newly defined symbols while #vscode can not, although this is rarely a problem in practice.]
 However, the language server must still obtain the contents of the file.
 
 // #info[One particular difference between #vscode['s] and #jedit['s] implementation of the #utf8isa encoding is that the set of Isabelle Symbols that #vscode understands is static. It is possible to extend this set and #jedit can deal with newly defined symbols while #vscode can not, although this is rarely a problem in practice.]
 
-Recall from @didchange that the LSP specification defines multiple notifications for text document synchronization, like the `textDocument/didOpen` and `textDocument/didChange` notifications, both of which contain data that informs the language server about the contents of a file. We will focus on `textDocument/didOpen` for now. This notification's `params` field contains a "`TextDocumentItem`" instance, whose interface definition is seen in @text-document-item.
+Recall from @didchange that the LSP specification defines multiple notifications for text document synchronization, like the #box[`textDocument/didOpen`] and #box[`textDocument/didChange`] notifications, both of which contain data that informs the language server about the contents of a file. We will focus on #box[`textDocument/didOpen`] for now. This notification's `params` field contains a "`TextDocumentItem`" instance, whose interface definition is seen in @text-document-item.
 
 #figure(
   box(width: 90%)[
@@ -43,7 +43,7 @@ Every code editor may handle Isabelle symbols differently. Some editors may have
 
 === Symbol Options <symbol-options>
 
-There are many messages sent from the server to the client containing different types of content potentially containing Isabelle symbols. #box[`window/showMessage`] notifications sent by the server asking the client to display a particular message, text edits sent for completions, text inserts sent for code actions, content sent for output and state panels, and many more.
+There are many messages sent from the server to the client containing different types of content potentially containing Isabelle symbols: #box[`window/showMessage`] notifications sent by the server asking the client to display a particular message, text edits sent for completions, text inserts sent for code actions, content sent for output and state panels, and many more.
 
 Previously, there was a single Isabelle option called `vscode_unicode_symbols` which was supposed to control whether these messages sent by the server should send Isabelle symbols in their Unicode or ASCII representations, however this option only affected a few messages (like hover information and diagnostics). Things like completions were hard-coded to always use Unicode, as that is what #vscode requires.
 
