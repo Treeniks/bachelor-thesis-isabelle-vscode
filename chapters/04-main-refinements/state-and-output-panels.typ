@@ -11,6 +11,10 @@ A comparison of #vscode's previous panel output against #jedit's panel output ca
 #figure(
   {
     show raw: set text(size: 8pt)
+
+    let blue = rgb(0, 0, 245) // used for s
+    let green = rgb(55, 126, 34)
+
     show "Γ": set text(green)
     show "τ": set text(green)
     show "a1": set text(green)
@@ -31,8 +35,11 @@ A comparison of #vscode's previous panel output against #jedit's panel output ca
         table.header([*jEdit State Panel*], [*VSCode State Panel*]),
         [
           #show raw: set text(font: "Isabelle DejaVu Sans Mono")
+
+          #let blue2 = rgb(42, 100, 149) // used for goal
+
 `proof (state)
-`#text(eastern)[`goal`]` (4 subgoals):
+`#text(blue2)[`goal`]` (4 subgoals):
  1. ⋀Γ `#text(green)[`i`]`. Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (Ic `#text(green)[`i`]`) `#text(blue)[`s`]`)
  2. ⋀Γ `#text(green)[`r`]`. Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (Rc `#text(green)[`r`]`) `#text(blue)[`s`]`)
  3. ⋀Γ `#text(green)[`x`]`. Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (V `#text(green)[`x`]`) `#text(blue)[`s`]`)
@@ -45,8 +52,11 @@ A comparison of #vscode's previous panel output against #jedit's panel output ca
         ],
         [
           #show raw: set text(font: ("Noto Sans Mono", "DejaVu Sans"))
+
+          #let blue2 = rgb(160, 32, 211) // used for goal
+
 `proof (state)
-`#text(purple)[`goal`]` (4 subgoals):
+`#text(blue2)[`goal`]` (4 subgoals):
  1. ⋀Γ `#text(green)[`i`]`. Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (Ic `#text(green)[`i`]`) `#text(blue)[`s`]`)
  2. ⋀Γ `#text(green)[`r`]`. Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (Rc `#text(green)[`r`]`) `#text(blue)[`s`]`)
  3. ⋀Γ `#text(green)[`x`]`. Γ ⊢ `#text(blue)[`s`]` ⟹ Ex (taval (V `#text(green)[`x`]`) `#text(blue)[`s`]`)
