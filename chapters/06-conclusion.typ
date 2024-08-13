@@ -13,7 +13,7 @@ In order to further assess the server's new flexibility, we built another protot
 
 Lastly, it became apparent that great care must be taken in the handling of Isabelle symbols, as it consistently proved challenging to deal with. We extended the language server to allow for more granular control over how symbols are sent, making it more flexible. Thus, a language client now has more freedom when choosing how it wants to deal with these symbols.
 
-All in all, Isabelle is a uniquely monolithic system. This is both its greatest strength and its greatest weakness. It gives it the power to build a large set of tools, which are all consistent with one another, and do things that seem magical. However, once you want to venture outside its system, it becomes all the more difficult to integrate, yet not impossible.
+All in all, Isabelle is a uniquely monolithic system. This is both its greatest strength and its greatest weakness. It gives it the power to build a large set of tools, which are all consistent with one another, and do things that seem magical. However, once you want to venture outside its system, it becomes all the more difficult to integrate. Yet the language server shows it is not impossible.
 
 #figure(
   box(stroke: 1pt, image("/resources/sublime-isabelle-light.png", width: 80%)),
