@@ -7,7 +7,7 @@
 
 Isabelle has many options that can be set to adjust different aspects of the interactive sessions. For example, the option `editor_output_state` defines whether the current state should additionally be printed within the output panel.
 
-The options, including their default values, are generally defined within `etc/options` files scattered throughout the codebase. The user can overwrite these options by adding respective entries into a `$ISABELLE_HOME_USER/etc/preferences` file. When using #jedit, the user will also find many of these options within #jedit's settings, as seen in @jedit-settings. These settings and the content of the `preferences` file are kept in sync @manual-jedit.
+The options, including their default values, are generally defined within `etc/options` files scattered throughout the codebase. Users can overwrite these options by adding respective entries into a `$ISABELLE_HOME_USER/etc/preferences` file. When using #jedit, the user will also find many of these options within #jedit's settings, as seen in @jedit-settings. These settings and the content of the `preferences` file are kept in sync @manual-jedit.
 
 #figure(
   image("/resources/jedit-settings.png", width: 80%),
@@ -21,9 +21,9 @@ The Isabelle language server offers one additional way of overwriting Isabelle s
 2. User preferences defined in the `preferences` file.
 3. Isabelle defaults.
 
-The same is true for #vscode. When starting #vscode with `isabelle vscode`, the user can add option overwrites as CLI arguments. However, previously there was no method to set Isabelle options through #vscode's UI. We wanted to alleviate this discrepancy between #vscode and #jedit by adding options that are relevant to #vscode to its settings.
+The same is true for #vscode. When starting #vscode with `isabelle vscode`, the user can add option overwrites as CLI arguments. However, previously, there was no method to set Isabelle options through #vscode's UI. We wanted to alleviate this discrepancy between #vscode and #jedit by adding relevant options to #vscode to its settings.
 
-Ideally, the settings in #vscode would be kept in-sync with the user's `preferences` file, like #jedit does. However, to do so, we would need be able to parse and understand the `preferences` file from within the VSCode extension, yet this file is supposed to be managed by #scala exclusively. Therefore, we instead chose to use the #vscode settings as pure overwrites.
+Ideally, the settings in #vscode would be kept in sync with the user's `preferences` file, as #jedit does. However, to do so, we would need to be able to parse and understand the `preferences` file from within the VSCode extension, yet this file is supposed to be managed exclusively by #scala. Therefore, we instead chose to use the #vscode settings as pure overwrites.
 
 === Passing Options from VSCode to the Language Server
 
@@ -105,23 +105,23 @@ These two get merged, prioritizing the options within the `ISABELLE_VSCODIUM_ARG
 
 === Option Types
 
-Isabelle system options all have a type, which can be `string`, `int`, `real` or `bool`. It might be tempting to use the same type for the VSCode extension's settings. However, since we ultimately want the user to be able to _overwrite_ these options, this is not optimal. Taking the `editor_output_state` as an example, which is of type `bool`, the respective VSCode setting would be of type `boolean`. In the UI, this would make it a checkbox, giving it two states. However, we actually need three states: Don't overwrite, `off` and `on`. If the type of the VSCode setting were `boolean` with a default value of `off`, there would be no difference between the user not wanting VSCode to overwrite their user preferences and wanting to overwrite it with `off`.
+Isabelle system options all have a type: `string`, `int`, `real`, or `bool`. Using the same type for the VSCode extension's settings might be tempting. However, since we ultimately want the user to be able to _overwrite_ these options, this is not optimal. Taking the `editor_output_state` as an example, which is of type `bool`, the respective VSCode setting would be of type `boolean`. In the UI, this would make it a checkbox, giving it two states. However, we actually need three states: Do not overwrite, `off` and `on`. If the type of the VSCode setting were `boolean` with a default value of `off`, there would be no difference between the user not wanting VSCode to overwrite their user preferences and wanting to overwrite it with `off`.
 
-Instead, we made all #vscode settings of type `string`. For Isabelle options of type `bool`, the respective VSCode setting will have possible values `""`, `"off"`, and `"on"`, meaning dont-overwrite, overwrite with `off`, and overwrite with `on` respectively. For Isabelle options of any other type, the empty string `""` means don't overwrite and any other value is the value the option should be overwritten with.
+Instead, we made all #vscode settings of type `string`. For Isabelle options of type `bool`, the respective VSCode setting will have possible values `""`, `"off"`, and `"on"`, meaning don't-overwrite, overwrite with `off`, and overwrite with `on`, respectively. For Isabelle options of any other type, the empty string `""` means do not overwrite, and any other value is the value the option should be overwritten with.
 
-This system has another advantage for numerical options: The types of VSCode settings are just JavaScript types. Isabelle makes a difference between `real` and `int` options, but JavaScript only has a singular `numeric` type. If the VSCode option were to take such `numeric` values, the extension would need to convert this value to a string to pass it to the language server as a CLI argument. By keeping it a string from the start, we skip potential conversion errors that may occur otherwise.
+This system has another advantage for numerical options: The types of VSCode settings are just JavaScript types. Isabelle differentiates between `real` and `int` options, but JavaScript only has a singular `numeric` type. If the VSCode option were to take such `numeric` values, the extension would need to convert this value to a string to pass it to the language server as a CLI argument. By keeping it a string from the start, we skip potential conversion errors that may occur otherwise.
 
 === Extending #vscode's Settings
 
-Many Isabelle options are annotated with a tag, thus creating grouping of similar options. For example, the `content` tag includes options such as `names_long`, `names_short` and `names_unique` which affect how names (like function names) are printed within output and state panels.
+Many Isabelle options are annotated with a tag, thus creating groupings of similar options. For example, the `content` tag includes options such as `names_long`, `names_short`, and `names_unique`, which affect how names (like function names) are printed within output and state panels.
 
-Many of the options Isabelle exposes are not relevant for #vscode. For example, one of the option tags available is the `jedit` tag which, as the name suggests, includes options relevant specifically for #jedit.
+Many of the options Isabelle exposes are not relevant for #vscode. For example, one of the option tags available is the `jedit` tag, which, as the name suggests, includes options relevant specifically to #jedit.
 
-The first options that we deemed relevant are the options specifically designed for VSCode and the language server. These options are defined within `src/Tools/VSCode/etc/options`. To easily access these options, we added and assigned a new `vscode` option tag to these options.
+The first options we deemed relevant are those specifically designed for #vscode and the language server. These options are defined within #box[`src/Tools/VSCode/etc/options`]. We added and assigned a new `vscode` option tag to these options to allow easy access.
 
 The second set of relevant options are options tagged with the aforementioned `content` tag.
 
-The third set are manually chosen options helpful for #vscode, but not included in either of the previous two tags. The list of options we chose is:
+The third set are manually chosen options helpful for #vscode but not included in the previous two tags. The list of options we chose is:
 #columns(2)[
   - `editor_output_state`
   - `auto_time_start`
@@ -136,6 +136,6 @@ The third set are manually chosen options helpful for #vscode, but not included 
   - `sledgehammer_timeout`
 ]
 
-To add custom settings to VSCode with a VSCode extension, one can add a `contributes.configuration` entry into the extensions `package.json` file @extension-api. Since the options available in the given tags may change in the future, simply adding them manually to the `package.json` file was unsatisfactory. Instead, the options are dynamically added while building the extension with `isabelle component_vscode_extension`. To do so, the `package.json` file includes a `"ISABELLE_OPTIONS": {},` marker which is replaced with the appropriate JSON format of the given options by the Isabelle system during build.
+To add custom settings to VSCode with a VSCode extension, one can add a `contributes.configuration` entry into the extensions `package.json` file @extension-api. Since the options available in the given tags may change in the future, simply adding them manually to the `package.json` file was unsatisfactory. Instead, the options are dynamically added while building the extension with `isabelle component_vscode_extension`. To do so, the `package.json` file includes a #box[`"ISABELLE_OPTIONS": {},`] marker, which is replaced with the appropriate JSON format of the given options by the Isabelle system during build.
 
-Additionally, we gave the options that were previously hard-coded into the extension a respective default value during this build process instead. That way, the user is able to change these settings if they want to, which was not possible before.
+Additionally, we gave the options that were previously hard-coded into the extension a respective default value during this build process instead. That way, the user can change these settings if they want, which was not possible before.

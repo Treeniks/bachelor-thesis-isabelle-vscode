@@ -47,7 +47,7 @@
 
   let cit = upper(text(size: 24pt, [School of Computation,\ Information and Technology\ -- Informatics --]))
   let tum = upper(text(size: 14pt, [Technical University of Munich]))
-  let degree-program = text(size: 16pt, degree + "’s Thesis in " + program)
+  let degree-program = text(size: 16pt, degree + "'s Thesis in " + program)
   let title1 = text(weight: "bold", size: 20pt, title-primary)
   let title2 = text(weight: "regular", size: 20pt, title-secondary)
 
