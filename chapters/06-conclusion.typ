@@ -24,7 +24,7 @@ Utilizing the Sublime LSP package #footnote[https://lsp.sublimetext.io/], we fou
 
 = Conclusion
 
-The primary objective of this thesis was to refine and enhance the functionality of #vscode, trying to mimic #jedit if possible while also adding features that make supporting Isabelle in other code editors possible. We discussed different ways of implementing the unique features required by Isabelle into a language server/client setup.
+The primary objective of this thesis was to refine and enhance the functionality of #vscode, trying to mimic #jedit while also adding features that make supporting Isabelle in other code editors possible. We discussed different ways of implementing the unique features required by Isabelle into a language server/client setup.
 
 In the process, we discovered that, by migrating away from #jedit's exact functionality, certain features can be built without needing any custom handlers in the language client, like how we used LSP code actions to implement Isabelle's active markup.
 
@@ -32,7 +32,7 @@ We also found existing issues in the language server, like frequent desyncs of t
 
 Lastly, it became apparent that great care must be taken in the handling of Isabelle symbols, as it consistently proved challenging to deal with. We extended the language server to allow for more granular control over how symbols are sent, making it more flexible. Thus, a language client now has more freedom when choosing how to deal with these symbols.
 
-All in all, Isabelle is a uniquely monolithic system. This is both its greatest strength and its greatest weakness. It gives it the power to build a large set of tools, which are all consistent with one another, and do things that seem magical. However, once you want to venture outside its system, it becomes all the more difficult to integrate. Nevertheless, our prototype language clients show that it is not impossible.
+All in all, Isabelle is a uniquely monolithic system. This is both its greatest strength and its greatest weakness. It gives it the power to build a large set of tools, which are all consistent with one another, and do things that seem magical. However, once you want to venture outside its system, it becomes all the more difficult to integrate. Nevertheless, our work shows that it is not impossible.
 
 // in Adrian's words: "kinda useless"
 
