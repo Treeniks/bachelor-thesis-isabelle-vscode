@@ -3,9 +3,9 @@
 
 = Enhancements and New Features
 
-This chapter focuses on significant redesigns or additions to #vscode. Users of #vscode frequently reported about syntax highlighting breaking, particularly when switching files. To address this, we implemented a feature that allows manual requests for decorations.
+This chapter focuses on significant redesigns or additions to #vscode. Users of #vscode frequently reported syntax highlighting breaking, particularly when switching files. To address this, we implemented a feature that allows manual requests for decorations.
 
-Additionally, we added the ability to disable HTML output for state and output panels, a feature primarily motivated by the requirements of the Neovim language client prototype mentioned in @intro:motivation. We also provided more granular control for the language client with regards to the handling of Isabelle symbols, which enhances the server's flexibility.
+Additionally, we added the ability to disable HTML output for state and output panels, a feature primarily motivated by the requirements of the Neovim language client prototype mentioned in @intro:motivation. We also provided more granular control for the language client regarding the handling of Isabelle symbols, which enhances the server's flexibility.
 
 Lastly, we identified two features of #jedit where #vscode had no equivalent: Active markup and the ability to set Isabelle preferences through a UI settings menu. While these features required certain compromises, the implementations in #vscode prioritize simplicity and compatibility, even if they deviate from the exact functionality found in #jedit.
 
