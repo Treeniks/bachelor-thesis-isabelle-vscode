@@ -29,7 +29,7 @@
 
 #show: thesis.with(
   title-primary: [Improving Isabelle/VSCode:\ Towards Better Prover IDE Integration\ via Language Server],
-  title-secondary: [Verbesserung von Isabelle/VSCode:\ In Richtung besserer Prover IDE Integration\ mithilfe eines Language Servers],
+  title-secondary: text(lang: "de", [Isabelle/VSCode Verbesserungen:\ Fortschritte in der Prover IDE Integration\ mittels Language Server]),
   degree: "Bachelor",
   program: "Informatics: Games Engineering",
   supervisor: "Prof. Dr. Stephan Krusche",
