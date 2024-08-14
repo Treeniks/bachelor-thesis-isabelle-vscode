@@ -90,9 +90,11 @@ Even quite fundamental keywords such as `theorem` do not exist statically, but a
   placement: auto,
 ) <jedit1>
 
-Isabelle has a few different types of panels which give crucial information to the user. The two most relevant to us are the _output_ panel and _state_ panels as seen in @jedit1. The point of the output panel is to show messages that correspond to a given command, which can include general information, warnings or errors. This also means, that the content of the output panel is directly tied to a specific command in the theory. The command is typically determined by the current position of the caret.
+Isabelle has a few different types of panels which give crucial information to the user. The two most relevant to us are the _output_ and _state_ panels as seen in @jedit1.
 
-State panels on the other hand display the current internal proof state within a proof. It is possible to have multiple state panels open, which may show states at different positions within the document. Whether moving the caret updates the currently displayed output or state depends on the _Auto update_ setting of the respective panel.
+The point of output panels is to show messages that correspond to a given command, which can include general information, warnings or errors. This also means, that the content of the output panel is directly tied to a specific command in the theory. The command is typically determined by the current position of the caret.
+
+State panels on the other hand display the current internal proof state within a proof. Just like with output panels, it is possible to have multiple state panels open, which may show states at different positions within the document. Whether moving the caret updates the currently displayed output or state depends on the _Auto update_ setting of the respective panel.
 
 === Symbols <background:isabelle-symbols>
 
@@ -146,6 +148,6 @@ Isabelle consists of multiple different components. #jedit is one such component
 
 Isabelle adds its own patches on top of VSCodium, in order to add a custom encoding mimicking the functionality of #jedit described in @background:isabelle-symbols, as well as integrating custom Isabelle-specific fonts. Since neither adding custom encodings nor including custom fonts is possible from within a VSCode extension, these patches exist instead.
 
-The concept of output and state panels exist equivalently within #vscode as seen in @vscode1, although it is currently not possible to create multiple state panels for reasons outlined in @state-init.
+The concept of output and state panels exist equivalently within #vscode as seen in @vscode1, although it is currently not possible to create multiple panels of the same type.
 
 Generally speaking, the goal of #vscode is to mimic the functionality of #jedit as closely as possible. As such, many issues described and solved within this work stem from a discrepancy between the two, and #jedit will often serve as the reference implementation.
