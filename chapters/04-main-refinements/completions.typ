@@ -3,18 +3,18 @@
 
 == Completions
 
-The LSP specification defines how completions are supposed to be handled. For this, it defines a `textDocument/completion` request sent by the client @lsp-spec. In particular, this means that the choice of _when_ completions are triggered is up to the client. They typically trigger them automatically for certain trigger characters that were typed, although most of them also offer a keybind to manually request completions. The client may choose which characters count as such trigger characters, and many also offer the user to overwrite this set in their preferences. The language server can additionally send a list of trigger characters within its capabilities during the initialization stage described in @back:lsp-initialization.
+The LSP specification defines how completions are supposed to be handled. For this, it defines a `textDocument/completion` request sent by the client @lsp-spec. In particular, the choice of _when_ completions are triggered is up to the client. They typically trigger them automatically for certain trigger characters that were typed, although most of them also offer a keybind to manually request completions. The client may choose which characters count as such trigger characters, and many also offer the user the option to overwrite this set in their preferences. The language server can additionally send a list of trigger characters within its capabilities during the initialization stage described in @back:lsp-initialization.
 
-Completions were already implemented in the Isabelle language server. The generation of the completions used the same internal system that #jedit uses, meaning the completions sent by the language server are identical to those offerd by #jedit.
+Completions were already implemented in the Isabelle language server. The generation of the completions used the same internal system that #jedit uses, meaning the completions sent by the language server are identical to those offered by #jedit.
 
-Isabelle completions concern primarily Isabelle symbols, although completions for other things such as keywords are also offered. We will differentiate Isabelle completions by three different categories:
+=== Completions Items Not Showing
+
+Isabelle's completions concern primarily Isabelle symbols, although completions for other things, such as keywords, are also offered. We will differentiate Isabelle's completions into three different categories:
 1. Symbol completions for abbreviations.
 2. Symbol completions for ASCII representations.
 3. Any other types of completions.
 
-=== Completions Items Not Showing
-
-Curiously, in #vscode, only categories 2 and 3 worked, category 1 did not. In Neovim, categories 1 and 3 worked, and 2 did not. Since completions are part of the standard LSP spec, handling of these completions is not done within the Isabelle extensions, but instead the standard language client implementations. Although in Neovim, the standard language client does not offer completions out of the box, so an additional plugin is required, for which we used `nvim-cmp` #footnote[https://github.com/hrsh7th/nvim-cmp].
+Curiously, in #vscode, only categories 2 and 3 worked; category 1 did not. In Neovim, categories 1 and 3 worked; category 2 did not. Since completions are part of the standard LSP spec, handling these completions is not done within the Isabelle extensions but instead in the standard language client implementations. Although, in Neovim, the standard language client does not offer completions out of the box, so an additional plugin is required, for which we used `nvim-cmp` #footnote[https://github.com/hrsh7th/nvim-cmp].
 
 The core problem is that completions in the LSP are meant to work in an additive fashion. That is, if the user writes `con` in JavaScript, it should be possible to complete to `console`. Note that the text the user wrote originally is a prefix of the completed text. This is not necessarily the case for Isabelle: In #jedit, the user can complete #isabelle(`\Longright`) to #isabelle(`\<Longrightarrow>`) which in turn gets displayed as #isabelle(`⟹`). An abbreviation like #isabelle(`<=`) should get replaced by #isabelle(`\<le>`) which gets displayed as #isabelle(`≤`). For the language server, it may even be that the completion should insert #isabelle(`⟹`) or #isabelle(`≤`) directly, depending on the options described in @symbol-options. These types of non-prefix completions are called _flex_ completions, which the LSP does not intend to handle.
 
