@@ -16,8 +16,9 @@ The #isar syntax consists of three main syntactic concepts: _Commands_, _methods
 #figure(
 
   align(left, rect(
-    fill: luma(235),
     radius: 5%,
+    fill: luma(245),
+    stroke: 2pt + luma(230),
   )[
     #let blue = rgb(42, 100, 149)
     #let green = rgb(67, 151, 106) // used for imports, begin, where etc.

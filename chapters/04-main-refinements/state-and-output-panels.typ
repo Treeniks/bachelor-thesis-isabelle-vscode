@@ -20,8 +20,9 @@ A comparison of #vscode's previous panel output against #jedit's panel output ca
     show "a1": set text(green)
     show "a2": set text(green)
 
-    box(
-      fill: luma(235),
+    rect(
+      fill: luma(245),
+      stroke: 2pt + luma(230),
       radius: 5%,
       table(
         columns: 2,
