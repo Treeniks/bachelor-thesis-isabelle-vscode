@@ -1,5 +1,6 @@
 #import "/utils/isabelle.typ": *
 
+#import "@preview/cetz:0.2.2"
 #import "@preview/polylux:0.3.1": *
 #import themes.clean: *
 #import "@preview/fletcher:0.5.1" as fletcher: diagram, node, edge
@@ -47,6 +48,7 @@
       edge((0, 0), (1, 0)),
       edge((1, 0), (5, 0), "<{-}>", [jsonrpc]),
     )
+    #v(1fr) // so that align horizon actually works for some reason...
   ]
 ]
 
@@ -75,17 +77,40 @@
 #new-section-slide("Decorations on File Switch")
 
 #slide(title: [])[
-  #v(1fr)
-  #align(center)[
-    #columns(2)[
-      #set text(size: 32pt)
-      *Caching*
-      #colbreak()
-      *Request*
-    ]
-  ]
-  #v(1fr)
+  #grid(
+    columns: (1fr, 1fr),
+    rows: (auto, 1fr),
+    gutter: 15pt,
+    align: horizon + center,
+    uncover(2, text(size: 1.5em)[*Client*]),
+    uncover(2, text(size: 1.5em)[*Server*]),
+    {
+      only(1, [Caching])
+      only(2, rect(width: 50%, height: 100%)[Caching])
+    },
+    {
+      only(1)[Request]
+      only(2, rect(width: 50%, height: 100%)[Request])
+    },
+  )
 ]
+
+// #slide(title: [])[
+//   #align(horizon + center)[
+//     #cetz.canvas({
+//       import cetz.draw: *
+
+//       line((0, 0), (20, 0), name: "line")
+//       content(
+//         ("line.start", 5%, "line.end"), anchor: "south", padding: .4, [Client]
+//       )
+//       content(
+//         ("line.start", 95%, "line.end"), anchor: "south", padding: .4, [Server]
+//       )
+//     })
+//     #v(1fr)
+//   ]
+// ]
 
 #slide(title: [Decorations on File Switch])[
   ```typescript
@@ -106,21 +131,46 @@
 #new-section-slide("Further Improvements")
 
 #slide(title: [Further Improvements])[
-  - Desync on File Changes
-  #pause
-  - State Panel IDs
-  #pause
-  - Completions
-  #pause
-  - Symbol Handling
-  #pause
-  - Code Actions for Active Markup
-  #pause
-  - Isabelle System Options as VSCode Settings
+  #uncover((beginning: 1))[- #only(1)[*Fixed File Content Desyncs*]#only((beginning: 2))[Fixed File Content Desyncs]]
+  #uncover((beginning: 2))[- #only(2)[*Improved Handling of State Panel IDs*]#only((beginning: 3))[Improved Handling of State Panel IDs]]
+  #uncover((beginning: 3))[- #only(3)[*Completions for Abbreviations*]#only((beginning: 4))[Completions for Abbreviations]]
+  #uncover((beginning: 4))[- #only(4)[*More Granular Symbol Options*]#only((beginning: 5))[More Granular Symbol Options]]
+  #uncover((beginning: 5))[- #only(5)[*Code Actions for Active Markup*]#only((beginning: 6))[Code Actions for Active Markup]]
+  #uncover((beginning: 6))[- *Isabelle System Options\ as VSCode Settings*]
+
+  #only(3)[
+    #place(
+      horizon + center,
+      dy: 50pt,
+      box(stroke: 2pt, image(width: 80%, "/resources-presentation/completions.png")))
+  ]
+
+  #only(4)[
+    #place(
+      horizon + right,
+      dy: 25pt,
+      box(stroke: 2pt, image(width: 50%, "/resources-presentation/symbol-handling.png")))
+  ]
+
+  #only(5)[
+    #place(
+      horizon + right,
+      dy: 25pt,
+      box(stroke: 2pt, image(width: 50%, "/resources/vscode-action-active-sledgehammer-light-before.png"))
+    )
+  ]
+
+  #only(6)[
+    #place(
+      horizon + right,
+      dy: 25pt,
+      box(stroke: 2pt, image(width: 50%, "/resources-presentation/vscode-settings.png"))
+    )
+  ]
 ]
 
-#focus-slide(background: tum-blue)[
-  _Focus!_
-
-  This is very important.
-]
+// #focus-slide(background: tum-blue)[
+//   _Focus!_
+//
+//   This is very important.
+// ]
