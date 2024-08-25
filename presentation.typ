@@ -186,8 +186,6 @@
   ]
 ]
 
-// #focus-slide(background: tum-blue)[
-//   _Focus!_
-//
-//   This is very important.
-// ]
+#focus-slide(background: tum-blue)[
+  *Questions?*
+]
