@@ -113,19 +113,36 @@
 // ]
 
 #slide(title: [Decorations on File Switch])[
-  ```typescript
-  /* decoration for document node */
+  #only(1)[
+    ```typescript
+    /* decoration for document node */
 
-  type Content = Range[] | DecorationOptions[]
-  const document_decorations = new Map<Uri, Map<string, Content>>()
-  ```
-  #pause
-  ```typescript
-  /* decoration for document node */
+    type Content = Range[] | DecorationOptions[]
+    const document_decorations = new Map<Uri, Map<string, Content>>()
+    ```
+  ]
+  #only((2, 3))[
+    #codly(highlights: (
+      (line: 3, start: 38, end: 38, fill: green),
+    ))
+    ```typescript
+    /* decoration for document node */
 
-  type Content = Range[] | DecorationOptions[]
-  const document_decorations = new Map<string, Map<string, Content>>()
-  ```
+    type Content = Range[] | DecorationOptions[]
+    const document_decorations = new Map<Uri , Map<string, Content>>()
+    ```
+  ]
+  #only(3)[
+    #codly(highlights: (
+      (line: 3, start: 38, end: 38, fill: green),
+    ))
+    ```typescript
+    /* decoration for document node */
+
+    type Content = Range[] | DecorationOptions[]
+    const document_decorations = new Map<string , Map<string, Content>>()
+    ```
+  ]
 ]
 
 #new-section-slide("Further Improvements")
