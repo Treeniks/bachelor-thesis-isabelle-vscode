@@ -105,6 +105,8 @@ These two get merged, prioritizing the options within the `ISABELLE_VSCODIUM_ARG
 
 === Option Types
 
+// I realized after submission that I actually changed the settings from "on" and "off" to "true" and "false"...oof
+
 Isabelle system options all have a type: `string`, `int`, `real`, or `bool`. Using the same type for the VSCode extension's settings might be tempting. However, since we ultimately want the user to be able to _overwrite_ these options, this is not optimal. Taking the `editor_output_state` as an example, which is of type `bool`, the respective VSCode setting would be of type `boolean`. In the UI, this would make it a checkbox, giving it two states. However, we actually need three states: Do not overwrite, `off` and `on`. If the type of the VSCode setting were `boolean` with a default value of `off`, there would be no difference between the user not wanting VSCode to overwrite their user preferences and wanting to overwrite it with `off`.
 
 Instead, we made all #vscode settings of type `string`. For Isabelle options of type `bool`, the respective VSCode setting will have possible values `""`, `"off"`, and `"on"`, meaning don't-overwrite, overwrite with `off`, and overwrite with `on`, respectively. For Isabelle options of any other type, the empty string `""` means do not overwrite, and any other value is the value the option should be overwritten with.
