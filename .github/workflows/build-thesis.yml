@@ -1,4 +1,4 @@
-name: Build Thesis
+name: Build Thesis + Presentation
 
 on: [push]
 
@@ -18,11 +18,13 @@ jobs:
         run: |
           apk add just
           apk add typst
-          just build
+          just
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: thesis
-          path: thesis.pdf
+          name: thesis+presentation
+          path: |
+            thesis.pdf
+            presentation.pdf
           if-no-files-found: error
