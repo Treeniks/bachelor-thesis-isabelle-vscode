@@ -20,12 +20,14 @@ A comparison of #vscode's previous panel output against #jedit's panel output ca
     show "a1": set text(green)
     show "a2": set text(green)
 
-    rect(
+    set par(justify: false)
+
+    box(
       fill: luma(245),
       stroke: 2pt + luma(230),
       radius: 5%,
       table(
-        columns: 2,
+        columns: (1fr, 1fr),
         align: left,
         stroke: (x, y) => (
           left: if x > 0 { .5pt } else { 0pt },
@@ -33,6 +35,7 @@ A comparison of #vscode's previous panel output against #jedit's panel output ca
           top: if y > 0 { .5pt } else { 0pt },
           bottom: 0pt,
         ),
+        inset: 4.6pt, // otherwise the jedit side has a bad linebreak
         table.header([*jEdit State Panel*], [*VSCode State Panel*]),
         [
           #show raw: set text(font: "Isabelle DejaVu Sans Mono")
