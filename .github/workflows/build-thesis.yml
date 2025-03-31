@@ -6,27 +6,36 @@ jobs:
   build-thesis:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      # using Alpine because it's easier
-      - name: Set Up Alpine
-        uses: jirutka/setup-alpine@v1
-        with:
-          branch: edge
+      - uses: actions/checkout@v4
+      - uses: typst-community/setup-typst@v4
+      - uses: extractions/setup-just@v3
 
       - name: Compile Thesis
-        shell: alpine.sh --root {0}
-        run: |
-          apk add just
-          apk add typst
-          just
+        run: just thesis
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: thesis+presentation
-          path: |
-            thesis.pdf
-            presentation.pdf
+          name: thesis
+          path: thesis.pdf
           if-no-files-found: error
+
+  build-presentation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: typst-community/setup-typst@v4
+        with:
+          typst-version: 0.11.1
+      - uses: extractions/setup-just@v3
+
+      - name: Compile Presentation
+        run: just presentation
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: presentation
+          path: presentation.pdf
+          if-no-files-found: error
+
