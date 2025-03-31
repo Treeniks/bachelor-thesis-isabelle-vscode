@@ -40,3 +40,7 @@ The thesis uses the following fonts:
 For ease of building, these are all included in the `fonts` directory.
 
 It also requires a TUM's logo in svg format, included as `resources/tum-logo.svg` and grabbed from [MyTUM-Portal](https://portal.mytum.de/corporatedesign/index_html).
+
+## PDFs
+
+Compiled PDFs can be found as [Releases](https://github.com/Treeniks/bachelor-thesis-isabelle-vscode/releases) and [on TUM's website](https://www21.in.tum.de/students/past/vscode_plugin_improvements/index.html) ([PDF](https://www21.in.tum.de/students/past/vscode_plugin_improvements/assets/Isabelle_LSP_Thesis.pdf)).
