@@ -12,6 +12,8 @@ jobs:
       # using Alpine because it's easier
       - name: Set Up Alpine
         uses: jirutka/setup-alpine@v1
+        with:
+          branch: edge
 
       - name: Compile Thesis
         shell: alpine.sh --root {0}
