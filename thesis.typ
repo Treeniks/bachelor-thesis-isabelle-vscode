@@ -2,8 +2,7 @@
 
 #import "/template.typ": thesis
 
-#import "@preview/codly:1.0.0": *
-#import "@preview/gentle-clues:0.9.0": *
+#import "@preview/codly:1.3.0": *
 
 #set text(font: "STIX Two Text", size: 11pt)
 #show math.equation: set text(font: "STIX Two Math")

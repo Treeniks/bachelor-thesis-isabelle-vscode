@@ -16,7 +16,7 @@
   set document(title: title-primary, author: author, date: submission-date)
 
   // default
-  show par: set block(spacing: 1.2em)
+  set par(spacing: 1.2em)
 
   show heading: set block(below: 1.6em, above: 2.4em)
   // Reference first-level headings as "chapters"
@@ -146,16 +146,10 @@
 
   // ===== TOC =====
   {
+    show outline.entry.where(level: 1): set outline.entry(fill: none)
     show outline.entry.where(level: 1): it => {
-      v(2em, weak: true)
-      link(
-        it.element.location(),
-        strong({
-          it.body
-          h(1fr)
-          it.page
-        }),
-      )
+      v(1.8em, weak: true)
+      strong(it)
     }
 
     outline(

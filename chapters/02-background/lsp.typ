@@ -1,7 +1,7 @@
 #import "/utils/todo.typ": TODO
 #import "/utils/isabelle.typ": *
 
-#import "@preview/cetz:0.2.2"
+#import "@preview/cetz:0.3.4"
 
 == Language Server Protocol (LSP)
 

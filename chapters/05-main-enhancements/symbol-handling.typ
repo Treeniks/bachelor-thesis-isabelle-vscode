@@ -115,7 +115,7 @@ This request gets a string it should convert, as well as whether symbols in it s
 
 #figure(
   {
-    import "@preview/codly:1.0.0": *
+    import "@preview/codly:1.3.0": *
     show raw: set text(size: 10pt, font: "Isabelle DejaVu Sans Mono")
     show raw: it => block(width: 100%, it)
     table(
@@ -145,7 +145,10 @@ This request gets a string it should convert, as well as whether symbols in it s
         }
 
 
+
         ```
+        // for some reason, since some update, we need 3 extra lines here instead of just 2
+        // I don't know why and presume it's a bug with codly/typst
       ),
     )
   },

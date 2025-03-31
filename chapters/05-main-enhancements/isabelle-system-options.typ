@@ -1,7 +1,7 @@
 #import "/utils/todo.typ": TODO
 #import "/utils/isabelle.typ": *
 
-#import "@preview/fletcher:0.5.1" as fletcher: diagram, node, edge
+#import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge
 
 == Isabelle System Options as VSCode Settings
 
